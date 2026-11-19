@@ -231,7 +231,12 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .ttl{font:400 118px/1.06 var(--display);letter-spacing:-.04em}
 .ttl .ln{display:block;width:max-content}
 .title .cat{right:96px;top:50%;margin-top:-190px;width:400px}
-.title.on.sweep .ln{animation:wipe .5s steps(8) both;animation-delay:var(--at)}
+.title.on.sweep .ln{animation:title-wipe .5s steps(8) backwards;animation-delay:var(--at)}
+/* Give glyphs room to extend past the text box during the reveal. */
+@keyframes title-wipe{
+  from{clip-path:inset(-.1em calc(100% + .1em) -.1em -.1em)}
+  to{clip-path:inset(-.1em -.1em -.1em -.1em)}
+}
 
 /* курс: цифры слева, модули списком справа */
 .course{flex:1;min-height:0;display:grid;grid-template-columns:340px minmax(0,1fr);gap:80px;align-items:center}
