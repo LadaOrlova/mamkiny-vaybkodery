@@ -38,8 +38,9 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .title{--c:var(--site);padding:0}
 .tc{position:absolute;height:156px;display:flex;align-items:center;padding:0 52px;border-radius:78px;background:var(--c);font:400 100px/1 var(--display);letter-spacing:-.025em;white-space:nowrap}
 .cat{position:absolute;display:block;margin:0}
-.cat img{display:block;width:100%;height:auto;border-radius:28px}
-.title.on.sweep .tc,.title.on.sweep .cat{animation:wipe .5s steps(8) both;animation-delay:var(--at)}
+.cat img{display:block;width:100%;height:auto;border-radius:16px}
+.title.on.sweep .tc{animation:wipe .5s steps(8) both;animation-delay:var(--at)}
+.title.on.sweep .cat{animation:fadein .5s ease-out both;animation-delay:var(--at)}
 @keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 
 /* промпт */
