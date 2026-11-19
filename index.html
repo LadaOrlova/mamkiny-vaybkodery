@@ -347,6 +347,20 @@ body.touch .ov .x{display:grid}
 #memo{position:absolute;inset:auto 0 0;background:rgba(255,255,255,.94);padding:18px 72px 24px;font-size:22px;line-height:1.4;z-index:4}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* Дашборды школы */
+.analytics-flow{display:grid;grid-template-columns:1fr 72px 1.05fr 72px .94fr;align-items:stretch;gap:0}
+.analytics-flow .flow-card{padding:24px 26px;border:1.5px solid var(--ink);border-radius:22px;background:#ffffffb8}
+.analytics-flow .flow-card:nth-child(3){background:#e1ebce}
+.analytics-flow h3{font-size:30px;font-weight:650;margin-bottom:18px}
+.analytics-flow p{font-size:23px;line-height:1.3}
+.analytics-flow ul{list-style:none;padding:0;display:grid;gap:13px;font-size:23px;line-height:1.18}
+.analytics-flow li span{display:block;margin-top:3px;color:var(--muted);font-size:20px}
+.analytics-flow .flow-arrow{align-self:center;text-align:center;font-size:45px}
+.analytics-flow .flow-tables{display:grid;gap:9px;margin-top:18px}
+.analytics-flow .flow-tables span{border:1px solid #707c60;border-radius:9px;padding:8px 12px;font-size:21px}
+.analytics-flow .flow-tables span:last-child{font-weight:650;background:#f5f8ef}
+.analytics-boundary{padding:18px 24px;border-top:1.5px solid var(--ink);font-size:25px;line-height:1.3}
+
 </style>
 </head>
 <body>
@@ -550,6 +564,42 @@ body.touch .ov .x{display:grid}
     </div>
   </div>
   <p class="call">Возьмите любую книгу или свои тексты, и агент соберёт такой же скилл</p>
+</section>
+
+<section class="clip" data-track="admin" data-name="Как устроены дашборды" style="--c:var(--admin)"
+  data-notes="Я долго пилила дашборды. Сначала подключала API прямо к ним, но интеграции периодически отваливались, а данные приходили не полностью. Отдельная задача — собрать понятный экран без перегруза. Передавать рабочую аналитику нейросети нельзя. Поэтому сбор и хранение я вынесла в отдельный слой. Сайт собирает ID Метрики с UTM. В CRM я попросила сделать MCP, который отдаёт факт продажи, продукт, сумму, UTM, источник и реферер без персональных полей CRM. Плюс собираю аналитику из BotHelp, UniSender и Яндекс Метрики. Для органики YouTube, без рекламы, нужную выгрузку можно сделать отдельным скриптом. Разработчик подготовил среду и репозиторий GitHub с настройками. В этой среде я написала и развернула свой дашборд. Нейросеть помогает с кодом, а загрузку, хранение и чтение данных выполняет программа. У нейросети нет доступа к рабочим данным, ключам или API.">
+  <div class="hd">
+    <h2>Как я собрала дашборды аналитики</h2>
+    <p>Прямые подключения к API отваливались, и часть данных терялась. Я вынесла сбор в базу.</p>
+  </div>
+  <div class="analytics-flow">
+    <div class="flow-card">
+      <h3>Источники</h3>
+      <ul>
+        <li>Сайт школы<span>ID Метрики и UTM</span></li>
+        <li>CRM через MCP<span>Продажа, продукт, сумма, источник, UTM и реферер</span></li>
+        <li>Яндекс Метрика, BotHelp и UniSender</li>
+        <li>Органика YouTube<span>Отдельный скрипт</span></li>
+      </ul>
+    </div>
+    <span class="flow-arrow" aria-hidden="true">→</span>
+    <div class="flow-card">
+      <h3>База данных</h3>
+      <p>Код собирает данные и складывает их в таблицы.</p>
+      <div class="flow-tables">
+        <span>Визиты и UTM</span>
+        <span>Продажи и источники</span>
+        <span>Данные по каналам</span>
+        <span>Таблица связей</span>
+      </div>
+    </div>
+    <span class="flow-arrow" aria-hidden="true">→</span>
+    <div class="flow-card">
+      <h3>Дашборд</h3>
+      <p>Читает данные из базы и показывает нужные метрики. Можно увидеть, откуда пришли посетители и какие источники принесли продажи.</p>
+    </div>
+  </div>
+  <p class="analytics-boundary"><strong>Нейросеть помогает писать код.</strong> Рабочие данные, ключи и доступ к API остаются в среде приложения.</p>
 </section>
 
 <section class="clip" data-track="admin" data-name="Заказы" style="--c:var(--admin)" data-notes="Локальная версия админки школы. Синтетические заказы, не реальные результаты продаж.">
