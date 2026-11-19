@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CJM «Как делать продукт»</title>
+<meta name="description" content="Путь клиента курса «Как делать продукт»: 10 этапов от жизни с задачей до возврата, 4 дорожки, разрывы пути. Собрано из 35 решенческих интервью, 1 660 входных анкет потоков 50–59, 85 анкет КДП 2.0, бота Вани и журнала сайта.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@1,400&display=swap" rel="stylesheet">
+<style>
+/* Маршрутная карта: 10 станций слева направо, строки = что происходит с человеком на станции; дорожки сегментов переключаются чипами */
+:root{
+  --canvas:#F5F4FA; --paper:#FFFFFF; --ink:#1A1824; --muted:#67647A; --line:#E3E1ED;
+  --accent:#5B3FE4; --accent-soft:#EEEAFE; --accent-ink:#3D27B8; --on-accent:#FFFFFF;
+  --minus:#B3372B; --minus-soft:#FBE8E5; --plus:#1D7A4E; --plus-soft:#E2F2E9;
+  --warn:#8F5B00; --warn-soft:#FBF0D9; --none:#6B6880; --none-soft:#ECEBF2;
+  --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --canvas:#121119; --paper:#1B1A24; --ink:#ECEAF5; --muted:#A3A0B6; --line:#2F2D3C;
+    --accent:#A595FF; --accent-soft:#2A2448; --accent-ink:#C9BFFF; --on-accent:#14121F;
+    --minus:#F29084; --minus-soft:#3A2121; --plus:#72D4A2; --plus-soft:#17322A;
+    --warn:#E9B860; --warn-soft:#382C14; --none:#A3A0B6; --none-soft:#26252F;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --canvas:#121119; --paper:#1B1A24; --ink:#ECEAF5; --muted:#A3A0B6; --line:#2F2D3C;
+  --accent:#A595FF; --accent-soft:#2A2448; --accent-ink:#C9BFFF; --on-accent:#14121F;
+  --minus:#F29084; --minus-soft:#3A2121; --plus:#72D4A2; --plus-soft:#17322A;
+  --warn:#E9B860; --warn-soft:#382C14; --none:#A3A0B6; --none-soft:#26252F;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:20px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+h1,h2,h3{text-wrap:balance}
+.mono{font-family:var(--mono)}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* шапка */
+header.top{background:var(--paper);border-bottom:1px solid var(--line);padding-block:36px 26px}
+.eyebrow{font:500 12px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
+h1{font:700 clamp(28px,4vw,40px)/1.12 var(--sans);letter-spacing:-.02em;margin:0 0 12px;max-width:20em}
+.sub{color:var(--muted);font-size:17px;max-width:48em;margin:0 0 20px}
+.sources{display:flex;flex-wrap:wrap;gap:8px}
+.src{font:500 12.5px/1 var(--mono);padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--canvas);color:var(--ink)}
+.src b{color:var(--accent);font-weight:500}
+
+main{padding-block:28px 90px}
+section{margin-top:52px}
+section:first-child{margin-top:12px}
+h2{font:700 24px/1.2 var(--sans);letter-spacing:-.015em;margin:0 0 6px}
+.lead{color:var(--muted);margin:0 0 20px;max-width:52em}
+
+/* главное */
+.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.key article{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 18px 16px;min-width:0}
+.key h3{font:600 16px/1.35 var(--sans);margin:0 0 8px}
+.key p{margin:0;color:var(--muted);font-size:14.5px}
+.key .fig{font:500 13px/1.4 var(--mono);color:var(--accent-ink);margin-top:10px;display:block}
+
+/* переключатель дорожек: радиокнопки + :has(), работает без скриптов */
+.lanes{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;border:0;padding:0}
+.lanes legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.lanes input{position:absolute;opacity:0;width:1px;height:1px}
+.lanes label{font:500 14px/1 var(--sans);padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;user-select:none}
+.lanes label:hover{border-color:var(--accent)}
+.lanes input:checked+label{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.lanes input:focus-visible+label{outline:2px solid var(--accent);outline-offset:2px}
+
+/* карта */
+.map-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+table.map{border-collapse:separate;border-spacing:0;min-width:2860px;width:100%;font-size:13.5px;line-height:1.5}
+.map th,.map td{vertical-align:top;text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);width:270px}
+.map tr>*:last-child{border-right:0}
+.map tbody tr:last-child>*{border-bottom:0}
+.map th.rowh{position:sticky;left:0;z-index:2;background:var(--paper);width:150px;min-width:150px;font:500 11.5px/1.35 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);box-shadow:1px 0 0 var(--line)}
+.map thead th{background:var(--paper)}
+.phase td,.phase th{padding:8px 14px;font:500 11.5px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--accent-ink);background:var(--accent-soft)}
+.phase th.rowh{background:var(--accent-soft);color:var(--accent-ink)}
+.stage-n{font:500 12px/1 var(--mono);color:var(--accent);display:block;margin-bottom:6px}
+.stage-t{font:700 16px/1.25 var(--sans);color:var(--ink);display:block}
+.job{font-weight:600;color:var(--ink)}
+.map ul{margin:0;padding-left:16px}
+.map li{margin:0 0 4px}
+.map li:last-child{margin-bottom:0}
+.emo-m{color:var(--minus)}
+.emo-p{color:var(--plus)}
+.tag{font:500 11px/1 var(--mono);color:var(--muted);white-space:nowrap}
+.aha{display:inline-block;font:600 11px/1 var(--mono);letter-spacing:.04em;color:var(--plus);background:var(--plus-soft);border-radius:4px;padding:4px 6px;margin-bottom:6px}
+.drop{background:color-mix(in srgb,var(--minus-soft) 55%,var(--paper))}
+.fwd{background:color-mix(in srgb,var(--plus-soft) 45%,var(--paper))}
+q,.quote{quotes:none}
+.quote{font:italic 400 14px/1.5 var(--serif);color:var(--ink);margin:0 0 10px}
+.quote:last-child{margin-bottom:0}
+.quote cite{display:block;font:normal 500 11px/1.4 var(--mono);color:var(--muted);margin-top:4px}
+.lane-note{margin:0 0 10px}
+.lane-note:last-child{margin-bottom:0}
+.lane-note b{display:block;font:500 11px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--accent-ink);margin-bottom:2px}
+/* выбранная дорожка поднимается под названия этапов */
+tr.lane-top{display:none}
+tr.lane-top td{background:color-mix(in srgb,var(--accent-soft) 70%,var(--paper))}
+tr.lane-top th.rowh{background:var(--accent-soft);color:var(--accent-ink)}
+tr.lane-top .lane-note{display:none}
+#map:has(#lane-owner:checked) tr.lane-top,#map:has(#lane-pm:checked) tr.lane-top,#map:has(#lane-switch:checked) tr.lane-top,#map:has(#lane-alumni:checked) tr.lane-top{display:table-row}
+#map:has(#lane-owner:checked) tr.lane-row,#map:has(#lane-pm:checked) tr.lane-row,#map:has(#lane-switch:checked) tr.lane-row,#map:has(#lane-alumni:checked) tr.lane-row{display:none}
+#map:has(#lane-owner:checked) tr.lane-top .lane-note[data-lane="owner"],
+#map:has(#lane-pm:checked) tr.lane-top .lane-note[data-lane="pm"],
+#map:has(#lane-switch:checked) tr.lane-top .lane-note[data-lane="switch"],
+#map:has(#lane-alumni:checked) tr.lane-top .lane-note[data-lane="alumni"]{display:block}
+tr.lane-top .lane-note b{display:none}
+.tp-note{color:var(--muted);font-size:13px}
+
+/* сила данных */
+.str{display:inline-flex;align-items:center;gap:6px;font:500 12px/1 var(--mono);padding:6px 8px;border-radius:999px}
+.str::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-hi{color:var(--plus);background:var(--plus-soft)}
+.s-mid{color:var(--warn);background:var(--warn-soft)}
+.s-lo{color:var(--minus);background:var(--minus-soft)}
+.s-no{color:var(--none);background:var(--none-soft)}
+.str-note{display:block;color:var(--muted);font-size:12.5px;margin-top:6px}
+
+/* точки контакта */
+table.tp{border-collapse:collapse;width:100%;min-width:860px;font-size:14px}
+.tp th,.tp td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tp thead th{font:500 11.5px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.tp td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tp tbody tr:last-child td{border-bottom:0}
+.tp .q{font:italic 400 13.5px/1.5 var(--serif)}
+.bar{display:inline-block;height:8px;border-radius:2px;background:var(--accent);vertical-align:middle;margin-right:8px}
+.tp-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:16px}
+.tp-sum p{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:14.5px}
+.tp-sum b{display:block;font:600 15px/1.35 var(--sans);margin-bottom:4px}
+
+/* дорожки */
+.segs{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px}
+.seg{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.seg h3{font:700 17px/1.25 var(--sans);margin:0 0 4px}
+.seg .share{font:500 12.5px/1.4 var(--mono);color:var(--accent-ink);margin:0 0 12px}
+.seg dl{margin:0;display:grid;gap:10px}
+.seg dt{font:500 11px/1.3 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.seg dd{margin:2px 0 0;font-size:14px}
+
+/* разрывы */
+.breaks{display:grid;gap:12px;counter-reset:br}
+.brk{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 14px}
+.brk .n{grid-row:span 4;font:700 26px/1 var(--mono);color:var(--accent)}
+.brk h3{font:600 16.5px/1.35 var(--sans);margin:0}
+.brk .meta{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 2px}
+.pill{font:500 11.5px/1 var(--mono);padding:5px 8px;border-radius:5px;background:var(--none-soft);color:var(--ink)}
+.pill.t-gap{background:var(--minus-soft);color:var(--minus)}
+.pill.t-fear{background:var(--warn-soft);color:var(--warn)}
+.pill.t-blind{background:var(--accent-soft);color:var(--accent-ink)}
+.pill.t-bar{background:var(--minus-soft);color:var(--minus)}
+.brk p{margin:4px 0 0;font-size:14.5px}
+.brk .ev{color:var(--muted)}
+.brk .do b{font-weight:600}
+
+/* пробелы и источники */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.box h3{font:600 16px/1.3 var(--sans);margin:0 0 10px}
+.box ul{margin:0;padding-left:18px}
+.box li{margin-bottom:8px;font-size:14.5px}
+.tbl-scroll{overflow-x:auto}
+table.src-t{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+.src-t th,.src-t td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.src-t th{font:500 11.5px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.src-t td.n{font-family:var(--mono);white-space:nowrap}
+footer{color:var(--muted);font-size:13px;margin-top:48px}
+@media (max-width:640px){
+  .map th.rowh{width:112px;min-width:112px;font-size:10.5px}
+  .brk{grid-template-columns:32px minmax(0,1fr)}
+  .brk .n{font-size:20px}
+}
+</style>
+
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">CJM · «Как делать продукт» · 7 октября 2026</p>
+    <h1>Путь клиента «Как делать продукт»</h1>
+    <p class="sub">От жизни с рабочей задачей до результата и возврата за следующим курсом. Каждый этап описан как работа человека, с цифрами, дословными цитатами и пометкой, насколько данным можно верить.</p>
+    <div class="sources">
+      <span class="src"><b>35</b> решенческих интервью</span>
+      <span class="src"><b>1 660</b> входных анкет, потоки 50–59</span>
+      <span class="src"><b>85</b> анкет КДП 2.0</span>
+      <span class="src"><b>19 068</b> подписчиков бота</span>
+      <span class="src"><b>2 960</b> человек в журнале сайта</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="key">
+  <h2>Главное</h2>
+  <p class="lead">Шесть выводов, которые подтверждаются в нескольких источниках сразу.</p>
+  <div class="key">
+    <article>
+      <h3>Решение созревает задолго до лендинга</h3>
+      <p>Все 35 респондентов знали Ваню до интервью, многие годами. Купивший Евгений К. говорит прямо: сайт в решении не участвовал. Лендинг не уговаривает, а проверяет уже почти принятое решение.</p>
+      <span class="fig">медиана в боте до покупки: 127 дней · Telegram Вани как источник: 47%</span>
+    </article>
+    <article>
+      <h3>«Сейчас» запускает окно, а не боль</h3>
+      <p>Желание копится давно. Покупку запускает повод: освободились время или бюджет, вышел анонс, руководитель задал вопрос, посоветовал знакомый, «последний поток».</p>
+      <span class="fig">«давно хотел» без события ≈91 анкета · без боли ≈66</span>
+    </article>
+    <article>
+      <h3>Курс нанимают под рабочую задачу</h3>
+      <p>Две главные точки А: «решаю на чуйке» и «запускаю своё». Карьера звучит в 3–4 раза реже бизнес-задачи.</p>
+      <span class="fig">бизнес-задача 56% · карьера 16% · потоки 56–59</span>
+    </article>
+    <article>
+      <h3>Бесплатный онбординг-модуль — самое сильное касание</h3>
+      <p>Проба — это не один вебинар. Вебинар ведёт в бесплатный модуль «Введение» в личном кабинете: лекции, диагностика, воркшоп 23.09 с персональным планом. После этих касаний покупают в 3–16 раз чаще, чем в среднем по боту. Массовые вайб-вебинары КДП не продают.</p>
+      <span class="fig">модуль у 46% покупателей против 14% подписчиков · пробные лекции: 4,5–10% покупают при средней 0,62%</span>
+    </article>
+    <article>
+      <h3>Больше всего теряем на «хочу, но не сейчас»</h3>
+      <p>Не купивших в интервью останавливают обстоятельства: нет живого продукта, смена работы, время. Механизма вернуть их к следующему потоку нет. Ещё четверть созданных заказов не оплачена.</p>
+      <span class="fig">20 из 79 заказов КДП 2.0 не оплачены · 6.09–6.10</span>
+    </article>
+    <article>
+      <h3>Главный страх на входе — перенос на свой контекст</h3>
+      <p>«Не смогу применить к своему продукту» звучит почти втрое чаще, чем «теория без практики». Что происходит после курса, мы не знаем: выходной анкеты в выгрузках нет.</p>
+      <span class="fig">«не применю» 22% · «теория» 8% · цена 0%</span>
+    </article>
+  </div>
+</section>
+
+<section id="map">
+  <h2>Карта пути</h2>
+  <p class="lead">Десять этапов слева направо, карта прокручивается вбок. Строка «Дорожки» внизу показывает, чем путь отличается у четырёх групп. Выберите дорожку, и её заметки встанут сразу под названиями этапов.</p>
+  <fieldset class="lanes">
+    <legend>Дорожка</legend>
+    <input type="radio" name="lane" id="lane-all" checked><label for="lane-all">Все дорожки</label>
+    <input type="radio" name="lane" id="lane-owner"><label for="lane-owner">Владельцы и основатели</label>
+    <input type="radio" name="lane" id="lane-pm"><label for="lane-pm">Продакты в найме</label>
+    <input type="radio" name="lane" id="lane-switch"><label for="lane-switch">Переходят в продукт</label>
+    <input type="radio" name="lane" id="lane-alumni"><label for="lane-alumni">Выпускники и повторники</label>
+  </fieldset>
+  <div class="map-scroll" tabindex="0" aria-label="Карта пути, прокручивается по горизонтали">
+  <table class="map" id="cjm">
+    <thead>
+      <tr class="phase">
+        <th class="rowh" scope="row">Фаза</th>
+        <td colspan="5">До покупки</td>
+        <td>Покупка</td>
+        <td colspan="2">Обучение · 8 недель</td>
+        <td colspan="2">После курса</td>
+      </tr>
+      <tr>
+        <th class="rowh" scope="row">Этап</th>
+        <th scope="col"><span class="stage-n">01</span><span class="stage-t">Живу с задачей</span></th>
+        <th scope="col"><span class="stage-n">02</span><span class="stage-t">Слежу за Ваней и зрею</span></th>
+        <th scope="col"><span class="stage-n">03</span><span class="stage-t">Наступает «сейчас»</span></th>
+        <th scope="col"><span class="stage-n">04</span><span class="stage-t">Пробую бесплатно</span></th>
+        <th scope="col"><span class="stage-n">05</span><span class="stage-t">Проверяю, про меня ли</span></th>
+        <th scope="col"><span class="stage-n">06</span><span class="stage-t">Решаю и плачу</span></th>
+        <th scope="col"><span class="stage-n">07</span><span class="stage-t">Вхожу в курс</span></th>
+        <th scope="col"><span class="stage-n">08</span><span class="stage-t">Учусь на своём продукте</span></th>
+        <th scope="col"><span class="stage-n">09</span><span class="stage-t">Получаю результат</span></th>
+        <th scope="col"><span class="stage-n">10</span><span class="stage-t">Возвращаюсь и привожу других</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="lane-top">
+        <th class="rowh" scope="row">Выбранная дорожка</th>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Продукт не растёт, нет маркетинга, «запускаю и боюсь слить деньги». Без опыта в продукте — это в основном они.</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Решают на чуйке и не могут объяснить руководителю приоритеты. «Чуйка» держится на ≈30% со второго года опыта.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Новая роль или потеря работы. «Новая роль» на пике при опыте меньше года — 30%.</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Прошлый курс «снова превратился в кашу», тогда не было своего продукта.</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Советы коллег-фаундеров, Boost и скиллы. Арсению курс посоветовал инженер PostHog. Евгений К. следил несколько лет, но «не мог себе объяснить, зачем мне как предпринимателю этим заниматься».</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Коллеги, руководитель, конференции, эфиры с Красинским.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Бесплатные лекции, YouTube, лекции в Яндексе.</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Канал и бот: «Очень полезно, что бот рассылает уведомлялки» (Ольга К.). Ждут анонса нового потока.</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>«Горит» задача и есть деньги в окне. Или освободилось время: у Евгения К. «отлетели несколько проектов», совпало с обновлением курса.</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Вопрос руководителя, перформанс-ревью, бюджет отдела на обучение.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>После увольнения освободилось время; назначили на новую роль.</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Анонс 2.0, «обновлений для выпускников не будет», «последний поток».</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Ищут ответ на свою задачу: сегменты, отстройка. Хуки первой лекции работают.</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Одна-две открытые лекции и вебинар, чтобы проверить глубину (Владимир М., продакт).</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Смотрят бесплатные материалы Вани и Красинского вместо платного, думают о складчине (Алекс, V2).</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Открытая часть кажется повторением (Тарас, 51-й поток).</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Карьерный блок мимо: «Продвигаться по карьере мне неинтересно». Не находят себя среди сегментов. Ищут слова «пересборка», «отстройка». Логотипы корпораций для малого бизнеса скорее минус: «делать продукт от полной МТС, это, типа, ну, и в реальном секторе, это две большие разницы» (Евгений К.).</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Нужны короткие аргументы для директора. Смотрят программу, даты, нагрузку.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>«Подойдёт ли новичку?» Фраза «курс не даёт профессии» одних расстраивает, других успокаивает.</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Главный вопрос: что нового по сравнению с прошлым потоком.</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Платят сами или со счёта ИП. Есть потолок личных денег: у Арсения ≈500 €.</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Компания платит у 9% покупателей 2.0. В V1 двое самых готовых ждали оплаты от работодателя и дат.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Решают цена и рассрочка: «Мне приоритетнее продать те навыки, которые уже есть, а не приобрести новые.»</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Скидка 20% за повторное прохождение.</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Страх есть у 4 из 14 собственников (в основном время) и у 9 из 11 «планирую первый бизнес».</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Junior и middle: страх у 11 из 14, «не применю в своей организации», «внутренний продукт». Senior: у 5 из 12.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>«Уровень не тот», «не пойму программу».</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Нет данных.</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Главный критерий — практика на своём продукте. Евгений К. собирается упаковать метод в скиллы и «на потоке тестировать десятки гипотез».</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Если продукт внутренний, идут на учебный кейс.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Своего продукта нет, учатся на учебном кейсе.</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Возвращаются к материалам эпизодически, «пару раз в несколько месяцев».</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Бизнес-результат: Точка Б у 13 из 15 собственников.</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Объяснить приоритет за пять минут, защитить решение, пройти перформанс-ревью.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Оффер: «Хочу найти работу продакт менеджером» (Искандар У.).</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>«Уникальная компетенция» в команде (Дмитрий Т.).</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Идут по лестнице продуктов: Ольга К. прошла КДП, Boost и Boost Pro и ждёт 2.0. «Ну всё, я Ванин фанат».</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Приходят командой: от пары до 10 человек из одной компании.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Product Heroes «вторым шагом».</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Возвращаются, когда есть большое обновление и новый продукт на руках.</p>
+        </td>
+      </tr>
+      <tr>
+        <th class="rowh" scope="row">Работа человека</th>
+        <td><span class="job">Я хочу принимать решения, которые могу обосновать.</span> Или запустить своё и не слить деньги, или справиться с новой ролью.</td>
+        <td><span class="job">Я хочу найти способ лучше и человека, которому можно доверять.</span></td>
+        <td><span class="job">Я хочу начать, пока есть окно по времени и деньгам.</span></td>
+        <td><span class="job">Я хочу проверить на себе, что метод работает на моей задаче.</span></td>
+        <td><span class="job">Я хочу убедиться, что курс про меня и что я получу на выходе.</span></td>
+        <td><span class="job">Я хочу оплатить и не ошибиться с деньгами, временем и уровнем.</span></td>
+        <td><span class="job">Я хочу понять, справлюсь ли и применю ли к своему продукту.</span></td>
+        <td><span class="job">Я хочу сделать на своём продукте интервью, сегменты, ценность и экономику.</span></td>
+        <td><span class="job">Я хочу показать результат, который признают руководитель, клиенты или рынок.</span></td>
+        <td><span class="job">Я хочу углубиться дальше и поделиться находкой.</span></td>
+      </tr>
+      <tr>
+        <th class="rowh" scope="row">Вопросы в голове</th>
+        <td><ul><li>Почему в роадмапе это, а не то?</li><li>Как запустить и не слить деньги?</li><li>Что я делаю не так?</li></ul></td>
+        <td><ul><li>Этому человеку можно доверять?</li><li>Сработало ли у тех, кого я знаю?</li></ul></td>
+        <td><ul><li>Если не сейчас, то когда?</li><li>Хватит ли времени и денег прямо сейчас?</li></ul></td>
+        <td><ul><li>Решит ли это мою задачу?</li><li>Это новое или я это уже знаю?</li></ul></td>
+        <td><ul><li>Это для меня?</li><li>Что нового в 2.0?</li><li>Когда старт и успеваю ли я?</li><li>Что я получу?</li><li>Сколько это в евро?</li></ul></td>
+        <td><ul><li>Какой тариф мой?</li><li>Плачу я или компания?</li><li>Есть рассрочка? Можно картой не из России?</li></ul></td>
+        <td><ul><li>Подойдёт ли офлайну, B2B, внутреннему продукту?</li><li>Потяну ли 10 часов в неделю?</li></ul></td>
+        <td><ul><li>Как сделать это на моём продукте?</li><li>Успеваю ли я за группой?</li></ul></td>
+        <td><ul><li>Как показать результат руководителю или клиентам?</li></ul></td>
+        <td><ul><li>Что дальше?</li><li>Стоит ли пройти заново с новым продуктом?</li></ul></td>
+      </tr>
+      <tr>
+        <th class="rowh" scope="row">Эмоции</th>
+        <td><span class="emo-m">− «бегу быстро, но на месте», «неприятное чувство самозванца на своём же месте»</span><br><span class="emo-p">+ часть приходит без боли: «просто хочу механик»</span></td>
+        <td><span class="emo-p">+ доверие к автору и его подаче</span><br><span class="emo-m">− откладывание, «всё как-то не срасталось»</span></td>
+        <td><span class="emo-p">+ «волшебный пинок», «время пришло»</span><br><span class="emo-m">− страх не успеть, FOMO</span></td>
+        <td><span class="emo-p">+ «понял насколько глубокого на самом деле нужно копать»</span><br><span class="emo-m">− скука на длинной лекции, «пока повторение того, что есть в курсе»</span></td>
+        <td><span class="emo-p">+ узнаю себя в болях, «за руку проведут»</span><br><span class="emo-m">− перегруз текстом, путаница с датами</span></td>
+        <td><span class="emo-m">− «тратить деньги очень страшно»</span><br><span class="emo-p">+ «Мне не страшно, на самом деле, заплатить сейчас»</span></td>
+        <td><span class="emo-p">+ 45% пишут «страхов нет», «я вам доверяю»</span><br><span class="emo-m">− «не применю к своему», «не потяну»</span></td>
+        <td><span class="emo-m">− по прошлым потокам: усталость к середине, «слилась с практической части»</span></td>
+        <td><span class="emo-p">+ ждут «спокойно и уверенно»</span></td>
+        <td><span class="emo-p">+ «Ванин фанат»</span><br><span class="emo-m">− «запроса на апгрейд и пройти это снова нету»</span></td>
+      </tr>
+      <tr>
+        <th class="rowh" scope="row">Наши точки контакта</th>
+        <td>Пока никаких. Слышим человека через квиз в боте: «пилим фичи на чуйке» — 344 ответа.</td>
+        <td>Telegram-канал, YouTube, книга, конференции, эфиры с Красинским, бот, Boost, NMT-скиллы, рекомендации выпускников.</td>
+        <td>Анонс потока, рост цены, «последний поток», вебинар 27.08, эфир 02.09, предложение от компании.</td>
+        <td>Вебинар 27.08 ведёт в бесплатный онбординг-модуль «Введение» в личном кабинете: лекции, диагностика, персональный план. Дальше воркшоп 23.09 с Ваней. Плюс скиллы и чат.</td>
+        <td>Страница курса, программа, тарифы, кейсы и отзывы, FAQ, «Задать вопрос команде», бот.</td>
+        <td>Чекаут: ЮKassa, Тинькофф, счёт на ИП, Stripe, крипта. Рассрочка, менеджер, скидка выпускнику.</td>
+        <td>Вступительная анкета, личный кабинет, «Введение», вводный воркшоп с Ваней, чат потока, AI-копилот.</td>
+        <td>Лекции в записи, воркшопы по вторникам, Q&amp;A с Ваней по четвергам, кураторы, полка артефактов.</td>
+        <td>Выходная анкета, экзамен, сертификат, портфолио-кейс, материалы навсегда.</td>
+        <td>Чат выпускников, анонсы обновлений, Boost и Boost Pro, скидка 20% за повтор, кейсы.</td>
+      </tr>
+      <tr>
+        <th class="rowh" scope="row">Где отваливаются</th>
+        <td class="drop">Не видят проблемы: 481 ответ «у нас всё классно» в квизе бота.</td>
+        <td class="drop">Годами откладывают. Канал на мьюте. Устают от анонсов: «…сильно вымораживать, когда пишут: „Я проведу вебинар послезавтра“» — Дмитрий Т.</td>
+        <td class="drop">«Хочу, но не сейчас»: нет живого продукта, смена работы, нет времени. В V1 пятеро из восьми ждали следующего потока после закрытого, и отказ снизил лояльность. Евгений К. уже решил «перенесу» и купил только после письма, что войти можно до 6 октября.</td>
+        <td class="drop">Длинные лекции: Егор остановился на 35-й минуте, Роман на третьей лекции. Модуль и личный кабинет живут отдельно: «мне как будто не хватает этой вкладки в личном кабинете» (Денис К.). Выпускнику модуль кажется повторением.</td>
+        <td class="drop">Ответы тонут в тексте. Непонятно, можно ли ещё войти. Карьерный блок мимо владельцев. «AI Copilot» и «агенты» непонятны тем, кто не вайбкодит. Страница не открылась с VPN.</td>
+        <td class="drop">Четверть заказов не оплачена. Рассрочка недоступна из-за рубежа, цена только в рублях. Путь «оплатит компания» не описан. «База» читается как урезанная. Доплата за фидбек Вани не объяснена, нет примера разбора: «Вот эта фраза не тянет на плюс там сколько-то там, 60 тысяч рублей» (Евгений К.).</td>
+        <td class="drop">После оплаты непонятно, что дальше: пропустил ли модуль, в каком темпе смотреть, где воркшоп и чат (Евгений К.). Анкету можно отправить пустой. Страх переноса на свой контекст. У кого нет продукта, тот уходит на учебный кейс.</td>
+        <td class="drop">Где именно бросают, неизвестно. По прошлым потокам: середина курса, практическая часть, нехватка времени.</td>
+        <td class="drop">Нет данных.</td>
+        <td class="drop">Выпускник с бесплатным апдейтом не видит повода. Бывший студент без результата видит «повторение». «Курсы утекают».</td>
+      </tr>
+      <tr>
+        <th class="rowh" scope="row">Что двигает вперёд</th>
+        <td class="fwd">Понимание, что на интуиции дальше нельзя: «Раньше он управлялся на чуйке, а теперь это стало невозможно» — Михаил, собственник.</td>
+        <td class="fwd">Рекомендация человека, у которого получилось. Узнаваемое лицо Вани. Boost и скиллы как первый опыт.</td>
+        <td class="fwd">Конкретная дата и дедлайн. Анонс обновления. Бюджет от компании. Совет знакомого.</td>
+        <td class="fwd"><span class="aha">AHA</span><br>Ответ Вани на мою задачу прямо на вебинаре. Хуки в начале первой лекции ведут ко второй.</td>
+        <td class="fwd">«Не подойдёт, если…». Боли словами клиента. Расписание по неделям и «10 часов в неделю». Кейсы с цифрами. Кнопка «Задать вопрос команде».</td>
+        <td class="fwd">Доверие: рекомендация и Ваня. Скидка выпускнику. Рассрочка. Ответ живого человека: «Люди идут на людей» (id8641, анкета п. 54–55).</td>
+        <td class="fwd">Доверие: «Нет. Я вам доверяю». Вводный воркшоп с Ваней. Учебный кейс для тех, у кого нет продукта.</td>
+        <td class="fwd"><span class="aha">AHA</span><br>Первая практика собирает теорию. Кураторы, напоминания и отметки в личном кабинете.</td>
+        <td class="fwd">Внешний судья: руководитель, перформанс-ревью, первая продажа.</td>
+        <td class="fwd">Большое обновление курса. Рекомендация. Boost и Product Heroes как следующие шаги.</td>
+      </tr>
+      <tr>
+        <th class="rowh" scope="row">Цифры</th>
+        <td class="tnum"><ul><li>«Решаю на чуйке» 27%, «запускаю своё» 25%, «не растёт» 18%, «новая роль» 18% <span class="tag">анкеты 50–59</span></li><li>Без опыта «запускаю своё» — 41%; у 8+ лет «не растёт» — 26%</li><li>Бизнес-задача 56% против карьеры 16% <span class="tag">потоки 56–59</span></li></ul></td>
+        <td class="tnum"><ul><li>Узнали из Telegram Вани 47%, от коллег 25%, с бесплатной лекции 14% <span class="tag">анкета 2.0</span></li><li>Медиана в боте до покупки 127 дней; 29 из 63 покупателей — дольше полугода <span class="tag">бот</span></li><li>«Давно», «пару лет» — ≈100 анкет</li></ul></td>
+        <td class="tnum"><ul><li>Поводы: контент или анонс Вани ≈100, рекомендация ≈84, руководитель или компания ≈76, смена роли ≈75, провал ≈66, потеря работы или освободился ресурс ≈65, «последний поток» или рост цены ≈28 <span class="tag">анкеты 50–59</span></li><li>Событие назвали 33 из 85 <span class="tag">анкета 2.0</span></li></ul></td>
+        <td class="tnum"><ul><li>Бесплатный модуль: у 46% покупателей против 14% подписчиков с email; из 1 465 человек с этим тегом купили 29 (2,0%) <span class="tag">бот</span></li><li>Теги пробных лекций: 157 человек → 4,5% купили, 89 → 10,1%. Средняя по боту — 0,62%</li><li>Вебинар 27.08: 46% покупателей против 7%, купили 3,9%; воркшоп 23.09: 37% против 7%, 3,3%; вебинар 02.09: 41% против 10%</li><li>Массовые вайб-вебинары: купили 0,25–0,56%</li><li>Открытая часть: 949 человек → 13 оплатили КДП 2.0 <span class="tag">сайт, 6.09–6.10</span></li><li>Даты тегов не выгружены: часть могла появиться после оплаты</li></ul></td>
+        <td class="tnum"><ul><li>«Много текста» или «длинно»: 14 из 20 (2.0), 5 из 8 (V1) <span class="tag">интервью</span></li><li>Путаница с датами: 7 из 20 (2.0), 5 из 8 (V1)</li><li>«Что нового?»: 5 из 8 (V1), 3 из 7 (V2)</li><li>«Не про меня» или «не горит»: 4 из 9 во второй половине интервью 2.0; «не про меня»: 4 из 7 (V2)</li></ul></td>
+        <td class="tnum"><ul><li>Почему выбрали: рекомендация 38%, Ваня 36%, методология 26%, вебинар или воркшоп 25%, Boost и скиллы 14%, обновление 12%, компания 11%; цена — 0 <span class="tag">анкета 2.0</span></li><li>79 человек создали заказ, 59 оплатили <span class="tag">сайт</span></li><li>Максимум 75, База 21, с фидбеком Вани 9 из 105 <span class="tag">Airtable</span></li></ul></td>
+        <td class="tnum"><ul><li>Страхов нет 45%; «не применю к своему» 22%; время 11%; уровень 10%; «теория без практики» 8%; цена 0 <span class="tag">анкета 2.0</span></li><li>Страх есть у 80% запускающих первый бизнес и junior/middle, у 32% senior, Head и собственников</li></ul></td>
+        <td class="tnum"><ul><li>8 недель, ≈10 часов в неделю, 8 воркшопов, 7 Q&amp;A <span class="tag">программа</span></li><li>Фактов о прохождении в выгрузках нет</li></ul></td>
+        <td class="tnum"><ul><li>Точка Б: уверенность 36, бизнес-результат 33, система 30, карьера 21 из 83 <span class="tag">анкета 2.0</span></li><li>Критерии: деньги 29%, «стало понятно» 25%, артефакты 24%, «не знаю» 7% <span class="tag">потоки 56–59</span></li></ul></td>
+        <td class="tnum"><ul><li>21% покупателей 2.0 уже платили Ване <span class="tag">анкета 2.0</span></li><li>Скидка за повтор — минимум у 13 из 105 <span class="tag">Airtable</span></li><li>Командное и парное прохождение — ≈20 анкет</li></ul></td>
+      </tr>
+      <tr>
+        <th class="rowh" scope="row">Голос клиента</th>
+        <td><p class="quote">«Когда меня спрашивают «почему в роадмапе именно это, а не то» - у меня нет ответа, который держится на цифрах.»<cite>Даниил С. · анкета КДП 2.0</cite></p><p class="quote">«Уже год топчемся на месте, 10 раз пересобрали продукты… Роста нет.»<cite>Александр Р. · анкета КДП 2.0</cite></p></td>
+        <td><p class="quote">«Давно читаю Ваню и уже пару лет собирался прийти на обучение, но всё как-то не срасталось.»<cite>id7233 · анкета п. 50–51</cite></p><p class="quote">«Я за Ваней слежу, наверное, уже лет восемь»<cite>Анна Д. · интервью 2.0</cite></p></td>
+        <td><p class="quote">«Решающее событие - анонс, что обновлений курса для выпускников предыдущих потоков не будет -> … -> волшебный пинок»<cite>Анастасия К. · анкета КДП 2.0</cite></p><p class="quote">«Последняя капля - перформанс ревью с лидером.»<cite>id7725 · анкета п. 52</cite></p><p class="quote">«И, кстати, у меня время еще появилось. Вот это важно. Это перечеркивает, наверное, все остальное.»<cite>Евгений К. · интервью 2.0, купил</cite></p></td>
+        <td><p class="quote">«Ваня во время вебинара дал ответ о том, чего не хватает в моей сегментации. Решила нужно, что в этот раз дойти до курса»<cite>Жанна К. · анкета КДП 2.0</cite></p><p class="quote">«Минут 35 посмотрел, на этом пока всё.»<cite>Егор Р. · интервью 2.0</cite></p></td>
+        <td><p class="quote">«Короче, я не использовал сайт для принятия решения о покупке. Вообще.»<cite>Евгений К. · интервью 2.0, купил</cite></p><p class="quote">«Вот этот текст я сразу, честно говоря, особо не читаю»<cite>Анна Д. · интервью 2.0</cite></p><p class="quote">«Очень приятно видеть, куда курс не подойдёт, — ощущение, что человек реально знает свой продукт.»<cite>Натела П. · интервью 2.0</cite></p></td>
+        <td><p class="quote">«я уже готова купить этот курс. Я не на этапе выбора этого курса, я на этапе выбора времени, когда к нему присоединиться.»<cite>Ольга К. · интервью 2.0</cite></p><p class="quote">«беспроцентная рассрочка ТБНК для меня недоступна, потому что я в Португалии»<cite>Анна Д. · интервью 2.0</cite></p></td>
+        <td><p class="quote">«Большинство примеров на таких курсах из IT и стартапов. У меня офлайн: дистрибуция товара и консалтинг.»<cite>Ольга С. · анкета КДП 2.0</cite></p><p class="quote">«Боюсь отстать от графика, потому сто работаю фултайм и есть маленький ребенок.»<cite>Ирина · анкета КДП 2.0</cite></p><p class="quote">«Я до сих пор не понимаю, я сейчас оплатил, я уже пропустил половину первого какого-то модуля, или я не пропустил.»<cite>Евгений К. · интервью 2.0, купил</cite></p></td>
+        <td><p class="quote">«Трудно понять концепцию, т.к. много нового, но после первой практики становится все на место»<cite>id9582 · анкета п. 56–57</cite></p><p class="quote">«прошлый проходила год назад и слилась с практической части»<cite>id7356 · анкета п. 50–51</cite></p></td>
+        <td><p class="quote">«Спокойно и уверенно: открываю бэклог и понимаю, почему делаю именно это, для какого сегмента и сколько денег это должно принести.»<cite>Владимир · анкета КДП 2.0, Точка Б</cite></p></td>
+        <td><p class="quote">«Мне посоветовал его знакомый, который проходил прошлый поток»<cite>Андрей · анкета КДП 2.0</cite></p><p class="quote">«Пока у меня запроса на апгрейд и пройти это снова нету.»<cite>Дмитрий Т. · выпускник 56-го потока</cite></p></td>
+      </tr>
+      <tr class="lane-row">
+        <th class="rowh" scope="row">Дорожки</th>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Продукт не растёт, нет маркетинга, «запускаю и боюсь слить деньги». Без опыта в продукте — это в основном они.</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Решают на чуйке и не могут объяснить руководителю приоритеты. «Чуйка» держится на ≈30% со второго года опыта.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Новая роль или потеря работы. «Новая роль» на пике при опыте меньше года — 30%.</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Прошлый курс «снова превратился в кашу», тогда не было своего продукта.</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Советы коллег-фаундеров, Boost и скиллы. Арсению курс посоветовал инженер PostHog. Евгений К. следил несколько лет, но «не мог себе объяснить, зачем мне как предпринимателю этим заниматься».</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Коллеги, руководитель, конференции, эфиры с Красинским.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Бесплатные лекции, YouTube, лекции в Яндексе.</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Канал и бот: «Очень полезно, что бот рассылает уведомлялки» (Ольга К.). Ждут анонса нового потока.</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>«Горит» задача и есть деньги в окне. Или освободилось время: у Евгения К. «отлетели несколько проектов», совпало с обновлением курса.</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Вопрос руководителя, перформанс-ревью, бюджет отдела на обучение.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>После увольнения освободилось время; назначили на новую роль.</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Анонс 2.0, «обновлений для выпускников не будет», «последний поток».</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Ищут ответ на свою задачу: сегменты, отстройка. Хуки первой лекции работают.</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Одна-две открытые лекции и вебинар, чтобы проверить глубину (Владимир М., продакт).</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Смотрят бесплатные материалы Вани и Красинского вместо платного, думают о складчине (Алекс, V2).</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Открытая часть кажется повторением (Тарас, 51-й поток).</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Карьерный блок мимо: «Продвигаться по карьере мне неинтересно». Не находят себя среди сегментов. Ищут слова «пересборка», «отстройка». Логотипы корпораций для малого бизнеса скорее минус: «делать продукт от полной МТС, это, типа, ну, и в реальном секторе, это две большие разницы» (Евгений К.).</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Нужны короткие аргументы для директора. Смотрят программу, даты, нагрузку.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>«Подойдёт ли новичку?» Фраза «курс не даёт профессии» одних расстраивает, других успокаивает.</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Главный вопрос: что нового по сравнению с прошлым потоком.</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Платят сами или со счёта ИП. Есть потолок личных денег: у Арсения ≈500 €.</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Компания платит у 9% покупателей 2.0. В V1 двое самых готовых ждали оплаты от работодателя и дат.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Решают цена и рассрочка: «Мне приоритетнее продать те навыки, которые уже есть, а не приобрести новые.»</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Скидка 20% за повторное прохождение.</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Страх есть у 4 из 14 собственников (в основном время) и у 9 из 11 «планирую первый бизнес».</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Junior и middle: страх у 11 из 14, «не применю в своей организации», «внутренний продукт». Senior: у 5 из 12.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>«Уровень не тот», «не пойму программу».</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Нет данных.</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Главный критерий — практика на своём продукте. Евгений К. собирается упаковать метод в скиллы и «на потоке тестировать десятки гипотез».</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Если продукт внутренний, идут на учебный кейс.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Своего продукта нет, учатся на учебном кейсе.</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Возвращаются к материалам эпизодически, «пару раз в несколько месяцев».</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Бизнес-результат: Точка Б у 13 из 15 собственников.</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Объяснить приоритет за пять минут, защитить решение, пройти перформанс-ревью.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Оффер: «Хочу найти работу продакт менеджером» (Искандар У.).</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>«Уникальная компетенция» в команде (Дмитрий Т.).</p>
+        </td>
+        <td>
+          <p class="lane-note" data-lane="owner"><b>Владельцы</b>Идут по лестнице продуктов: Ольга К. прошла КДП, Boost и Boost Pro и ждёт 2.0. «Ну всё, я Ванин фанат».</p>
+          <p class="lane-note" data-lane="pm"><b>Продакты в найме</b>Приходят командой: от пары до 10 человек из одной компании.</p>
+          <p class="lane-note" data-lane="switch"><b>Переходят в продукт</b>Product Heroes «вторым шагом».</p>
+          <p class="lane-note" data-lane="alumni"><b>Выпускники</b>Возвращаются, когда есть большое обновление и новый продукт на руках.</p>
+        </td>
+      </tr>
+      <tr>
+        <th class="rowh" scope="row">Сила данных</th>
+        <td><span class="str s-hi">высокая</span><span class="str-note">1 660 + 85 анкет</span></td>
+        <td><span class="str s-hi">высокая</span><span class="str-note">анкеты, бот, все интервью</span></td>
+        <td><span class="str s-hi">высокая</span><span class="str-note">явный повод назвала часть анкет</span></td>
+        <td><span class="str s-mid">средняя</span><span class="str-note">даты присвоения тегов не выгружены</span></td>
+        <td><span class="str s-hi">высокая</span><span class="str-note">но выборка тёплая и в основном не купившая</span></td>
+        <td><span class="str s-mid">средняя</span><span class="str-note">причины отказа на чекауте не знаем</span></td>
+        <td><span class="str s-hi">высокая</span><span class="str-note">анкеты купивших 2.0 и одно интервью купившего</span></td>
+        <td><span class="str s-lo">низкая</span><span class="str-note">ретроспектива 3–4 выпускников</span></td>
+        <td><span class="str s-no">нет данных</span><span class="str-note">только ожидания на входе</span></td>
+        <td><span class="str s-mid">средняя</span><span class="str-note">повтор и рекомендации видны, удержание нет</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="touchpoints">
+  <h2>Какие точки контакта люди называют сами</h2>
+  <p class="lead">Анкета КДП 2.0 спрашивала «из какого источника узнали о курсе», можно было выбрать несколько вариантов. В интервью точки назывались по ходу разговора. В последней колонке — что видно в журнале сайта и в боте за 6.09–6.10 по всем посетителям, не только покупателям.</p>
+  <div class="tp-sum">
+    <p><b>Главная точка — Telegram Вани</b>Его назвали 40 из 85 купивших 2.0. Второе место у рекомендаций: коллеги, эксперты и Красинский дают ещё 36 упоминаний.</p>
+    <p><b>Сайт и блог zamesin.ru почти не называют</b>Блог zamesin.ru выбрал 1 человек из 85. В интервью блог и статьи на zamesin.ru вспомнили трое из 35, и у двоих они сработали как проверка доверия.</p>
+    <p><b>Страница курса — проверка, а не источник</b>Её отметили 11 из 85, всегда вместе с другими источниками. Купивший Евгений К. сайт для решения не использовал.</p>
+  </div>
+  <div class="box tbl-scroll">
+    <table class="tp">
+      <thead><tr><th>Точка контакта</th><th>Анкета 2.0, из 85</th><th>Кто называл в интервью</th><th>Сайт и бот, 6.09–6.10</th></tr></thead>
+      <tbody>
+        <tr><td>Telegram-канал Вани</td><td class="n"><span class="bar" style="width:120px" aria-hidden="true"></span>40</td><td>Многие «давно подписаны». У Ксении М. канал был на мьюте</td><td>переходы из канала 138, из бота 334</td></tr>
+        <tr><td>Посоветовали коллеги</td><td class="n"><span class="bar" style="width:63px" aria-hidden="true"></span>21</td><td>13 из 35 пришли по совету: друзья, коллеги, Оля Соколова, инженер PostHog у Арсения</td><td>—</td></tr>
+        <tr><td>Бесплатная лекция или вебинар Вани (онбординг-модуль)</td><td class="n"><span class="bar" style="width:36px" aria-hidden="true"></span>12</td><td>Открытые лекции смотрели около 11 человек, вебинары и эфиры — около 8</td><td>открытая часть: 343 визита, 949 человек открыли; тег бесплатного модуля в боте у 1 465 человек</td></tr>
+        <tr><td>Сайт «Как делать продукт»</td><td class="n"><span class="bar" style="width:33px" aria-hidden="true"></span>11</td><td>Смотрели все, но как проверку. Евгений К.: <span class="q">«я не использовал сайт для принятия решения о покупке»</span></td><td>страница курса: 847 визитов</td></tr>
+        <tr><td>Рекомендация другого эксперта</td><td class="n"><span class="bar" style="width:33px" aria-hidden="true"></span>11</td><td>—</td><td>—</td></tr>
+        <tr><td>Другие Telegram-каналы</td><td class="n"><span class="bar" style="width:27px" aria-hidden="true"></span>9</td><td>Ксения М. увидела анонс выступления Вани на другом канале</td><td>—</td></tr>
+        <tr><td>Обучение купила компания</td><td class="n"><span class="bar" style="width:24px" aria-hidden="true"></span>8</td><td>Дарья и Никита М. (V1) ждали оплату от работодателя</td><td>—</td></tr>
+        <tr><td>YouTube Вани</td><td class="n"><span class="bar" style="width:21px" aria-hidden="true"></span>7</td><td>Артём, Дарья, Евгений К.</td><td>переходы с YouTube 21</td></tr>
+        <tr><td>Boost</td><td class="n"><span class="bar" style="width:18px" aria-hidden="true"></span>6</td><td>Ольга К., Екатерина, Денис Б. прошли Boost до КДП</td><td>—</td></tr>
+        <tr><td>Рекомендация Ильи Красинского</td><td class="n"><span class="bar" style="width:12px" aria-hidden="true"></span>4</td><td>Тарас проходил курс Красинского. В анкете 2.0 Винер назвал поводом эфир Вани с Красинским 2 сентября</td><td>—</td></tr>
+        <tr><td>Выступление Вани на конференции</td><td class="n"><span class="bar" style="width:12px" aria-hidden="true"></span>4</td><td>—</td><td>—</td></tr>
+        <tr><td>Instagram Вани</td><td class="n"><span class="bar" style="width:6px" aria-hidden="true"></span>2</td><td>Антонина</td><td>переходы из Instagram 24</td></tr>
+        <tr><td>Сайт AURA</td><td class="n"><span class="bar" style="width:6px" aria-hidden="true"></span>2</td><td>—</td><td>—</td></tr>
+        <tr><td>Книга Вани</td><td class="n"><span class="bar" style="width:3px" aria-hidden="true"></span>1</td><td>Ксения М. читала черновики, Анна ждёт книгу, Егор знал про бесплатную книгу</td><td>—</td></tr>
+        <tr><td><b>Блог zamesin.ru</b></td><td class="n"><span class="bar" style="width:3px" aria-hidden="true"></span>1</td><td>Арсений: <span class="q">«Мне очень помогло посмотреть на zamesin.ru: есть вот эти посты про «Мету»… тут Ваня пишет прямо про выручку, расходы по месяцам, и мне это дало много кредибилити»</span>. Артём: <span class="q">«Я читал много статей еще. Причем на старом сайте Вани.»</span> Ольга К.: <span class="q">«могу пропускать сам блог Вани, не всё читать, на это нет времени»</span></td><td>статья «Клиенты не покупают» 22 визита, видео «Почему продукт не растёт» 17, «Выручка не растёт» 11</td></tr>
+        <tr><td>Лекции Вани в Яндексе</td><td class="n">нет в форме</td><td>Никита Ш., Никита С., Арсений, Дмитрий Т. узнали о Ване с лекций в Яндексе, некоторые ещё в 2019–2020</td><td>—</td></tr>
+        <tr><td>NMT-скиллы</td><td class="n">нет в форме</td><td>Павел, Артём, Анна, Евгений К. пользуются скиллами или своими версиями</td><td>страница скиллов: 68 визитов</td></tr>
+        <tr><td>Бот и письма</td><td class="n">нет в форме</td><td>Ольга К.: бот напоминает о важном. Евгений К. купил после рассылки про вход до 6 октября. Алине бот сразу добавил предзапись</td><td>переходы из бота 334, из рассылки 31</td></tr>
+        <tr><td>Подкаст</td><td class="n">нет в форме</td><td>Роман видел интервью Вани у Гриши Мастеридера</td><td>—</td></tr>
+        <tr><td>Поиск</td><td class="n"><span class="bar" style="width:3px" aria-hidden="true"></span>1</td><td>—</td><td>Google 128, Яндекс 114, Яндекс с меткой 65, ChatGPT 13</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tp-note">Анкета: 85 содержательных анкет из 93, у одного человека в среднем 1,7 источника. Интервью: 35 человек, счёт по упоминаниям в расшифровках. Журнал сайта показывает визиты всех людей, у 50 из 59 покупателей визиты до заказа не связаны с email.</p>
+</section>
+
+<section id="lanes">
+  <h2>Четыре дорожки</h2>
+  <p class="lead">Дорожки различаются контекстом и тем, кто платит, а не возрастом или должностью. Человек может быть сразу в двух: выпускник бывает и владельцем.</p>
+  <div class="segs">
+    <article class="seg">
+      <h3>Владельцы и основатели</h3>
+      <p class="share">31% покупателей 2.0 · 26 из 85</p>
+      <dl>
+        <div><dt>Работа</dt><dd>Найти платящий сегмент, отстроиться, запустить и не слить деньги.</dd></div>
+        <div><dt>Что запускает</dt><dd>Продукт не растёт или запускается новый, плюс деньги и время в окне.</dd></div>
+        <div><dt>Что тормозит</dt><dd>Время, «подойдёт ли офлайну и B2B», карьерный язык лендинга, путаница с датами потока.</dd></div>
+        <div><dt>Точка Б</dt><dd>Бизнес-результат: выручка, первые продажи, понятный сегмент.</dd></div>
+      </dl>
+    </article>
+    <article class="seg">
+      <h3>Продакты в найме</h3>
+      <p class="share">36% покупателей 2.0 · 31 из 85</p>
+      <dl>
+        <div><dt>Работа</dt><dd>Перестать решать на чуйке и уметь обосновать решение перед руководителем.</dd></div>
+        <div><dt>Что запускает</dt><dd>Вопрос руководителя, перформанс-ревью, новая роль, бюджет компании.</dd></div>
+        <div><dt>Что тормозит</dt><dd>Согласование оплаты, даты, «применю ли во внутреннем продукте».</dd></div>
+        <div><dt>Точка Б</dt><dd>Система в голове, защищённый роадмап, рост в грейде.</dd></div>
+      </dl>
+    </article>
+    <article class="seg">
+      <h3>Переходят в продукт</h3>
+      <p class="share">«новая роль» 18% и «рынок труда» 10% анкет 50–59</p>
+      <dl>
+        <div><dt>Работа</dt><dd>Разобраться, как управлять продуктом, и получить работу.</dd></div>
+        <div><dt>Что запускает</dt><dd>Назначение на роль, увольнение, освободившееся время.</dd></div>
+        <div><dt>Что тормозит</dt><dd>Цена без дохода, рассрочка, «подойдёт ли новичку».</dd></div>
+        <div><dt>Точка Б</dt><dd>Оффер, зарплата, уверенность на собеседованиях.</dd></div>
+      </dl>
+    </article>
+    <article class="seg">
+      <h3>Выпускники и повторники</h3>
+      <p class="share">21% покупателей 2.0 уже платили Ване</p>
+      <dl>
+        <div><dt>Работа</dt><dd>Пересобрать знания на новом продукте и не отстать от методологии.</dd></div>
+        <div><dt>Что запускает</dt><dd>Анонс обновления, «обновлений не будет», «последний поток».</dd></div>
+        <div><dt>Что тормозит</dt><dd>Непонятно, что нового. Бесплатный апдейт снимает повод купить.</dd></div>
+        <div><dt>Точка Б</dt><dd>Применить на новом контексте, держать уникальную компетенцию.</dd></div>
+      </dl>
+    </article>
+  </div>
+</section>
+
+<section id="breaks">
+  <h2>Где рвётся путь</h2>
+  <p class="lead">Порядок — по тому, сколько людей теряем и насколько дёшево проверить. Последние пункты опираются на меньше данных. Предложения в каждом пункте — гипотезы для проверки, а не готовые решения.</p>
+  <div class="breaks">
+    <article class="brk">
+      <span class="n">1</span>
+      <h3>«Хочу, но не сейчас» уходит без следующего шага</h3>
+      <div class="meta"><span class="pill">этапы 03 и 06</span><span class="pill t-gap">разрыв между потоками</span></div>
+      <p class="ev">В интервью 2.0 так ответили 6 из 10 и 3 из 9. В V1 пятеро из восьми ждали следующего потока после закрытого. Никита Ш. сказал, что вернулся бы по уведомлению в Telegram. Антонину отказ в прошлый поток задел. Евгений К. уже решил перенести покупку и купил «абсолютно случайно», когда пришло письмо про вход до 6 октября. Его оценка: «вы часть продаж потеряли из-за этого».</p>
+      <p class="do"><b>Проверить:</b> предзапись на следующий поток с датой, тег «ждёт поток» в боте и одно напоминание. Считать, сколько «позже» вернулось.</p>
+    </article>
+    <article class="brk">
+      <span class="n">2</span>
+      <h3>Путь до покупки не виден в данных</h3>
+      <div class="meta"><span class="pill">этапы 02–05</span><span class="pill t-blind">слепое пятно</span></div>
+      <p class="ev">У 50 из 59 покупателей в журнале сайта нет ни одного визита до заказа: анонимные визиты не склеиваются с email. UTM есть у 44 из 105 записей. В боте по email нашлись 63 из 115 покупателей, даты тегов не выгружаются.</p>
+      <p class="do"><b>Проверить:</b> связывать визиты с email при регистрации на вебинар и открытую часть; выгружать дату присвоения тега в боте.</p>
+    </article>
+    <article class="brk">
+      <span class="n">3</span>
+      <h3>Лендинг не отвечает на четыре вопроса проверки</h3>
+      <div class="meta"><span class="pill">этап 05</span><span class="pill t-fear">страх + перегруз внимания</span></div>
+      <p class="ev">Про меня ли, что нового, когда старт и успеваю ли, что получу на выходе. Ответы есть, но тонут в тексте: «много текста» или «длинно» отметили 14 из 20 в интервью 2.0 и 5 из 8 в V1. Даты путали 7 из 20 и 5 из 8.</p>
+      <p class="do"><b>Проверить:</b> короткий блок наверху с этими четырьмя ответами, одной датой старта и дедлайном входа, ценой в евро.</p>
+    </article>
+    <article class="brk">
+      <span class="n">4</span>
+      <h3>Четверть заказов не оплачена</h3>
+      <div class="meta"><span class="pill">этап 06</span><span class="pill t-bar">объективный барьер</span></div>
+      <p class="ev">С 6 сентября по 6 октября 79 человек создали заказ КДП 2.0, 20 не оплатили. Из-за рубежа недоступна рассрочка (Португалия), просят оплату не на российскую карту, не понимают цену в рублях.</p>
+      <p class="do"><b>Проверить:</b> связаться с бросившими заказ в течение часа и спросить причину; показать оплату иностранной картой и сумму в евро.</p>
+    </article>
+    <article class="brk">
+      <span class="n">5</span>
+      <h3>Путь «оплатит компания» не описан</h3>
+      <div class="meta"><span class="pill">этапы 03 и 06</span><span class="pill t-gap">передача между людьми</span></div>
+      <p class="ev">Руководитель или компания стали поводом в ≈76 анкетах 50–59, компания оплатила 9% покупателей 2.0. В V1 двое самых готовых покупателей ждали согласования. Гюзэль просит короткие аргументы для директора.</p>
+      <p class="do"><b>Проверить:</b> одна страница для руководителя: что получит компания, как выставить счёт, договор, сроки.</p>
+    </article>
+    <article class="brk">
+      <span class="n">6</span>
+      <h3>Страх «не применю к своему» закрываем не тем</h3>
+      <div class="meta"><span class="pill">этапы 05 и 07</span><span class="pill t-fear">страх</span></div>
+      <p class="ev">«Не смогу применить к своему контексту» — 22%, «теория без практики» — 8%. Боятся офлайн-бизнес, B2B, внутренние продукты и те, у кого продукта ещё нет.</p>
+      <p class="do"><b>Проверить:</b> разборы для офлайна, B2B и внутреннего продукта на лендинге и во «Введении»; явно сказать, что делать без своего продукта.</p>
+    </article>
+    <article class="brk">
+      <span class="n">7</span>
+      <h3>Бесплатный модуль теряет людей на длинных лекциях</h3>
+      <div class="meta"><span class="pill">этап 04</span><span class="pill t-gap">внимание</span></div>
+      <p class="ev">Модуль — самое конверсионное касание, но в нём же и теряем. Егор ушёл на 35-й минуте первой лекции, Роман — на третьей лекции. Денис К. не нашёл лекции в личном кабинете, когда появилось свободное время. Арсения удержали хуки в начале. Открытая часть за месяц: 949 человек, 13 оплатили.</p>
+      <p class="do"><b>Проверить:</b> выгрузить досмотры модуля из личного кабинета по лекциям; переставить самый сильный пример в первые минуты; держать модуль одной вкладкой в кабинете.</p>
+    </article>
+    <article class="brk">
+      <span class="n">8</span>
+      <h3>Выпускникам не дали повода вернуться</h3>
+      <div class="meta"><span class="pill">этапы 05 и 10</span><span class="pill t-gap">разрыв</span></div>
+      <p class="ev">21% покупателей 2.0 уже платили Ване. При этом «что нового?» спрашивали 5 из 8 в V1, выпускник 56-го с бесплатным апдейтом не покупает, а Тарас видит в открытой части повторение.</p>
+      <p class="do"><b>Проверить:</b> отдельный экран «что нового для выпускников» и оффер под пересборку на новом продукте.</p>
+    </article>
+    <article class="brk">
+      <span class="n">9</span>
+      <h3>Не знаем, что происходит после курса</h3>
+      <div class="meta"><span class="pill">этапы 08–10</span><span class="pill t-blind">слепое пятно</span></div>
+      <p class="ev">В выгрузке потоков 50–59 только поля входной анкеты. У КДП 2.0 поле «Точка B END» пустое, потому что поток идёт до 22 ноября.</p>
+      <p class="do"><b>Проверить:</b> выгрузить выходную анкету прошлых потоков, если она есть; в 2.0 собрать «Точку Б» в конце и повторить замер через три месяца.</p>
+    </article>
+    <article class="brk">
+      <span class="n">10</span>
+      <h3>Купивший не понимает, что будет дальше</h3>
+      <div class="meta"><span class="pill">этап 07</span><span class="pill t-gap">передача от продажи к обучению</span></div>
+      <p class="ev">Евгений К. оплатил и не понимает, пропустил ли половину модуля, в каком темпе смотреть лекции, будет ли у него «тест на входе с персональным маршрутом», где идут воркшопы. Чат потока нашёл только во время интервью. Это один человек, но единственный уже купивший среди интервью 2.0.</p>
+      <p class="do"><b>Проверить:</b> письмо и экран сразу после оплаты с картой «что будет дальше»: что уже открыто, даты воркшопов, где чат, что делать в первую неделю.</p>
+    </article>
+  </div>
+</section>
+
+<section id="gaps">
+  <h2>Чего мы не знаем и что надёжно</h2>
+  <div class="two">
+    <div class="box">
+      <h3>Открытые вопросы</h3>
+      <ul>
+        <li>Какой результат люди получают после курса и через сколько.</li>
+        <li>Почему 20 человек создали заказ и не оплатили.</li>
+        <li>Сколько «хочу, но позже» возвращаются к следующему потоку.</li>
+        <li>На какой неделе и на каком задании бросают обучение.</li>
+        <li>Как выбирают тариф: фидбек Вани назвали причиной не больше 2 из 7 взявших этот тариф, а Евгений К. не уверен, какой тариф купил.</li>
+        <li>Как идёт холодный путь: все 35 респондентов знали Ваню заранее.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Оговорки</h3>
+      <ul>
+        <li>Решенческие интервью — это тест лендинга на тёплой выборке. Они показывают, мешает ли страница, а не продаёт ли она холодному.</li>
+        <li>Анкеты заполняют после оплаты. Отказавшихся в них нет.</li>
+        <li>В потоках 50–55 и 56–59 разные формы анкеты, поэтому работы и критерии сравниваются внутри формы.</li>
+        <li>Разметка триггеров и работ — интерпретация свободного текста, цифры приблизительные.</li>
+        <li>В боте нет дат присвоения тегов, часть тегов могла появиться после оплаты.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="sources">
+  <h2>Источники и метод</h2>
+  <p class="lead">Каждый источник прочитан целиком, без выборки. Для всех кусков использовался один кодбук: 13 типов триггеров и 8 работ. Цитаты дословные, с опечатками оригинала. По канону Next Move Theory CJM строится как цепочка работ клиента: в карту входят шаги до и после продукта, а путь у каждого сегмента свой.</p>
+  <div class="box tbl-scroll">
+    <table class="src-t">
+      <thead><tr><th>Источник</th><th>Объём</th><th>Период</th><th>Покрывает этапы</th></tr></thead>
+      <tbody>
+        <tr><td>Решенческие интервью КДП 2.0</td><td class="n">20</td><td>22.09–07.10.2026</td><td>01–07, ожидания 08–10</td></tr>
+        <tr><td>Решенческие интервью V1 и V2 по прошлым лендингам</td><td class="n">8 + 7</td><td>май–июль 2026</td><td>01–07, ожидания 08–10</td></tr>
+        <tr><td>Входная анкета, потоки 50–59 («Обучение студентов на потоках»)</td><td class="n">1 660</td><td>потоки 50–59</td><td>01, 03, 07, следы 02 и 10</td></tr>
+        <tr><td>Вступительная форма КДП 2.0</td><td class="n">85 из 93</td><td>27.08–29.09.2026</td><td>01–03, 06, 07, 09</td></tr>
+        <tr><td>Airtable «Обучение студентов КДП 2.0»</td><td class="n">105</td><td>1-й поток 2.0</td><td>06, 10</td></tr>
+        <tr><td>Бот Вани, экспорт BotHelp с тегами</td><td class="n">19 068</td><td>на 07.10.2026</td><td>01, 02, 04</td></tr>
+        <tr><td>Журнал сайта «Journeys»</td><td class="n">2 960 чел.</td><td>06.09–06.10.2026</td><td>04–06</td></tr>
+        <tr><td>Программа «Максимум» и план запуска КДП 2.0</td><td class="n">2 док.</td><td>август–сентябрь 2026</td><td>точки контакта 04–09</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <footer>Собрано 7 октября 2026. Полные отчёты с цитатами и разметкой по каждому источнику лежат в репозитории рядом с картой: 2-Products/RU/KDP-New/cjm/evidence/.</footer>
+</section>
+
+</main>
+
+
+
+</body>
+</html>

@@ -1,0 +1,1053 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Мамкины вайбкодеры</title>
+<style>
+@font-face{font-family:"Golos Text";src:url(assets/fonts/golos-text-cyrillic.woff2) format("woff2");font-weight:400 900;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:block}
+@font-face{font-family:"Golos Text";src:url(assets/fonts/golos-text-latin.woff2) format("woff2");font-weight:400 900;unicode-range:U+0000-00FF,U+2000-206F;font-display:block}
+
+/* свежий белый фон, разделы различаются приглушёнными пигментами, линии тонкие */
+:root{
+  --paper:#f6f8fa; --ink:#1d2733; --muted:#66707d; --hair:1.5px solid #1d2733;
+  --grey:#f6f8fa; --intro:#cdd9e6; --quiz:#e9dcab; --ableton:#efc5a4; --site:#aed3da; --admin:#cbdba8; --fekla:#e8b9ca; --job:#e8b0a3; --neuro:#c9c0e6; --mint:#bfe0cf; --sky:#b9c9ee;
+  --display:"Golos Text",system-ui,sans-serif;
+  --text:"Golos Text",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:var(--paper);color:var(--ink);font-family:var(--text);font-synthesis:none;overflow:hidden}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;margin:-450px 0 0 -800px;overflow:hidden;transform-origin:50% 50%}
+
+/* слайд: светлый лист, пигмент раздела растворяется из правого верхнего угла */
+.clip{position:absolute;inset:0;display:none;flex-direction:column;gap:30px;padding:56px 72px 48px;background:linear-gradient(225deg,var(--c) 0%,var(--paper) 66%)}
+.clip.on{display:flex}
+.hd{display:block}
+.hd h2{font:400 46px/1.1 var(--display);letter-spacing:-.015em;white-space:nowrap}
+.hd p{margin-top:10px;font-size:28px;line-height:1.25;font-weight:400;text-align:left;color:var(--muted)}
+.shotbox{flex:1;min-height:0}
+.shot{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 14px 34px rgba(29,60,100,.14))}
+.pair{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.pair .shot{height:auto}
+
+/* титул */
+.title{--c:var(--site);padding:0}
+.tc{position:absolute;height:156px;display:flex;align-items:center;padding:0 52px;border-radius:78px;background:var(--c);font:400 100px/1 var(--display);letter-spacing:-.025em;white-space:nowrap}
+.cat{position:absolute;display:block;margin:0}
+.cat img{display:block;width:100%;height:auto;border-radius:28px}
+.title.on.sweep .tc,.title.on.sweep .cat{animation:wipe .5s steps(8) both;animation-delay:var(--at)}
+@keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+
+/* промпт */
+.prompt{flex:1;display:flex;flex-direction:column;justify-content:center;gap:.7em;max-width:1240px;font-size:40px;line-height:1.35;font-weight:400}
+
+/* курс: модули идут друг за другом, длина = минуты */
+.wf{position:relative;flex:1;min-height:0}
+.wf .m{position:absolute;height:28px}
+.wf .m::after{content:"";position:absolute;left:0;right:0;top:12px;height:3px;border-radius:2px;background:var(--ink)}
+.wf .t{position:absolute;height:28px;line-height:28px;font-size:22px;font-weight:400;white-space:nowrap}
+.facts{display:flex;gap:72px;align-items:baseline;font-size:25px;font-weight:400;color:var(--muted)}
+.facts b{font:400 52px/1 var(--display);letter-spacing:-.02em;margin-right:12px;color:var(--ink)}
+
+/* цепочка: три шага слева направо */
+.chain{flex:1;min-height:0;display:grid;grid-template-columns:1fr 72px 1fr 72px 1fr;align-items:center}
+.step h3{font:500 30px/1 var(--display);margin-bottom:18px}
+.step img{display:block;width:100%;aspect-ratio:1.376;object-fit:cover;object-position:left top;border-radius:18px;box-shadow:0 12px 30px rgba(29,60,100,.14)}
+.step p{margin-top:18px;font-size:25px;line-height:1.25;font-weight:400;color:var(--muted)}
+.wire{position:relative;height:1.5px;background:var(--ink);margin:0 14px 0 8px}
+.wire::after{content:"";position:absolute;right:-5px;top:-4.25px;width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.url{display:block;font:400 32px/1.1 var(--display);letter-spacing:-.01em;text-decoration:none;text-align:center;white-space:nowrap}
+.url:hover{text-decoration:underline}
+
+/* два приложения */
+.apps{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-content:center}
+.apps h3{font:500 30px/1 var(--display);margin-bottom:18px}
+.apps img{display:block;width:100%;border-radius:20px;box-shadow:0 14px 34px rgba(29,60,100,.16)}
+
+/* 71 канал: по фейдеру на канал, зазоры делят рубрики */
+.mix{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 640px;gap:64px}
+.board{display:flex;flex-direction:column;justify-content:center;gap:34px;min-width:0}
+.big{display:flex;align-items:flex-end;gap:26px}
+.big b{font:400 150px/.86 var(--display);letter-spacing:-.04em}
+.big span{font-size:30px;line-height:1.2;font-weight:400;color:var(--muted)}
+.faders{height:270px;display:flex;gap:6px;align-items:flex-end}
+.faders i{flex:1;background:var(--ink);border-radius:3px;height:calc(var(--l)*100%);transform-origin:bottom}
+.faders i.gap{flex:0 0 18px;background:none;height:0}
+.clip.on .faders i{animation:rise .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--w)}
+@keyframes rise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.playing .clip.on .faders i{animation:vu var(--v) ease-in-out infinite alternate}
+@keyframes vu{from{transform:scaleY(.55)}to{transform:scaleY(1.1)}}
+.lead{font-size:28px;line-height:1.25;font-weight:400}
+
+/* поиск работы: точки текут через сито */
+.flow{position:relative;flex:1;min-height:0}
+#flow{position:absolute;left:0;top:0;width:1488px;height:440px}
+.fl{position:absolute;top:456px;font-size:23px;line-height:1.25;font-weight:400;color:var(--muted)}
+.fl b{display:block;font:400 56px/1 var(--display);letter-spacing:-.03em;margin-bottom:10px;color:var(--ink)}
+
+/* критерии: длина линии = вес */
+.weights{display:flex;gap:12px;margin-top:10px}
+.weights div{flex:var(--w) 1 0;min-width:0}
+.weights b{display:flex;align-items:flex-end;height:auto;padding:0 0 16px;border-bottom:var(--hair);color:var(--ink);font:400 54px/1 var(--display);letter-spacing:-.03em;background:none}
+.weights span{display:block;margin-top:14px;font-size:24px;font-weight:400;color:var(--muted)}
+.flags{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:56px;align-content:center}
+.flags p{font-size:27px;line-height:1.3;font-weight:400}
+.flags i{display:block;width:26px;height:26px;border-radius:50%;background:var(--f);box-shadow:0 0 0 1.5px #fff,0 0 26px var(--f);margin:4px 0 24px 4px}
+
+/* Granola */
+.lines{flex:1;display:flex;flex-direction:column;justify-content:center;gap:34px;font-size:54px;line-height:1.15;font-weight:400;letter-spacing:-.02em}
+
+/* одно окно: сервисы слева и справа, по проводам бегут данные */
+.hub{position:relative;flex:1;min-height:0;margin-top:-34px}
+.hub>svg{position:absolute;left:0;top:0;width:1488px;height:733px}
+.hub line{stroke:var(--ink);stroke-width:1.5}
+.hub circle{stroke:#fff;stroke-width:2;filter:drop-shadow(0 0 6px rgba(29,39,51,.22))}
+.svc{position:absolute;width:320px;height:120px;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:0 28px;background:rgba(255,255,255,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.9);border-radius:28px;box-shadow:0 10px 34px rgba(29,60,100,.12);transition:background-color .25s}
+.svc.hot{background:var(--k)}
+.svc h3{display:flex;align-items:center;gap:12px;font:500 28px/1 var(--display)}
+.svc h3 i{flex:none;width:12px;height:12px;border-radius:50%;background:var(--k);box-shadow:0 0 0 4px rgba(255,255,255,.7)}
+.svc.hot h3 i{background:#fff;box-shadow:none}
+.svc p{font-size:22px;font-weight:400;color:var(--muted)}
+.svc b{position:absolute;right:-12px;top:-20px;padding:7px 16px;border-radius:20px;background:var(--ink);color:#fff;font-size:20px;font-weight:500;opacity:0;transform:scale(.7);transition:opacity .25s,transform .25s}
+.svc b.on{opacity:1;transform:none}
+.win{position:absolute;left:484px;top:100px;width:520px;height:500px;display:flex;flex-direction:column;background:rgba(255,255,255,.78);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.95);border-radius:30px;box-shadow:0 22px 60px rgba(29,60,100,.18);overflow:hidden}
+.wtop{position:relative;display:flex;gap:9px;align-items:center;height:52px;padding:0 24px;border-bottom:1px solid rgba(29,39,51,.08)}
+.wtop i{width:12px;height:12px;border-radius:50%;background:#ff5f57}
+.wtop i+i{background:#febc2e}
+.wtop i+i+i{background:#28c840}
+.wtop span{position:absolute;left:0;right:0;text-align:center;font-size:20px;font-weight:500;color:var(--muted)}
+.chat{flex:1;display:flex;flex-direction:column;gap:14px;padding:16px 26px}
+.me{align-self:flex-end;max-width:460px;padding:12px 22px;border-radius:22px;background:rgba(29,60,100,.07);font-size:22px;line-height:1.25;font-weight:400}
+.tools{list-style:none;padding:0;display:flex;flex-direction:column;gap:6px}
+.tools li{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:400;color:var(--muted);transform:translateY(6px)}
+.tools li i{width:10px;height:10px;border-radius:50%;background:var(--k)}
+.ans{min-height:35px;font-size:26px;line-height:1.25;font-weight:500}
+.me,.ans,.tools li{opacity:0;transition:opacity .3s,transform .3s}
+.me.on,.ans.on,.tools li.on{opacity:1;transform:none}
+.inp{display:flex;align-items:center;gap:12px;height:60px;margin:0 20px 20px;padding:0 9px 0 26px;border-radius:30px;box-shadow:inset 0 0 0 1px rgba(29,39,51,.14);font-size:22px;font-weight:400}
+.inp span{flex:1;white-space:nowrap;overflow:hidden}
+.inp span:empty::before{content:"Сообщение";color:#9aa3ad}
+.inp span.typing::after{content:"";display:inline-block;width:1.5px;height:1.05em;margin-left:2px;vertical-align:-.18em;background:var(--ink)}
+.inp em{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--ink)}
+
+/* аутричер: три шага, 36 писем, два ответа */
+.steps div{flex:1 1 0}
+.steps b{font-size:40px}
+.sent{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-content:center;align-items:start}
+.sent .big{margin-bottom:34px}
+.envs{display:grid;grid-template-columns:repeat(12,46px);gap:14px 10px}
+.env{display:block;width:46px;height:32px;overflow:visible}
+.env rect{fill:none;stroke:var(--ink);stroke-width:1.5}
+.env path{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round}
+.env.re rect{fill:var(--job);stroke:var(--job)}
+.clip.on .envs .env{animation:pop .35s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--w)}
+.clip.on .envs .re rect{animation:unread .5s 1.5s both}
+@keyframes pop{from{transform:scale(0)}}
+@keyframes unread{from{fill:transparent;stroke:var(--ink)}}
+.replies{display:flex;flex-direction:column;gap:26px}
+.replies p{display:flex;gap:18px;align-items:flex-start;font-size:28px;line-height:1.25;font-weight:400}
+.replies .env{flex:none;margin-top:4px}
+.replies small{display:block;margin-top:8px;font-size:22px;font-weight:400;color:var(--muted)}
+
+/* статьи: шесть кругов правки, линия с точками */
+@keyframes fadein{from{opacity:0}}
+.say{max-width:1180px;margin-bottom:28px;font-size:30px;line-height:1.4}
+
+
+/* скиллы: вертикальная линия с точками и три числа */
+.make{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:88px;align-content:center;align-items:center}
+.vs{position:relative;padding:0 0 30px 54px}
+.vs::before{content:"";position:absolute;left:0;top:5px;width:20px;height:20px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 6px rgba(255,255,255,.7)}
+.vs::after{content:"";position:absolute;left:9.25px;top:34px;bottom:-4px;width:1.5px;background:var(--ink)}
+.vs:last-child{padding-bottom:0}
+.vs:last-child::after{display:none}
+.vs h3{font:500 30px/1.2 var(--display);margin-bottom:8px}
+.vs p{font-size:24px;line-height:1.35;color:var(--muted);max-width:720px}
+.clip.on .vs{animation:fadein .5s ease-out both;animation-delay:calc(var(--i)*.14s)}
+
+/* схема статьи: два входа, письмо, петля из двух кругов, выход */
+.art{position:relative;flex:none;width:1456px;height:540px}
+.art>svg{position:absolute;left:0;top:0;width:1456px;height:540px;overflow:visible}
+.art .frame{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-dasharray:3 7;stroke-linecap:round}
+.art .wire{fill:none;stroke:var(--ink);stroke-width:1.5}
+.art .dot{fill:var(--ink)}
+.art text{font:400 20px var(--text);fill:var(--muted)}
+.node{position:absolute;padding:20px 26px;background:rgba(255,255,255,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.92);border-radius:26px;box-shadow:0 10px 34px rgba(29,60,100,.12)}
+.node h3{font:500 26px/1.15 var(--display);margin-bottom:8px}
+.node p{font-size:21px;line-height:1.35;color:var(--muted)}
+.node.out{background:var(--c)}
+.node.out p{color:var(--ink)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pills i{font-style:normal;font-size:20px;padding:4px 16px;border-radius:20px;box-shadow:inset 0 0 0 1.5px var(--ink)}
+.chip{position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);padding:9px 24px;border-radius:24px;background:var(--ink);color:#fff;font-size:22px;white-space:nowrap}
+.clip.on .node{animation:fadein .5s ease-out both;animation-delay:calc(var(--i)*.16s)}
+.say{max-width:1180px;font-size:26px;line-height:1.4;color:var(--muted)}
+
+/* скилл: три шага и результат */
+.res{padding:34px 40px;background:rgba(255,255,255,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.92);border-radius:30px;box-shadow:0 14px 44px rgba(29,60,100,.14)}
+.res h3{font:500 32px/1.15 var(--display);margin-bottom:6px}
+.res .sub{font-size:22px;color:var(--muted);margin-bottom:22px}
+.res li{list-style:none;padding:14px 0;border-top:1.5px solid rgba(29,39,51,.14);font-size:26px;line-height:1.3}
+.res ul{padding:0}
+.call{font-size:30px;line-height:1.35;max-width:1250px;margin-bottom:26px}
+
+.cat6{position:absolute;right:72px;bottom:64px;width:460px}
+.cat6 img{display:block;width:100%;height:auto;border-radius:28px}
+
+/* обзор всех слайдов */
+.ov{position:fixed;inset:0;z-index:20;overflow:auto;background:var(--paper);padding:28px 36px 48px}
+.ov[hidden]{display:none}
+.ov h2{font:400 22px/1.3 var(--text);color:var(--muted);margin-bottom:22px}
+.ovg{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:30px 26px}
+.cell{display:block;text-align:left}
+.thumb{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:10px;background:#fff;box-shadow:0 6px 24px rgba(29,60,100,.16)}
+.thumb iframe{position:absolute;left:0;top:0;width:1600px;height:900px;border:0;transform-origin:0 0;pointer-events:none}
+.cell:hover .thumb,.cell:focus-visible .thumb{box-shadow:0 0 0 2px var(--ink),0 6px 24px rgba(29,60,100,.2)}
+.cap{margin-top:10px;font-size:19px;line-height:1.3}
+.cap b{display:inline-block;min-width:38px;font-weight:500}
+
+/* казачки ищут работу: источники и воронка */
+.src{display:flex;flex-direction:column;gap:18px}
+.src .pills{margin-top:0}
+.src .pills i{font-size:24px;padding:6px 20px}
+.src p{font-size:28px;line-height:1.35}
+.fun{display:grid;grid-template-columns:repeat(4,1fr);gap:0 44px;margin-top:auto}
+.fs{position:relative;padding-top:56px}
+.fs::before{content:"";position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 6px rgba(255,255,255,.7)}
+.fs::after{content:"";position:absolute;left:34px;right:-44px;top:10.25px;height:1.5px;background:var(--ink)}
+.fs:last-child::after{display:none}
+.fs b{display:block;margin:0 0 8px;font:400 124px/1 var(--display);letter-spacing:-.04em}
+.fs span{display:block;font-size:28px;line-height:1.25}
+.fs small{display:block;margin-top:12px;font-size:22px;line-height:1.4;color:var(--muted)}
+.clip.on .fs{animation:fadein .5s ease-out both;animation-delay:calc(var(--i)*.2s)}
+.foot{margin:22px 0 26px;font-size:20px;color:var(--muted)}
+
+/* титул: три строки лёгким шрифтом, один кот */
+.clip.title{justify-content:center;padding:0 72px}
+.ttl{font:400 118px/1.06 var(--display);letter-spacing:-.04em}
+.ttl .ln{display:block;width:max-content}
+.title .cat{right:96px;top:50%;margin-top:-190px;width:400px}
+.title.on.sweep .ln{animation:wipe .5s steps(8) both;animation-delay:var(--at)}
+
+/* курс: цифры слева, модули списком справа */
+.course{flex:1;min-height:0;display:grid;grid-template-columns:340px minmax(0,1fr);gap:80px;align-items:center}
+.cf{display:flex;flex-direction:column;gap:30px}
+.cf b{display:block;font:400 84px/1 var(--display);letter-spacing:-.04em}
+.cf span{display:block;margin-top:4px;font-size:23px;line-height:1.3;color:var(--muted)}
+.mods{list-style:none;padding:0}
+.mods li{display:grid;grid-template-columns:34px minmax(0,1fr) 200px 100px;align-items:center;gap:14px;padding:8px 0;border-top:1.5px solid rgba(29,39,51,.14);font-size:25px;line-height:1.25}
+.mods .n,.mods .min{font-size:20px;color:var(--muted)}
+.mods .min{text-align:right;white-space:nowrap}
+.mods .bar{display:block;height:3px;border-radius:2px;background:var(--ink);width:calc(var(--w)*1%)}
+
+/* CJM и SEO-аудит */
+.src5{display:grid;grid-template-columns:repeat(5,1fr);gap:0 36px}
+.src5 b{display:block;font:400 74px/1 var(--display);letter-spacing:-.04em}
+.src5 span{display:block;margin-top:6px;font-size:21px;line-height:1.3;color:var(--muted)}
+.stg{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:0 12px;margin-top:auto}
+.ph{padding-bottom:10px;border-bottom:1.5px solid var(--ink);font-size:21px}
+.sg{position:relative;padding-top:42px;font-size:21px;line-height:1.3}
+.sg::before{content:"";position:absolute;left:0;top:14px;width:14px;height:14px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 5px rgba(255,255,255,.7)}
+.sg i{display:block;font-style:normal;font-size:18px;color:var(--muted);margin-bottom:2px}
+.six{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:26px 28px;align-content:center}
+.six div{padding:26px 28px 24px;background:rgba(255,255,255,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.92);border-radius:26px;box-shadow:0 10px 34px rgba(29,60,100,.12)}
+.six b{display:block;font:400 62px/1 var(--display);letter-spacing:-.035em;margin-bottom:10px}
+.six h3{font:500 23px/1.25 var(--display);margin-bottom:8px}
+.six p{font-size:20px;line-height:1.4;color:var(--muted)}
+.embed{flex:1;min-height:0;border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 14px 44px rgba(29,60,100,.18)}
+.embed iframe{display:block;width:100%;height:100%;border:0}
+.seo{flex:1;min-height:0;display:grid;grid-template-columns:300px 440px minmax(0,1fr);gap:56px;align-items:center}
+.score b{display:block;font:400 150px/.9 var(--display);letter-spacing:-.05em}
+.score b small{font-size:44px;letter-spacing:0;color:var(--muted)}
+.score p{margin-top:12px;font-size:23px;line-height:1.3;color:var(--muted)}
+.score .f{margin-top:26px;display:flex;flex-direction:column;gap:8px;font-size:22px}
+.score .f b{display:inline;font:500 22px var(--display);letter-spacing:0}
+.areas{display:flex;flex-direction:column;gap:20px}
+.areas div{display:grid;grid-template-columns:minmax(0,1fr) 44px;column-gap:14px;font-size:22px}
+.areas em{font-style:normal;text-align:right;color:var(--muted)}
+.areas i{grid-column:1/3;display:block;margin-top:8px;height:3px;border-radius:2px;background:rgba(29,39,51,.14)}
+.areas i::after{content:"";display:block;height:3px;border-radius:2px;background:var(--ink);width:calc(var(--v)*1%)}
+.finds h3{font:500 26px/1.2 var(--display);margin-bottom:16px}
+.finds p{padding:12px 0;border-top:1.5px solid rgba(29,39,51,.14);font-size:21px;line-height:1.35}
+.finds b{font-weight:500}
+.hint{font-size:20px;color:var(--muted)}
+
+/* CJM по сегментам */
+.seg{flex:1;min-height:0;display:grid;grid-template-columns:150px repeat(4,minmax(0,1fr));gap:0 28px;align-content:center}
+.seg>div{padding:14px 0;border-top:1.5px solid rgba(29,39,51,.14);font-size:20px;line-height:1.35}
+.seg>.sh{padding:0 0 12px;border-top:0;border-bottom:1.5px solid var(--ink);font:500 25px/1.2 var(--display)}
+.seg>.rl{color:var(--muted);font-size:19px}
+.seg>.pg{padding-bottom:6px}
+
+/* линия прогресса: кот-наклейка бежит по точкам и сталкивает их вниз, как вещи со стола */
+.clip{padding-bottom:62px}
+#bar{display:none}
+#pr{position:absolute;left:190px;bottom:20px;width:1180px;height:30px;z-index:3;pointer-events:none}
+#pr .line,#pr .done{position:absolute;left:0;top:14px;height:1.5px}
+#pr .line{right:0;background:rgba(29,39,51,.16)}
+#pr .done{width:0;background:var(--ink)}
+#pr .trail{position:absolute;left:0;top:7px;width:0;height:16px;background:linear-gradient(90deg,transparent,var(--g));filter:blur(8px);opacity:.9}
+#pr .glow{position:absolute;top:-3px;left:0;width:40px;height:36px;margin-left:-20px;border-radius:50%;background:var(--g);filter:blur(10px);opacity:.9}
+#pr .dot{position:absolute;top:10.5px;width:8px;height:8px;margin-left:-4px;padding:0;border-radius:50%;background:rgba(29,39,51,.4);pointer-events:auto;cursor:pointer;transition:transform .25s ease,opacity .25s ease}
+#pr .dot::before{content:"";position:absolute;inset:-12px}
+#pr .dot.fallen{animation:eat .45s ease-in forwards}
+#pr .dot.gone{opacity:0;pointer-events:none}
+#pr .dot.back{animation:popin .35s ease-out}
+@keyframes eat{0%{transform:scale(1)}35%{transform:translateY(-12px) scale(1.6)}100%{transform:translateY(-34px) scale(0);opacity:0}}
+@keyframes popin{from{transform:scale(0)}}
+#pr .dot:hover{transform:scale(1.8)}
+#pr .tip{position:absolute;bottom:50px;left:0;transform:translateX(-50%);padding:6px 14px;border-radius:16px;background:var(--ink);color:#fff;font-size:18px;white-space:nowrap;opacity:0;transition:opacity .15s}
+#pr .tip.on{opacity:1}
+#pr .hero{position:absolute;left:0;bottom:12px;width:90px;margin-left:-45px;height:70px}
+#pr .flip,#pr .jump,#pr .bun{width:90px;height:70px;transform-origin:50% 100%}
+#pr .bun{transition:transform .3s}
+#pr .cat-cut{width:90px;height:70px;background:url(assets/cat-vibe-sprite.png) 0 0/1260px 70px no-repeat;filter:drop-shadow(1.3px 0 0 #fff) drop-shadow(-1.3px 0 0 #fff) drop-shadow(0 1.3px 0 #fff) drop-shadow(0 -1.3px 0 #fff) drop-shadow(0 3px 4px rgba(29,39,51,.22))}
+#pr .hero.hop .jump{animation:hop .35s ease-out}
+@keyframes hop{40%{transform:translateY(-9px)}}
+#pr .hero.sleep .bun{transform:scaleY(.85) rotate(-6deg)}
+#pr .zz{position:absolute;left:62px;top:-12px;display:none;font-size:15px;color:var(--ink);letter-spacing:2px;animation:zz 1.6s ease-in-out infinite}
+#pr .hero.sleep .zz{display:block}
+@keyframes zz{50%{transform:translateY(-6px);opacity:.5}}
+
+/* управление с планшета: крупные кнопки, свайп, без случайного зума */
+html,body{touch-action:manipulation;overscroll-behavior:none}
+.nb{display:none;position:absolute;bottom:10px;width:68px;height:68px;padding:0;place-items:center;border-radius:50%;background:rgba(255,255,255,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.95);box-shadow:0 6px 22px rgba(29,60,100,.2);z-index:6;-webkit-tap-highlight-color:transparent}
+.nb:active{background:#fff;transform:scale(.94)}
+.nb svg{width:28px;height:28px;stroke:var(--ink);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.nb.menu{right:12px}.nb.next{right:88px}.nb.prev{right:164px}
+body.touch .nb{display:grid}
+body.touch #stage{-webkit-user-select:none;user-select:none}
+.ov .x{position:fixed;right:22px;top:18px;width:56px;height:56px;border-radius:50%;background:var(--ink);color:#fff;font-size:30px;line-height:1;display:none;place-items:center;z-index:21}
+body.touch .ov .x{display:grid}
+
+/* номер слайда */
+#num{position:absolute;left:72px;bottom:20px;z-index:3;font-size:20px;font-weight:500;letter-spacing:.02em;color:var(--muted);pointer-events:none}
+#num b{font-weight:500;color:var(--ink)}
+
+/* прогресс */
+#bar{position:absolute;left:0;bottom:0;height:2px;background:var(--ink);transition:width .2s ease-out;z-index:3}
+
+/* все клипы: Tab */
+#session{position:absolute;inset:0;background:var(--paper);display:grid;grid-template-columns:repeat(9,1fr);gap:6px;padding:6px;z-index:5}
+#session[hidden],#memo[hidden]{display:none}
+.col{display:grid;grid-template-rows:repeat(8,1fr);gap:6px;min-width:0;min-height:0}
+.col h3{display:flex;align-items:center;font-size:22px;font-weight:500;padding:0 14px;white-space:nowrap;overflow:hidden}
+.slot{background:var(--c);border-radius:12px;text-align:left;padding:0 14px;font-size:20px;font-weight:400;line-height:1.15}
+.slot:hover,.slot.now{box-shadow:inset 0 0 0 1.5px var(--ink)}
+#memo{position:absolute;inset:auto 0 0;background:rgba(255,255,255,.94);padding:18px 72px 24px;font-size:22px;line-height:1.4;z-index:4}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<section class="clip title" data-track="intro" data-name="Мамкины вайбкодеры"
+  data-notes="Существующий мем: кот-хакер, tenor.com/view/matrix-matrix-cat-fbi-detective-cat-gif-13795820884723134666">
+  <h1 class="ttl"><span class="ln" style="--at:.1s">Сейчас мы станем</span><span class="ln" style="--at:.5s">мамкиными</span><span class="ln" style="--at:.9s">вайбкодерами</span></h1>
+  <div class="cat" style="--at:1.3s"><img src="assets/cat-hacker.png" alt="Кот в темноте за светящейся клавиатурой, подпись: enters my own password, im in"></div>
+</section>
+
+<section class="clip" data-track="intro" data-name="Claude и Codex" style="--c:var(--intro)" data-notes="Оба приложения: пишу задачу обычными словами, они делают.">
+  <div class="hd"><h2>Где я вайбкожу</h2></div>
+  <div class="apps">
+    <div><h3>Claude</h3><img src="assets/tool-claude.jpg" alt="Окно чата в приложении Claude"></div>
+    <div><h3>Codex</h3><img src="assets/tool-codex.jpg" alt="Окно чата в приложении Codex"></div>
+  </div>
+</section>
+
+<section class="clip" data-track="intro" data-name="Плагины" style="--c:var(--intro)" data-notes="ChatGPT, Настройки → Плагины → Приложения. Подключено 15 приложений, среди них GitHub, Gmail, Google Calendar, Google Contacts, Google Drive, Granola и Notion. Скрин от 17.11.2026.">
+  <div class="hd"><h2>Плагины в ChatGPT</h2><p>Почта, календарь, встречи, Notion, GitHub</p></div>
+  <div class="shotbox"><img class="shot" src="assets/plugins.png" style="filter:none" alt="Настройки ChatGPT, раздел «Плагины»: подключены GitHub, Gmail, Google Calendar, Google Contacts, Google Drive, Granola, Notion и другие приложения"></div>
+</section>
+
+<section class="clip" data-track="intro" data-name="Одно окно" style="--c:var(--intro)" data-notes="Схема условная, анимация идёт по кругу. Пишу задачу в одном окне, а ChatGPT сам ходит в подключённые сервисы: почта, календарь, расшифровки встреч Granola, Telegram, GitHub, Google Диск и папка на компьютере. Всё собирается в одном чате.">
+  <div class="hd"><h2>Плагины собирают всё в одно окно</h2><p>Сервисы обмениваются данными через чат</p></div>
+  <div class="hub" id="hub" role="img" aria-label="Окно ChatGPT, к нему подключены Gmail, Календарь, Granola, Telegram, GitHub, Google Диск и папка на компьютере. Всё приходит в один чат">
+    <div class="win">
+      <div class="wtop"><i></i><i></i><i></i><span>ChatGPT</span></div>
+      <div class="chat"><p class="me">Собери итоги недели</p><ul class="tools"></ul><p class="ans"></p></div>
+      <div class="inp"><span></span><em><svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 16V4M4.5 9.5 10 4l5.5 5.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></div>
+    </div>
+  </div>
+</section>
+
+<section class="clip" data-track="job" data-name="Как я ищу работу" style="--c:var(--job)"
+  data-notes="Система собрана в Codex. По будням в 10:00 она обходит источники, читает вакансии и ставит флаги, всё складывается в Google-таблицу. Зелёный флаг: можно влиять на стратегию, есть команда и ресурсы. Красный: под видом руководителя ищут человека, который сам будет делать весь контент. Если про команду или зарплату ничего нет, надо спросить, а не додумывать. Срез на 17.11.2026: 80 вакансий в базе, 47 откликов, 18 ответов работодателей, 5 приглашений к следующему этапу. Падающие точки показывают идею отсева, их число условное.">
+  <div class="hd"><h2>Как я ищу работу</h2><p>Чтобы поиск не превратился в ещё одну работу</p></div>
+  <div class="flow">
+    <canvas id="flow" width="2976" height="880" role="img" aria-label="Вакансии идут из источников через фильтр критериев, 80 попадают в таблицу, 47 становятся откликами, 5 приглашений дальше"></canvas>
+    <div class="fl" style="left:0;width:290px"><b>&nbsp;</b>источники: hh.ru, Telegram, сайты компаний</div>
+    <div class="fl" style="left:352px;width:230px"><b>&nbsp;</b>Codex читает и оценивает по критериям</div>
+    <div class="fl" style="left:640px;width:260px"><b>80</b>вакансий в таблице</div>
+    <div class="fl" style="left:980px;width:280px"><b>47</b>откликов: Claude ищет почту помимо hh.ru и отправляет письмо</div>
+    <div class="fl" style="left:1296px;width:190px"><b>5</b>приглашений дальше</div>
+  </div>
+</section>
+
+<section class="clip" data-track="job" data-name="Критерии" style="--c:var(--job)"
+  data-notes="Шесть критериев из таблицы: стратегия 25%, опыт 20%, финансы 20%, автономия 15%, компания 10%, условия 10%. Веса предложены и ещё не откалиброваны, числовые баллы система пока не считает: главное в карточке вакансии флаги. Каждый флаг хранит цитату из объявления. Отсутствие сведений не считается плохим признаком, это вопрос к работодателю.">
+  <div class="hd"><h2>Как оцениваю вакансию</h2><p>Веса пока черновые</p></div>
+  <div class="weights">
+    <div style="--w:25"><b>25%</b><span>Стратегия</span></div>
+    <div style="--w:20"><b>20%</b><span>Опыт</span></div>
+    <div style="--w:20"><b>20%</b><span>Финансы</span></div>
+    <div style="--w:15"><b>15%</b><span>Автономия</span></div>
+    <div style="--w:10"><b>10%</b><span>Компания</span></div>
+    <div style="--w:10"><b>10%</b><span>Условия</span></div>
+  </div>
+  <div class="flags">
+    <p><i style="--f:#8fcfa9"></i>Можно влиять на стратегию, есть команда и ресурсы</p>
+    <p><i style="--f:#e9d48a"></i>Про команду или зарплату ничего нет: спросить, а не додумывать</p>
+    <p><i style="--f:#d9786d"></i>Под видом руководителя ищут того, кто сам сделает весь контент</p>
+  </div>
+</section>
+
+<section class="clip" data-track="intro" data-name="Аутричер" style="--c:var(--intro)" data-notes="Пример с почтой. Codex упаковал мои услуги, нашёл контакты бизнесов, которым это может быть интересно, и рассылает им письма. Уже 36 писем и 2 ответа: один отказ, во втором сказали, что такой маркетолог-консультант у них уже есть. Это частично подтвердило гипотезу услуги. Вопрос в зал: где ещё агент может стать вашим амбассадором — хвалить вас, предлагать услуги, торговаться там, где вы сами постеснялись бы.">
+  <div class="hd"><h2>У меня появился свой аутричер на Codex</h2><p>Предлагает мои услуги, пока я стесняюсь</p></div>
+  <div class="weights steps">
+    <div><b>Упаковывает</b><span>мои услуги в предложение</span></div>
+    <div><b>Ищет</b><span>бизнесы, которым это интересно</span></div>
+    <div><b>Пишет</b><span>им письма</span></div>
+  </div>
+  <div class="sent">
+    <div>
+      <div class="big"><b>36</b><span>писем<br>уже отправил</span></div>
+      <div class="envs" id="envs" role="img" aria-label="36 конвертов, на два пришёл ответ"></div>
+    </div>
+    <div>
+      <div class="big"><b>2</b><span>ответа</span></div>
+      <div class="replies">
+        <p><svg class="env re" aria-hidden="true"></svg><span>Отказ</span></p>
+        <p><svg class="env re" aria-hidden="true"></svg><span>Такой маркетолог у нас уже есть<small>Это частично подтвердило гипотезу услуги</small></span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="clip" data-track="ableton" data-name="Про музыку" style="--c:var(--ableton)" data-notes="Мем: Vibing Cat, tenor.com/view/cat-vibe-cat-dancing-cat-cat-meme-gif-15870698214896676686. Курс по Ableton я собрала для себя: со своей LMS и своим сайтом. Дальше на слайдах его первый дизайн, готовый курс и как он попал в интернет.">
+  <div class="hd"><h2>А ещё я начала делать музыку</h2></div>
+  <div class="lines">
+    <p>Собрала себе курс по Ableton</p>
+    <p>со своей LMS</p>
+    <p>и своим сайтом</p>
+  </div>
+  <picture class="cat6"><source media="(prefers-reduced-motion:reduce)" srcset="assets/cat-vibing-still.jpg"><img src="assets/cat-vibing.gif" alt="Кот качает головой под музыку"></picture>
+</section>
+
+<section class="clip" data-track="ableton" data-name="Что внутри" style="--c:var(--ableton)"
+  data-notes="Посчитано по данным сайта 04.11.2026. 12 модулей, 47 уроков, 1218 минут, то есть около 20 часов. Ещё 137 слов в словаре и 10 битов в атласе ритмов. Тренажёры: грув, мотив, аккорды, синтезатор, слух на частоты, слух на эффекты, горячие клавиши, названия интерфейса. Длина полоски равна длине модуля в минутах.">
+  <div class="hd"><h2>Что внутри курса</h2><p>От первого запуска до трека на SoundCloud</p></div>
+  <div class="course">
+    <div class="cf">
+      <div><b>12</b><span>модулей по порядку</span></div>
+      <div><b>47</b><span>уроков</span></div>
+      <div><b>20</b><span>часов видео и практики</span></div>
+      <div><b>8</b><span>тренажёров со звуком: ритм, аккорды, слух, горячие клавиши</span></div>
+    </div>
+    <ol class="mods" id="mods" aria-label="Модули курса, длина полоски равна длине модуля в минутах"></ol>
+  </div>
+</section>
+
+<section class="clip" data-track="ableton" data-name="Первый дизайн" style="--c:var(--ableton)">
+  <div class="hd"><h2>Ableton: первый вариант дизайна</h2></div>
+  <div class="shotbox"><img class="shot" src="assets/ableton-first.jpg" alt="Первая версия курса: карта интерфейса на светлом фоне"></div>
+</section>
+
+<section class="clip" data-track="ableton" data-name="Готовый курс: весь сайт" style="--c:var(--ableton)"
+  data-notes="Весь сайт курса calm ass techno встроен в слайд, им можно пользоваться прямо здесь: уроки, тренажёры со звуком, карта интерфейса, словарь. Копия лежит в assets/ableton-course. Прогресс и заметки курс сохраняет в браузере. При первом открытии курс может предложить подписаться на телеграм-канал, это можно закрыть кнопкой «Позже». Шрифты сайт подгружает из интернета. Живая версия: ableton-course-production-ccc0.up.railway.app">
+  <div class="hd"><h2>Ableton: весь сайт курса</h2><p class="hint">Можно кликать и листать мышью</p></div>
+  <div class="embed"><iframe src="assets/ableton-course/index.html" title="Курс calm ass techno по Ableton Live 12" loading="lazy"></iframe></div>
+</section>
+
+<section class="clip" data-track="ableton" data-name="Путь в интернет" style="--c:var(--ableton)"
+  data-notes="Код лежит в приватном репозитории LadaOrlova/ableton-course, 21 коммит, в авторах LadaOrlova и claude. Railway подключён к ветке main и сам разворачивает каждое обновление. На выходе публичная ссылка, её можно открыть прямо со слайда.">
+  <div class="hd"><h2>Ableton: как курс попал в интернет</h2></div>
+  <div class="chain">
+    <div class="step"><h3>GitHub</h3><img src="assets/chain-ableton-github.jpg" alt="GitHub: приватный репозиторий ableton-course, 21 коммит"><p>Здесь лежит код</p></div>
+    <div class="wire" aria-hidden="true"></div>
+    <div class="step"><h3>Railway</h3><img src="assets/chain-ableton-railway.jpg" alt="Railway: сервис ableton-course подключён к GitHub"><p>Здесь сайт работает</p></div>
+    <div class="wire" aria-hidden="true"></div>
+    <div class="step"><h3>Сайт</h3><img src="assets/chain-ableton-site.jpg" alt="Главная страница курса calm ass techno"><p>А это ссылка на него</p></div>
+  </div>
+  <a class="url" href="https://ableton-course-production-ccc0.up.railway.app" target="_blank" rel="noopener">ableton-course-production-ccc0.up.railway.app</a>
+</section>
+
+<section class="clip" data-track="site" data-name="Главная" style="--c:var(--site)" data-notes="zamesinschool.ru">
+  <div class="hd"><h2>Сайт школы Замесина</h2><p><a href="https://zamesinschool.ru/" target="_blank" rel="noopener">Главная страница</a></p></div>
+  <div class="shotbox"><img class="shot" src="assets/site-home.png" alt="Главная страница сайта школы"></div>
+</section>
+
+<section class="clip" data-track="site" data-name="Гайды и видео" style="--c:var(--site)">
+  <div class="hd"><h2>База знаний: гайды и видео</h2></div>
+  <div class="pair">
+    <img class="shot" src="assets/site-guides.png" alt="Раздел «Гайды»">
+    <img class="shot" src="assets/site-video.png" alt="Раздел «Видео»">
+  </div>
+</section>
+
+<section class="clip" data-track="site" data-name="Корзина" style="--c:var(--site)">
+  <div class="hd"><h2>Выбор продуктов и корзина</h2></div>
+  <div class="shotbox"><img class="shot" src="assets/site-cart.png" alt="Выбор продуктов и корзина"></div>
+</section>
+
+<section class="clip" data-track="site" data-name="Статьи" style="--c:var(--site)">
+  <div class="hd"><h2>Статьи для сайта школы</h2><p>Раздел со статьями</p></div>
+  <div class="shotbox"><img class="shot" src="assets/site-articles.png" alt="Раздел со статьями"></div>
+</section>
+
+<section class="clip" data-track="site" data-name="Как я пишу статьи" style="--c:var(--site)"
+  data-notes="Процесс не линейный. На входе два блока: начинка (скачанный телеграм-канал эксперта, база знаний, наработки, методология, всё лежит в md-файлах) и спрос (агент смотрит Вордстат и собирает реальные запросы). По ним пишется статья, при этом подключены скиллы: Ильяхов, «На перо» и «Редактура». Потом два круга критики. Сначала нейросеть эмулирует 30 или 100 читателей. Это не настоящие люди, а симуляция. Они говорят, что понятно и что нет, правки вносятся. Потом злой редактор ищет нейрослоп, правки снова. Всю схему можно собрать в один скилл, и он прогонит её сам. Цитата про Пелевина про рассказ «Поединок» из книги «Transhumanism Inc.»: в нём герой оживляет боевых кукол программой и воссоздаёт бой Мусаси и Сасаки Кодзиро. Мантры в рассказе есть, по пересказам, но точные слова я по тексту не сверяла.">
+  <div class="hd"><h2>Как я пишу статьи</h2><p>Сначала начинка и спрос, потом два круга критики и правок</p></div>
+  <div class="art" role="img" aria-label="Схема: начинка в md-файлах и спрос из Вордстата идут в письмо со скиллами, дальше два круга правок, читатели и злой редактор, на выходе статья без нейрослопа. Всё это можно собрать в один скилл">
+    <svg viewBox="0 0 1456 540" aria-hidden="true">
+      <rect class="frame" x="0" y="20" width="1150" height="500" rx="34"/>
+      <path class="wire" d="M318 157 C354 157 354 235 390 235"/><circle class="dot" cx="390" cy="235" r="5"/>
+      <path class="wire" d="M318 415 C354 415 354 295 390 295"/><circle class="dot" cx="390" cy="295" r="5"/>
+      <path class="wire" d="M680 265 C740 265 740 165 800 165"/><circle class="dot" cx="800" cy="165" r="5"/>
+      <path class="wire" d="M945 298 L945 324"/><circle class="dot" cx="945" cy="324" r="5"/>
+      <path class="wire" d="M1090 409 C1145 409 1145 270 1200 270"/><circle class="dot" cx="1200" cy="270" r="5"/>
+    </svg>
+    <div class="node" style="--i:0;left:28px;top:50px;width:290px;height:214px"><h3>Начинка</h3><p>Скачанный телеграм-канал эксперта, база знаний, наработки, методология. Всё в md-файлах</p></div>
+    <div class="node" style="--i:1;left:28px;top:340px;width:290px;height:150px"><h3>Спрос</h3><p>Прошу агента собрать реальные запросы в Вордстате</p></div>
+    <div class="node" style="--i:2;left:390px;top:160px;width:290px;height:210px"><h3>Агент пишет статью со скиллами</h3><div class="pills"><i>Ильяхов</i><i>На перо</i><i>Редактура</i></div></div>
+    <div class="node" style="--i:3;left:800px;top:70px;width:290px;height:228px"><h3>Эмулированные читатели</h3><p>30 или 100 ненастоящих людей говорят, что непонятно</p></div>
+    <div class="node" style="--i:4;left:800px;top:324px;width:290px;height:170px"><h3>Злой редактор</h3><p>Ищет нейрослоп и всё, что сделано плохо</p></div>
+    <div class="node out" style="--i:5;left:1200px;top:190px;width:256px"><h3>Статья без нейрослопа</h3><p>Кажется, что работы много. На деле нет</p></div>
+    <div class="chip">Всю схему можно собрать в один скилл, дальше он сам</div>
+  </div>
+  <p class="say">Чувствую себя героем Пелевина, который оживил кукол мантрами и воссоздал бой Миямото Мусаси и Сасаки Кодзиро</p>
+</section>
+
+<section class="clip" data-track="site" data-name="Как я делаю скиллы" style="--c:var(--site)"
+  data-notes="Я даю агенту любую книгу, гайд или архив текстов. Дальше работает агент. Он делит текст на части, и каждую часть целиком читает отдельный агент на Haiku, самой дешёвой модели: так недорого и быстро. Из выжимок агент собирает один гайдлайн (принципы, правила, ошибки, шаблоны) и сверяет спорные места с источником. По гайдлайну он пишет скилл через skill-creator, гоняет его на примере и правит слабые места. Пример: скилл по книге Дональда Миллера «Метод StoryBrand», книга делилась на пять частей, но число частей зависит от книги. Тест: Haiku переписал первый экран студии йоги, убрал историю основания из начала, поменял кнопку «Узнать больше» на «Записаться на пробное за 300 ₽» и не выдумал отзывы. Слабое место: предположения модель вписывала в текст, а помечала только списком ниже, поэтому в скилле теперь такие места помечены прямо в тексте. Не сделано: прогон на нескольких примерах со сравнением «со скиллом и без» и настройка описания для вызова.">
+  <div class="hd"><h2>Как я делаю скиллы</h2><p>Чтобы нейросеть работала по вашей методологии, а не «вообще»</p></div>
+  <div class="make">
+    <div class="steps-v">
+      <div class="vs" style="--i:0"><h3>Даю любую книгу или методологию</h3><p>Книгу, гайд или архив своих текстов</p></div>
+      <div class="vs" style="--i:1"><h3>Дешёвые агенты читают по частям</h3><p>Агент режет текст на части, каждую целиком читает свой агент на Haiku. Так недорого и быстро</p></div>
+      <div class="vs" style="--i:2"><h3>Агент собирает гайдлайн</h3><p>Принципы, правила и ошибки из всех частей в одном документе. Спорные места сверяет с источником</p></div>
+      <div class="vs" style="--i:3"><h3>Агент собирает скилл и проверяет</h3><p>Прогоняет на примере и сам правит слабые места</p></div>
+    </div>
+    <div class="res">
+      <h3>Например, скилл «storybrand»</h3>
+      <div class="sub">Агент собрал его по книге. Вызывается словами «сторибренд», «брендарий», «ванлайнер»</div>
+      <ul>
+        <li>Собирает брендарий по описанию бизнеса</li>
+        <li>Проверяет, понятен ли текст за 5 секунд</li>
+        <li>Пишет и переписывает лендинги и письма</li>
+      </ul>
+    </div>
+  </div>
+  <p class="call">Возьмите любую книгу или свои тексты, и агент соберёт такой же скилл</p>
+</section>
+
+<section class="clip" data-track="admin" data-name="Заказы" style="--c:var(--admin)" data-notes="Локальная версия админки школы. Синтетические заказы, не реальные результаты продаж.">
+  <div class="hd"><h2>Админка: заказы</h2><p style="white-space:nowrap">Демонстрационные данные</p></div>
+  <div class="shotbox"><img class="shot" src="assets/admin-orders.png" alt="Таблица заказов в админке"></div>
+</section>
+
+<section class="clip" data-track="admin" data-name="Аналитика" style="--c:var(--admin)" data-notes="Общий дашборд и источники покупок. Группировка UTM по source, medium, campaign, отдельно рефереры.">
+  <div class="hd"><h2>Аналитика: продажи и источники</h2><p style="white-space:nowrap">Демонстрационные данные</p></div>
+  <div class="shotbox"><img class="shot" src="assets/admin-analytics.png" alt="Дашборд продаж и источников"></div>
+</section>
+
+<section class="clip" data-track="admin" data-name="CJM" style="--c:var(--admin)" data-notes="Частота визитов и путь до покупки. Визиты и покупатели сопоставлены по ID.">
+  <div class="hd"><h2>CJM: путь клиента</h2><p style="white-space:nowrap">Демонстрационные данные</p></div>
+  <div class="shotbox"><img class="shot" src="assets/admin-cjm.png" alt="Частота визитов и путь до покупки"></div>
+</section>
+
+<section class="clip" data-track="admin" data-name="CJM: источники и путь" style="--c:var(--admin)"
+  data-notes="CJM «Как делать продукт» от 7 октября 2026. Из разрозненной обратной связи собрана одна карта пути клиента. Источники: 35 решенческих интервью, 1 660 входных анкет (потоки 50–59), 85 анкет КДП 2.0, 19 068 подписчиков бота, 2 960 человек в журнале сайта. Десять этапов в четырёх фазах. До покупки: 1–5, покупка: 6, обучение (8 недель): 7–8, после курса: 9–10. Каждый этап описан как работа человека, с цифрами и дословными цитатами и пометкой, насколько данным можно верить.">
+  <div class="hd"><h2>CJM: путь клиента по большим данным</h2><p>Из разрозненной обратной связи в одну карту</p></div>
+  <div class="src5">
+    <div><b>35</b><span>решенческих интервью</span></div>
+    <div><b>1 660</b><span>входных анкет, потоки 50–59</span></div>
+    <div><b>85</b><span>анкет КДП 2.0</span></div>
+    <div><b>19 068</b><span>подписчиков бота</span></div>
+    <div><b>2 960</b><span>человек в журнале сайта</span></div>
+  </div>
+  <div class="stg" role="img" aria-label="Десять этапов пути клиента в четырёх фазах">
+    <div class="ph" style="grid-column:span 5">До покупки</div><div class="ph" style="grid-column:span 1">Покупка</div><div class="ph" style="grid-column:span 2">Обучение, 8 недель</div><div class="ph" style="grid-column:span 2">После курса</div>
+    <div class="sg"><i>1</i>Живу с задачей</div><div class="sg"><i>2</i>Слежу за Ваней и зрею</div><div class="sg"><i>3</i>Наступает «сейчас»</div><div class="sg"><i>4</i>Пробую бесплатно</div><div class="sg"><i>5</i>Проверяю, про меня ли</div><div class="sg"><i>6</i>Решаю и плачу</div><div class="sg"><i>7</i>Вхожу в курс</div><div class="sg"><i>8</i>Учусь на своём продукте</div><div class="sg"><i>9</i>Получаю результат</div><div class="sg"><i>10</i>Возвращаюсь и привожу других</div>
+  </div>
+</section>
+
+<section class="clip" data-track="admin" data-name="CJM: шесть выводов" style="--c:var(--admin)"
+  data-notes="Шесть выводов, которые подтверждаются сразу в нескольких источниках. 1. Все 35 респондентов знали Ваню до интервью, лендинг проверяет уже почти принятое решение. Медиана в боте до покупки 127 дней, Telegram Вани как источник у 47%. 2. «Сейчас» запускает окно, а не боль: событие назвали 33 из 85 в анкете 2.0. 3. Бизнес-задача 56% против карьеры 16% (потоки 56–59). 4. Бесплатный модуль «Введение» прошли 46% покупателей против 14% подписчиков, после пробных лекций покупают 4,5–10% при средней 0,62%. 5. 20 из 79 заказов КДП 2.0 не оплачены (6.09–6.10), механизма вернуть тех, кто сказал «не сейчас», нет. 6. «Не применю к своему» 22%, «теория без практики» 8%, цена 0%. Что происходит после курса, неизвестно: выходной анкеты в выгрузках нет.">
+  <div class="hd"><h2>Что показала карта: шесть выводов</h2><p>Каждый подтверждён несколькими источниками</p></div>
+  <div class="six">
+    <div><b>127 дней</b><h3>Решение созревает до лендинга</h3><p>Медиана в боте до покупки. Telegram Вани привёл 47% покупателей</p></div>
+    <div><b>33 из 85</b><h3>«Сейчас» запускает окно, а не боль</h3><p>Назвали событие, которое запустило покупку: освободилось время или деньги, вышел анонс</p></div>
+    <div><b>56%</b><h3>Курс нанимают под рабочую задачу</h3><p>Бизнес-задача против 16% у карьеры, потоки 56–59</p></div>
+    <div><b>46%</b><h3>Бесплатный модуль продаёт сильнее всего</h3><p>Прошли его покупатели, среди подписчиков с почтой только 14%</p></div>
+    <div><b>20 из 79</b><h3>Больше всего теряем на «не сейчас»</h3><p>Заказов КДП 2.0 не оплачены. Вернуть этих людей к следующему потоку нечем</p></div>
+    <div><b>22%</b><h3>Главный страх: не применю к своему</h3><p>Против 8% у «теории без практики». Цены не боится никто</p></div>
+  </div>
+</section>
+
+<section class="clip" data-track="admin" data-name="CJM: отчёт целиком" style="--c:var(--admin)"
+  data-notes="Исходный отчёт встроен целиком, его можно листать мышью: карта пути прокручивается вбок, внизу строка «Дорожки» показывает, чем путь отличается у четырёх групп (владельцы и основатели, продакты в найме, переходят в продукт, выпускники и повторники). Файл лежит в папке assets. Шрифты отчёт подгружает из интернета.">
+  <div class="hd"><h2>CJM «Как делать продукт»: отчёт целиком</h2><p class="hint">Листается мышью</p></div>
+  <div class="embed"><iframe src="assets/cjm-kak-delat-produkt.html" title="CJM Как делать продукт, 7 октября 2026" loading="lazy"></iframe></div>
+</section>
+
+<section class="clip" data-track="admin" data-name="SEO-аудит" style="--c:var(--admin)"
+  data-notes="Полный SEO-аудит zamesinschool.ru, повторный обход 27 августа 2026, после первых правок. Обойдено 138 страниц, в sitemap 56 URL, ошибок 4xx и 5xx нет. Здоровье 75 из 100. Оценки по областям: техническое SEO 72, качество контента 78, on-page 63, микроразметка 88, скорость 92, готовность к AI-поиску 73, картинки 60. Главные находки, порядок по цене ошибки: 21 индексируемая страница не попала в sitemap, 19 страниц без canonical, старые адреса Boost, Boost Pro и КДП на zamesin.ru ведут на личную главную и теряют накопленный вес, 54 заголовка обрезаются в выдаче (кейсы доходят до 178 знаков при 60–65 видимых), 30 описаний вдвое-втрое длиннее нужного (до 392 знаков вместо 155). Ещё: 29 материалов из 41 делят одну картинку в разметке, нет заголовков безопасности, у www ошибка сертификата.">
+  <div class="hd"><h2>SEO-аудит сайта школы</h2><p>Повторный обход 27 августа, после первых правок</p></div>
+  <div class="seo">
+    <div class="score">
+      <b>75<small>/100</small></b>
+      <p>здоровье сайта</p>
+      <div class="f"><span><b>138</b> страниц обошли</span><span><b>56</b> URL в sitemap</span><span><b>0</b> ошибок 4xx и 5xx</span></div>
+    </div>
+    <div class="areas" role="img" aria-label="Оценки по семи областям из ста">
+      <div><span>Скорость</span><em>92</em><i style="--v:92"></i></div>
+      <div><span>Микроразметка</span><em>88</em><i style="--v:88"></i></div>
+      <div><span>Качество контента</span><em>78</em><i style="--v:78"></i></div>
+      <div><span>Готовность к AI-поиску</span><em>73</em><i style="--v:73"></i></div>
+      <div><span>Техническое SEO</span><em>72</em><i style="--v:72"></i></div>
+      <div><span>On-page</span><em>63</em><i style="--v:63"></i></div>
+      <div><span>Картинки</span><em>60</em><i style="--v:60"></i></div>
+    </div>
+    <div class="finds">
+      <h3>Что нашли, по цене ошибки</h3>
+      <p><b>21 страница</b> не попала в sitemap, хотя индексируется</p>
+      <p><b>19 страниц</b> без canonical: ссылка с UTM создаёт дубль</p>
+      <p><b>Старые адреса Boost, Boost Pro и КДП</b> ведут на личную страницу, накопленный вес теряется</p>
+      <p><b>54 заголовка</b> обрезаются в выдаче: у кейсов до 178 знаков при 60–65 видимых</p>
+      <p><b>30 описаний</b> вдвое-втрое длиннее нужного</p>
+    </div>
+  </div>
+</section>
+
+<section class="clip" data-track="admin" data-name="SEO-аудит: отчёт целиком" style="--c:var(--admin)"
+  data-notes="Исходный SEO-аудит встроен целиком, его можно листать мышью. Файл лежит в папке assets. Шрифты отчёт подгружает из интернета.">
+  <div class="hd"><h2>SEO-аудит: отчёт целиком</h2><p class="hint">Листается мышью</p></div>
+  <div class="embed"><iframe src="assets/seo-audit-zamesinschool.html" title="SEO-аудит zamesinschool.ru" loading="lazy"></iframe></div>
+</section>
+
+<section class="clip" data-track="fekla" data-name="71 канал" style="--c:var(--fekla)"
+  data-notes="Источник: channels.json в репозитории LadaOrlova/fekla, проверено 03.11.2026. 72 записи, 71 уникальный канал: naurale_trvl есть и в Екб, и в Поездках. Рубрики: События 20, Анонсы 5, Екб 14, Поездки 8, Знания 15, Рабочие 7, Музыка и видосы 3. На слайде один столбик = один канал, зазоры делят рубрики.">
+  <div class="hd"><h2>Бот Фекла</h2></div>
+  <div class="mix">
+    <div class="board">
+      <div class="big"><b>71</b><span>Telegram-канал<br>в 7 рубриках</span></div>
+      <div class="faders" id="faders" role="img" aria-label="71 столбик, по одному на канал, сгруппированы по 7 рубрикам"></div>
+      <p class="lead">Собирает посты в персональный дайджест</p>
+    </div>
+    <div class="shotbox"><img class="shot" src="assets/fekla-chat.png" alt="Дайджест событий от бота Фекла в Telegram"></div>
+  </div>
+</section>
+
+<section class="clip" data-track="fekla" data-name="Как устроена" style="--c:var(--fekla)"
+  data-notes="Бот написан вместе с Claude Code в VS Code. Код лежит в приватном репозитории LadaOrlova/fekla, 77 коммитов. На Railway он запущен как сервис worker, статус Online, 44 деплоя, всё идёт из GitHub.">
+  <div class="hd"><h2>Как устроена Фекла</h2></div>
+  <div class="chain">
+    <div class="step"><h3>VS Code</h3><img src="assets/chain-vscode.jpg" alt="VS Code: папка Fekla bot и вкладка Claude Code"><p>Здесь вайбкожу бота</p></div>
+    <div class="wire" aria-hidden="true"></div>
+    <div class="step"><h3>GitHub</h3><img src="assets/chain-github.jpg" alt="GitHub: приватный репозиторий LadaOrlova/fekla"><p>Здесь лежит код</p></div>
+    <div class="wire" aria-hidden="true"></div>
+    <div class="step"><h3>Railway</h3><img src="assets/chain-railway.jpg" alt="Railway: сервис worker в статусе Online"><p>Здесь бот работает</p></div>
+  </div>
+</section>
+
+<section class="clip" data-track="neuro" data-name="Granola" style="--c:var(--neuro)" data-notes="granola.ai: AI-блокнот для встреч. Использует звук компьютера для расшифровки и заметок. Не утверждаем, что сохраняет аудио- или видеозапись.">
+  <div class="hd"><h2>Granola: заметки по встречам</h2><p>Ещё из полезных нейроночек</p></div>
+  <div class="lines">
+    <p>Расшифровывает разговор</p>
+    <p>Собирает конспект и договорённости</p>
+    <p>Помогает вспомнить, что обсуждали</p>
+  </div>
+</section>
+
+<section class="clip" data-track="quiz" data-name="Вайбкодер ли ты?" style="--c:var(--quiz)" data-notes="zamesinschool.ru/products/boost/quiz-vibecoder">
+  <div class="hd"><h2>Квиз «Вайбкодер ли ты?»</h2><p><a href="https://zamesinschool.ru/products/boost/quiz-vibecoder" target="_blank" rel="noopener">10 вопросов, результат и рекомендация</a></p></div>
+  <div class="shotbox"><img class="shot" src="assets/quiz.png" alt="Стартовый экран квиза «Вайбкодер ли ты?»"></div>
+</section>
+
+<section class="clip" data-track="mari" data-name="Сайт «Мари, куда идём?»" style="--c:var(--mint)"
+  data-notes="Сайт «Мари, куда идём?» из чата «Лекторий дизайн и удобство»: личный каталог Москвы из канала «Привет, не хочешь сходить?». 301 место, 2014 событий, 590 лекций и маршрут на три остановки. Сайт встроен целиком, им можно пользоваться прямо в слайде. Карте нужен интернет (подложка OpenFreeMap, данные © OpenStreetMap). Исходники и свежая сборка лежат в папке «Лекторий у Мари» в загрузках, в презентацию скопирован готовый index.html.">
+  <div class="hd"><h2>Сайт «Мари, куда идём?»</h2><p>Личный каталог Москвы: 301 место, 2014 событий, 590 лекций</p></div>
+  <div class="embed"><iframe src="assets/mari-site/index.html" title="Мари, куда идём? Личный каталог Москвы" loading="lazy"></iframe></div>
+</section>
+
+<i id="bar"></i>
+<div id="pr" aria-label="Прогресс по слайдам"><i class="line"></i><i class="trail"></i><i class="done"></i><div class="dots"></div><i class="glow"></i>
+  <div class="hero"><div class="flip"><div class="jump"><div class="bun"><div class="cat-cut"></div></div></div></div><span class="zz">z z z</span></div>
+  <span class="tip"></span></div>
+<div id="num" aria-hidden="true"></div>
+<button class="nb prev" id="nbPrev" aria-label="Предыдущий слайд"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+<button class="nb next" id="nbNext" aria-label="Следующий слайд"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+<button class="nb menu" id="nbMenu" aria-label="Обзор слайдов"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></button>
+<div id="session" hidden></div>
+<aside id="memo" hidden></aside>
+</div>
+<div class="ov" id="ov" hidden><button class="x" id="ovClose" aria-label="Закрыть обзор">×</button><h2>Все слайды. Нажмите на слайд, чтобы открыть. Клавиша O или Esc закрывает обзор</h2><div class="ovg" id="ovg"></div></div>
+
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const clips = [...document.querySelectorAll('.clip')];
+  const TRACKS = [['intro','Старт'],['ableton','Ableton'],['site','Сайт школы'],['admin','Админка'],['fekla','Фекла'],['job','Поиск работы'],['neuro','Нейроночки'],['quiz','Квиз'],['mari','Сайт Мари']];
+  const BPM = 108;
+  let cur = 0;
+
+  /* сцена 1600×900 подгоняется под любое окно */
+  const fit = () => { stage.style.transform = `scale(${Math.min(innerWidth / 1600, innerHeight / 900)})`; };
+  addEventListener('resize', fit); fit();
+
+  /* модули курса: длина полоски = минуты, полоски идут друг за другом */
+  const MODS = [['Первые шаги',100],['Слушать как продюсер',100],['Ритм: медленный и живой',165],['Свои звуки',117],['Низ: бочка, бас, rumble',69],['Синтез с нуля',97],['Гармония и мотивы',115],['Пространство и даб',95],['Движение',75],['Из лупа в трек',100],['Сведение для глубины',110],['Финиш и привычки',75]];
+  const mods = document.getElementById('mods'), MAXMIN = Math.max(...MODS.map(m => m[1]));
+  MODS.forEach(([name, min], i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="n">${i + 1}</span><span>${name}</span><i class="bar" style="--w:${(min / MAXMIN * 100).toFixed(1)}"></i><span class="min">${min} мин</span>`;
+    mods.append(li);
+  });
+
+  /* 71 канал: столбик на канал, в «Поездках» 7, потому что один канал общий с «Екб» */
+  const faders = document.getElementById('faders');
+  let n = 0;
+  [20, 5, 14, 7, 15, 7, 3].forEach((count, gi) => {
+    if (gi) { const g = document.createElement('i'); g.className = 'gap'; faders.append(g); }
+    for (let i = 0; i < count; i++, n++) {
+      const f = document.createElement('i');
+      const r = Math.abs(Math.sin(n * 12.9898) * 43758.5453) % 1;
+      f.style.cssText = `--l:${(.34 + r * .62).toFixed(2)};--w:${n * 9}ms;--v:${(.28 + r * .4).toFixed(2)}s`;
+      faders.append(f);
+    }
+  });
+
+  /* поиск работы: положение каждой точки считается от времени, поэтому финальный кадр всегда один и тот же */
+  const flow = (() => {
+    const cv = document.getElementById('flow'), g = cv.getContext('2d');
+    const H = 440, MID = 200, SIEVE = 462, R = 6, END = 6600;
+    const rnd = s => { const x = Math.sin(s * 127.1) * 43758.5453; return x - Math.floor(x); };
+    const ease = u => u < 0 ? 0 : u > 1 ? 1 : u * u * (3 - 2 * u);
+    const mix = (a, b, u) => a + (b - a) * u;
+    const src = [], slot = [], out = [];
+    for (let i = 0; i < 210; i++) src.push([12 + (i % 14) * 22, MID - 160 + Math.floor(i / 14) * 22]);   /* сырых вакансий намного больше, чем попадает в таблицу */
+    for (let i = 0; i < 80; i++) slot.push([652 + (i % 10) * 26, MID - 91 + Math.floor(i / 10) * 26]);
+    for (let i = 0; i < 47; i++) out.push([1010 + (i % 8) * 28, MID - 65 + Math.floor(i / 8) * 26]);
+    const yes = [3, 12, 20, 31, 40];                                              /* пять приглашений выбраны из 47 откликов */
+    const parts = [];
+    for (let i = 0, kept = 0; i < 210; i++) {
+      const pass = kept < 80 && (rnd(i + 3) < .38 || 210 - i <= 80 - kept);
+      const p = { pass, s: src[i], y: MID + (rnd(i + 9) - .5) * 250, at: i * 9 };
+      if (pass) p.slot = slot[kept++];
+      parts.push(p);
+    }
+    const dot = (x, y, r, a = 1) => { g.globalAlpha = a; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); g.globalAlpha = 1; };
+    const envelope = (x, y) => {                                                 /* отклик = письмо */
+      g.strokeStyle = '#1d2733'; g.lineWidth = 1.5; g.strokeRect(x - 10, y - 7, 20, 14);
+      g.beginPath(); g.moveTo(x - 10, y - 7); g.lineTo(x, y + 1); g.lineTo(x + 10, y - 7); g.stroke();
+    };
+    function draw(t) {
+      g.setTransform(2, 0, 0, 2, 0, 0); g.clearRect(0, 0, 1488, H); g.fillStyle = '#1d2733';
+      src.forEach(([x, y]) => { g.beginPath(); g.arc(x, y, 3.2, 0, 7); g.fill(); });
+      for (let y = 24; y < H - 40; y += 26) g.fillRect(SIEVE - 0.75, y, 1.5, 15);   /* сито */
+      parts.forEach(p => {
+        const u = t - p.at; if (u < 0) return;
+        if (u < 620) { const k = ease(u / 620); return dot(mix(p.s[0], SIEVE, k), mix(p.s[1], p.y, k), 3.2); }
+        if (p.pass) { const k = ease((u - 620) / 620); return dot(mix(SIEVE, p.slot[0], k), mix(p.y, p.slot[1], k), mix(3.2, R, k)); }
+        const f = (u - 620) / 1000; if (f < 1) dot(SIEVE + 34 * f, p.y + 620 * f * f, 3.2, 1 - f);
+      });
+      for (let i = 0; i < 47; i++) {                                             /* отклики */
+        const k = ease((t - 3300 - i * 30) / 560), from = slot[Math.floor(i * 80 / 47)], to = out[i];
+        if (k >= 1) envelope(to[0], to[1]);
+        else if (k > 0) dot(mix(from[0], to[0], k), mix(from[1], to[1], k), R);
+      }
+      g.fillStyle = '#e0897b';                                                   /* приглашения */
+      yes.forEach((n, j) => {
+        const k = ease((t - 5200 - j * 90) / 520), big = ease((t - 5900) / 460), to = [1306 + j * 34, MID];
+        if (k > 0) dot(mix(out[n][0], to[0], k), mix(out[n][1], to[1], k), mix(R, 13, big));
+      });
+    }
+    let raf = 0;
+    return {
+      play() {
+        cancelAnimationFrame(raf);
+        if (matchMedia('(prefers-reduced-motion:reduce)').matches) return draw(END);
+        const t0 = performance.now();
+        const tick = n => { const t = n - t0; draw(Math.min(t, END)); if (t < END) raf = requestAnimationFrame(tick); };
+        raf = requestAnimationFrame(tick);
+      },
+      stop() { cancelAnimationFrame(raf); }
+    };
+  })();
+
+  /* одно окно: сервисы отдают данные в чат, итог уходит в Notion. Кадр считается от времени, анимация идёт по кругу */
+  const hub = (() => {
+    const box = document.getElementById('hub'), NS = 'http://www.w3.org/2000/svg';
+    const me = box.querySelector('.me'), ans = box.querySelector('.ans'), inp = box.querySelector('.inp span'), tools = box.querySelector('.tools');
+    const ASK = me.textContent, ANS = 'Готово, итоги недели собраны';
+    const LOOP = 10200, SENT = 1700, REPLY = 5300, FADE = 9300;
+    /* имя, что даёт, цвет, сторона, центр по y, когда идут данные, строка в чате (null = сервис только принимает) */
+    const SVC = [
+      ['Gmail', 'почта', '--job', 'l', 95, 2000, 'Смотрю почту'],
+      ['Календарь', 'расписание', '--site', 'l', 265, 2350, 'Смотрю календарь'],
+      ['Granola', 'расшифровки встреч', '--admin', 'l', 435, 2700, 'Читаю расшифровки'],
+      ['Telegram', 'чаты и каналы', '--sky', 'l', 605, 3050, 'Читаю Telegram'],
+      ['GitHub', 'код и задачи', '--ableton', 'r', 180, 3400, 'Смотрю GitHub'],
+      ['Google Диск', 'документы и таблицы', '--mint', 'r', 350, 3750, 'Смотрю Google Диск'],
+      ['Папка на компе', 'файлы и заметки', '--quiz', 'r', 520, 4100, 'Читаю папку']
+    ];
+    const ease = u => u < 0 ? 0 : u > 1 ? 1 : u * u * (3 - 2 * u);
+    const clamp = u => Math.min(1, Math.max(0, u));
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 1488 733'); svg.setAttribute('aria-hidden', 'true');
+    box.prepend(svg);                                                            /* провода под плашками и окном */
+    const trains = [], hot = [], chips = [];
+    SVC.forEach(([name, what, color, side, y, at, line]) => {
+      const left = side === 'l', inbound = true;
+      const wire = document.createElementNS(NS, 'line');
+      [['x1', left ? 320 : 1004], ['x2', left ? 484 : 1168], ['y1', y], ['y2', y]].forEach(([k, v]) => wire.setAttribute(k, v));
+      svg.append(wire);
+      const tile = document.createElement('div'); tile.className = 'svc';
+      tile.style.cssText = `--k:var(${color});left:${left ? 0 : 1168}px;top:${y - 60}px`;
+      tile.innerHTML = `<h3><i></i>${name}</h3><p>${what}</p>`;
+      box.append(tile);
+      const tileX = left ? 160 : 1328, winX = left ? 524 : 964;                 /* точки выныривают из-под плашки и ныряют под окно */
+      const dots = [0, 1, 2].map(() => {
+        const c = document.createElementNS(NS, 'circle');
+        c.setAttribute('r', 6); c.setAttribute('cy', y); c.style.fill = `var(${color})`;
+        svg.append(c); return c;
+      });
+      trains.push({ from: inbound ? tileX : winX, to: inbound ? winX : tileX, at, dots });
+      hot.push([tile, at - 150, at + 700]);
+      const li = document.createElement('li'); li.style.setProperty('--k', `var(${color})`);
+      li.innerHTML = `<i></i>${line}`; tools.append(li); chips.push([li, at + 750]);
+    });
+    function draw(t) {
+      const live = t < FADE;
+      inp.textContent = t < SENT ? ASK.slice(0, Math.floor(ASK.length * clamp((t - 300) / 1200))) : '';
+      inp.classList.toggle('typing', t > 200 && t < SENT);
+      me.classList.toggle('on', live && t >= SENT);
+      chips.forEach(([li, at]) => li.classList.toggle('on', live && t >= at));
+      ans.textContent = ANS.slice(0, Math.floor(ANS.length * clamp((t - REPLY) / 800)));
+      ans.classList.toggle('on', live && t >= REPLY);
+      trains.forEach(({ from, to, at, dots }) => dots.forEach((d, i) => {
+        const u = (t - at - i * 120) / 700;
+        d.style.visibility = u > 0 && u < 1 ? 'visible' : 'hidden';
+        d.setAttribute('cx', from + (to - from) * ease(u));
+      }));
+      hot.forEach(([tile, a, b]) => tile.classList.toggle('hot', t >= a && t < b));
+    }
+    let raf = 0;
+    return {
+      play() {
+        cancelAnimationFrame(raf);
+        if (matchMedia('(prefers-reduced-motion:reduce)').matches) return draw(6000);
+        const t0 = performance.now();
+        const tick = n => { draw((n - t0) % LOOP); raf = requestAnimationFrame(tick); };
+        raf = requestAnimationFrame(tick);
+      },
+      stop() { cancelAnimationFrame(raf); }
+    };
+  })();
+
+  /* аутричер: 36 конвертов, на два пришёл ответ */
+  const ENV = '<rect width="46" height="32" rx="3"/><path d="M4 5 23 18 42 5"/>';
+  document.querySelectorAll('.env').forEach(s => { s.setAttribute('viewBox', '0 0 46 32'); s.innerHTML = ENV; });
+  const envs = document.getElementById('envs');
+  for (let i = 0; i < 36; i++) envs.insertAdjacentHTML('beforeend', `<svg class="env${i === 8 || i === 27 ? ' re' : ''}" viewBox="0 0 46 32" style="--w:${i * 26}ms">${ENV}</svg>`);
+
+  /* все клипы по Tab собираются из самих слайдов */
+  const session = document.getElementById('session'), slots = [];
+  const ROWS = 7;
+  TRACKS.forEach(([id, name]) => {
+    const col = document.createElement('div'); col.className = 'col'; col.style.setProperty('--c', `var(--${id})`);
+    const h = document.createElement('h3'); h.textContent = name; col.append(h);
+    clips.filter(c => c.dataset.track === id).forEach(c => {
+      const i = clips.indexOf(c);
+      const s = document.createElement('button'); s.className = 'slot'; s.textContent = `${i + 1}. ${c.dataset.name}`;
+      s.onclick = () => { go(i); toggleSession(false); }; col.append(s); slots[i] = s;
+    });
+    session.append(col);
+  });
+
+  const num = document.getElementById('num'), bar = document.getElementById('bar'), memo = document.getElementById('memo');
+  /* линия прогресса: кот бежит по точкам и сталкивает их вниз. Клик по точке открывает слайд, наведение показывает название */
+  const pr = document.getElementById('pr'), prDots = pr.querySelector('.dots'), glow = pr.querySelector('.glow');
+  const trail = pr.querySelector('.trail'), prDone = pr.querySelector('.done'), tip = pr.querySelector('.tip');
+  const hero = pr.querySelector('.hero'), flipEl = pr.querySelector('.flip');
+  const PW = 1180, PAD = 24, NOANIM = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const XS = clips.map((_, i) => PAD + i * (PW - 2 * PAD) / (clips.length - 1));
+  const dots = clips.map((c, i) => {
+    const b = document.createElement('button'); b.className = 'dot'; b.style.left = XS[i] + 'px';
+    b.setAttribute('aria-label', `Слайд ${i + 1}: ${c.dataset.name}`);
+    b.onclick = () => go(i);
+    b.onmouseenter = () => { tip.textContent = `${i + 1}. ${c.dataset.name}`; tip.style.left = XS[i] + 'px'; tip.classList.add('on'); };
+    b.onmouseleave = () => tip.classList.remove('on');
+    prDots.append(b); return b;
+  });
+  let heroX = XS[0], pTimers = [], firstMove = true, idleTimer = 0;
+  const IDLE = 20000;                                     /* кот засыпает, если слайд стоит дольше 20 секунд */
+  const napLater = () => { clearTimeout(idleTimer); hero.classList.remove('sleep'); idleTimer = setTimeout(() => { if (heroX !== XS[XS.length - 1] || true) hero.classList.add('sleep'); }, IDLE); };
+  ['keydown', 'pointerdown'].forEach(ev => addEventListener(ev, () => { if (hero.classList.contains('sleep') && heroX !== XS[XS.length - 1]) napLater(); else if (!hero.classList.contains('sleep')) napLater(); }, true));
+  function moveProgress(i) {
+    const from = heroX, to = XS[i], dist = Math.abs(to - from);
+    const dur = (NOANIM || firstMove || !dist) ? 0 : Math.min(1400, 400 + dist * .9), ease = `${dur}ms cubic-bezier(.4,0,.2,1)`;
+    pTimers.forEach(clearTimeout); pTimers = [];
+    hero.classList.remove('run', 'sleep');
+    hero.style.transition = `transform ${ease}`; glow.style.transition = `left ${ease}`;
+    trail.style.transition = prDone.style.transition = `width ${ease}`;
+    hero.style.transform = `translateX(${to}px)`; glow.style.left = to + 'px'; trail.style.width = prDone.style.width = to + 'px';
+    if (dist) flipEl.style.transform = to < from ? 'scaleX(-1)' : 'scaleX(1)';
+    pr.style.setProperty('--g', clips[i].style.getPropertyValue('--c') || 'var(--site)');
+    if (dur) { hero.classList.add('run'); pTimers.push(setTimeout(() => hero.classList.remove('run'), dur)); }
+    dots.forEach((d, j) => {
+      const gone = j < i, isGone = d.classList.contains('fallen') || d.classList.contains('gone');
+      if (gone === isGone) return;
+      const act = () => {
+        d.classList.remove('fallen', 'gone', 'back');
+        if (gone) {
+          if (!dur) d.classList.add('gone');
+          else { void d.offsetWidth; d.classList.add('fallen'); hero.classList.remove('hop'); void hero.offsetWidth; hero.classList.add('hop'); }
+        } else if (dur) { void d.offsetWidth; d.classList.add('back'); }
+      };
+      if (!dur) act(); else pTimers.push(setTimeout(act, Math.max(0, dur * Math.abs(XS[j] - from) / dist)));
+    });
+    if (i === clips.length - 1) pTimers.push(setTimeout(() => hero.classList.add('sleep'), dur + 150));
+    heroX = to; firstMove = false;
+    napLater();
+    if (i === clips.length - 1) { clearTimeout(idleTimer); pTimers.push(setTimeout(() => hero.classList.add('sleep'), dur + 150)); }
+  }
+
+  function go(i, fromHash) {
+    i = Math.max(0, Math.min(clips.length - 1, i));
+    clips[cur].classList.remove('on', 'sweep');
+    cur = i;
+    const c = clips[cur];
+    void c.offsetWidth;            /* анимация запускается при каждом входе */
+    c.classList.add('on');
+    if (c.classList.contains('title')) c.classList.add('sweep');
+    if (c.dataset.track === 'job') flow.play(); else flow.stop();
+    if (c.querySelector('#hub')) hub.play(); else hub.stop();
+    num.innerHTML = `<b>${cur + 1}</b> / ${clips.length}`;
+    bar.style.width = `${(cur + 1) / clips.length * 100}%`;
+    moveProgress(cur);
+    slots.forEach((s, j) => s.classList.toggle('now', j === cur));
+    memo.textContent = c.dataset.notes || 'Заметок к этому слайду нет';
+    if (!fromHash) history.replaceState(null, '', `#${cur + 1}`);
+  }
+  function toggleSession(v) { session.hidden = v === undefined ? !session.hidden : !v; }
+
+  /* бит по пробелу: звук синтезируется на месте, файлов нет */
+  let ctx, out, echo, noise, timer, next = 0, step = 0;
+  const CHORDS = [[110, 130.81, 164.81], [87.31, 110, 130.81], [98, 123.47, 146.83], [110, 130.81, 164.81]];
+  function setup() {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    out = ctx.createGain(); out.gain.value = .55; out.connect(ctx.destination);
+    echo = ctx.createDelay(1); echo.delayTime.value = 60 / BPM * .75;
+    const fb = ctx.createGain(); fb.gain.value = .48;
+    echo.connect(fb); fb.connect(echo); echo.connect(out);
+    noise = ctx.createBuffer(1, ctx.sampleRate * .1, ctx.sampleRate);
+    const d = noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  function kick(t) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.setValueAtTime(125, t); o.frequency.exponentialRampToValueAtTime(46, t + .11);
+    g.gain.setValueAtTime(.7, t); g.gain.exponentialRampToValueAtTime(.001, t + .34);
+    o.connect(g); g.connect(out); o.start(t); o.stop(t + .36);
+  }
+  function hat(t) {
+    const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = noise; f.type = 'highpass'; f.frequency.value = 8500;
+    g.gain.setValueAtTime(.07, t); g.gain.exponentialRampToValueAtTime(.001, t + .06);
+    s.connect(f); f.connect(g); g.connect(out); s.start(t); s.stop(t + .08);
+  }
+  function stab(t, chord) {
+    const f = ctx.createBiquadFilter(), g = ctx.createGain();
+    f.type = 'lowpass'; f.Q.value = 3; f.frequency.setValueAtTime(1100, t); f.frequency.exponentialRampToValueAtTime(320, t + .3);
+    g.gain.setValueAtTime(.075, t); g.gain.exponentialRampToValueAtTime(.001, t + .34);
+    chord.forEach(hz => { const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = hz * 2; o.connect(f); o.start(t); o.stop(t + .36); });
+    f.connect(g); g.connect(out); g.connect(echo);
+  }
+  function schedule() {
+    const sixteenth = 60 / BPM / 4;
+    while (next < ctx.currentTime + .14) {
+      const q = step % 16;
+      if (q % 4 === 0) kick(next);
+      if (q % 4 === 2) hat(next);
+      if (q === 6 || q === 11) stab(next, CHORDS[Math.floor(step / 32) % 4]);
+      next += sixteenth; step++;
+    }
+  }
+  function toggleBeat() {
+    const on = document.documentElement.classList.toggle('playing');
+    if (on) {
+      if (!ctx) setup();
+      ctx.resume(); out.gain.setTargetAtTime(.55, ctx.currentTime, .01);
+      next = ctx.currentTime + .08; step = 0; timer = setInterval(schedule, 30);
+    } else {
+      clearInterval(timer); out.gain.setTargetAtTime(0, ctx.currentTime, .05);
+    }
+  }
+
+  /* обзор всех слайдов: живые миниатюры с номерами, клик открывает слайд */
+  const ov = document.getElementById('ov'), ovg = document.getElementById('ovg');
+  const scaleThumbs = () => ovg.querySelectorAll('.thumb').forEach(t => { t.firstElementChild.style.transform = `scale(${t.clientWidth / 1600})`; });
+  function toggleOv(v) {
+    if (window.top !== window) return;                       /* внутри миниатюры обзор не нужен */
+    ov.hidden = v === undefined ? !ov.hidden : !v;
+    if (ov.hidden) return;
+    if (!ovg.children.length) clips.forEach((c, i) => {
+      const a = document.createElement('button'); a.className = 'cell';
+      a.innerHTML = `<div class="thumb"><iframe src="${location.pathname.split('/').pop() || 'index.html'}#${i + 1}" tabindex="-1" loading="lazy" title="Слайд ${i + 1}"></iframe></div><div class="cap"><b>${i + 1}</b>${c.dataset.name}</div>`;
+      a.onclick = () => { toggleOv(false); go(i); };
+      ovg.append(a);
+    });
+    scaleThumbs();
+  }
+  addEventListener('resize', () => { if (!ov.hidden) scaleThumbs(); });
+
+  addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const key = e.key.toLowerCase();
+    if (!ov.hidden) { if (key === 'escape' || key === 'o' || key === 'щ') toggleOv(false); return; }
+    if (key === 'o' || key === 'щ') { toggleOv(true); return; }
+    if (['arrowright', 'arrowdown', 'pagedown'].includes(key)) { e.preventDefault(); go(cur + 1); }
+    else if (['arrowleft', 'arrowup', 'pageup'].includes(key)) { e.preventDefault(); go(cur - 1); }
+    else if (key === 'home') go(0);
+    else if (key === 'end') go(clips.length - 1);
+    else if (key === ' ') { e.preventDefault(); toggleBeat(); }
+    else if (key === 'tab') { e.preventDefault(); toggleSession(); }
+    else if (key === 'escape') toggleSession(false);
+    else if (key === 'n' || key === 'т') memo.hidden = !memo.hidden;
+    else if (key === 'f' || key === 'а') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+  });
+
+  /* клик мышью: правая часть вперёд, левая треть назад */
+  stage.addEventListener('click', e => {
+    if (e.target.closest('a,button') || !session.hidden) return;
+    const r = stage.getBoundingClientRect();
+    go(cur + (e.clientX < r.left + r.width / 3 ? -1 : 1));
+  });
+
+  /* планшет: свайп листает, кнопки внизу справа дублируют жесты, потому что внутри встроенных сайтов свайпы уходят в сайт */
+  if (matchMedia('(pointer:coarse)').matches || /[?&]touch\b/.test(location.search)) document.body.classList.add('touch');
+  document.getElementById('nbPrev').onclick = () => go(cur - 1);
+  document.getElementById('nbNext').onclick = () => go(cur + 1);
+  document.getElementById('nbMenu').onclick = () => toggleOv();
+  document.getElementById('ovClose').onclick = () => toggleOv(false);
+  let x0 = null, y0 = 0;
+  addEventListener('touchstart', e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchend', e => {
+    if (x0 === null || !ov.hidden || !session.hidden) { x0 = null; return; }
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(cur + (dx < 0 ? 1 : -1));
+  });
+  addEventListener('hashchange', () => { if (location.hash === '#o') toggleOv(true); else go((parseInt(location.hash.slice(1), 10) || 1) - 1, true); });
+
+  go((parseInt(location.hash.slice(1), 10) || 1) - 1, true);
+  if (location.hash === '#o') toggleOv(true);
+})();
+</script>
+</body>
+</html>
