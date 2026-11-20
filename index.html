@@ -779,14 +779,13 @@ body.touch #sw button{padding:16px 34px}
   </div>
 </section>
 
-<section class="clip" data-track="fekla" data-name="Бот: запуск" style="--c:var(--fekla)" data-notes="Деплой на Railway. 1. Залить репозиторий на GitHub (приватный). 2. railway.app, New Project, Deploy from GitHub repo. Попроси агента настроить команду запуска бота на Railway. 3. Settings, Volumes, Add Volume, Mount path /data, хватит 1 ГБ. 4. Variables: TELEGRAM_BOT_TOKEN, ANTHROPIC_API_KEY, DATA_DIR=/data, при необходимости GOOGLE_CREDENTIALS_JSON и GOOGLE_TOKEN_JSON. 5. Каждый git push в main запускает автоматический редеплой. Чтобы бот отвечал только владельцу, в OWNER_ID пишется Telegram ID.">
+<section class="clip" data-track="fekla" data-name="Бот: запуск" style="--c:var(--fekla)" data-notes="Деплой на Railway. 1. Залить репозиторий на GitHub (приватный). 2. railway.app, New Project, Deploy from GitHub repo. Попроси агента настроить команду запуска бота на Railway. 3. Variables: TELEGRAM_BOT_TOKEN, ANTHROPIC_API_KEY, при необходимости GOOGLE_CREDENTIALS_JSON и GOOGLE_TOKEN_JSON. 4. Каждый git push в main запускает автоматический редеплой. Чтобы бот отвечал только владельцу, в OWNER_ID пишется Telegram ID.">
   <div class="hd"><h2>Шаг 3. Запусти бота на Railway</h2><p>Чтобы он работал, даже когда компьютер выключен</p></div>
   <div class="setup">
     <ol class="todo">
       <li>Залей проект в приватный репозиторий на GitHub</li>
       <li>На railway.app нажми New Project, затем Deploy from GitHub repo и выбери репозиторий</li>
-      <li>В сервисе добавь Volume с путём <span class="mono">/data</span><small>Settings, Volumes. Так задачи не пропадут при обновлении</small></li>
-      <li>В Variables впиши ключи<small><span class="mono">TELEGRAM_BOT_TOKEN</span>, <span class="mono">ANTHROPIC_API_KEY</span>, <span class="mono">DATA_DIR=/data</span></small></li>
+      <li>В Variables впиши ключи<small><span class="mono">TELEGRAM_BOT_TOKEN</span>, <span class="mono">ANTHROPIC_API_KEY</span></small></li>
     </ol>
     <div class="kard"><h3>Дальше</h3><p>Каждый git push в main сам обновляет бота</p><p>Файлы .env, credentials.json и token.json в репозиторий не кладём. Чтобы бот отвечал только вам, впиши свой Telegram ID в OWNER_ID, узнать его можно командой /whoami</p></div>
   </div>
