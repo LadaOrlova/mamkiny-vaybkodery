@@ -100,7 +100,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .lines{flex:1;display:flex;flex-direction:column;justify-content:center;gap:34px;font-size:54px;line-height:1.15;font-weight:400;letter-spacing:-.02em}
 
 /* одно окно: сервисы слева и справа, по проводам бегут данные */
-.hub{position:relative;flex:1;min-height:0;margin-top:-34px}
+.hub{position:relative;flex:1;min-height:0;margin-top:-60px}
 .hub>svg{position:absolute;left:0;top:0;width:1488px;height:733px}
 .hub line{stroke:var(--ink);stroke-width:1.5}
 .hub circle{stroke:#fff;stroke-width:2;filter:drop-shadow(0 0 6px rgba(29,39,51,.22))}
@@ -394,7 +394,7 @@ body.touch .ov .x{display:grid}
   </div>
 </section>
 
-<section class="clip" data-track="intro" data-name="Плагины" style="--c:var(--intro)" data-notes="ChatGPT, Настройки → Плагины → Приложения. Подключено 15 приложений, среди них GitHub, Gmail, Google Calendar, Google Contacts, Google Drive, Granola и Notion. Скрин от 17.11.2026.">
+<section class="clip" data-track="intro" data-name="Коннекторы" style="--c:var(--intro)" data-notes="ChatGPT, Настройки → Плагины → Приложения. Подключено 15 приложений, среди них GitHub, Gmail, Google Calendar, Google Contacts, Google Drive, Granola и Notion. Скрин от 17.11.2026.">
   <div class="hd"><h2>Коннекторы в ChatGPT и Claude</h2></div>
   <div class="model-layout">
     <div class="shotbox"><img class="shot" src="assets/plugins.png" style="filter:none" alt="Список подключённых приложений в настройках ChatGPT"></div>
@@ -406,8 +406,8 @@ body.touch .ov .x{display:grid}
   </div>
 </section>
 
-<section class="clip" data-track="intro" data-name="Одно окно" style="--c:var(--intro)" data-notes="Схема условная, анимация идёт по кругу. Пишу задачу в одном окне, а ChatGPT сам ходит в подключённые сервисы: почта, календарь, расшифровки встреч Granola, Telegram, GitHub, Google Диск и папка на компьютере. Всё собирается в одном чате.">
-  <div class="hd"><h2>Плагины собирают всё в одно окно</h2><p>Сервисы обмениваются данными через чат</p></div>
+<section class="clip" data-track="intro" data-name="Коннекторы в работе" style="--c:var(--intro)" data-notes="Схема условная, анимация идёт по кругу. Пишу задачу в одном окне, а ChatGPT сам ходит в подключённые сервисы: почта, календарь, расшифровки встреч Granola, Telegram, GitHub, Google Диск и папка на компьютере. Всё собирается в одном чате.">
+  <div class="hd"><h2>Коннекторы в работе</h2><p>Что агент может делать в подключённых сервисах</p></div>
   <div class="hub" id="hub" role="img" aria-label="Окно ChatGPT, к нему подключены Gmail, Календарь, Granola, Telegram, GitHub, Google Диск и папка на компьютере. Всё приходит в один чат">
     <div class="win">
       <div class="wtop"><i></i><i></i><i></i><span>ChatGPT</span></div>
@@ -848,13 +848,13 @@ body.touch .ov .x{display:grid}
     const LOOP = 10200, SENT = 1700, REPLY = 5300, FADE = 9300;
     /* имя, что даёт, цвет, сторона, центр по y, когда идут данные, строка в чате (null = сервис только принимает) */
     const SVC = [
-      ['Gmail', 'почта', '--job', 'l', 95, 2000, 'Смотрю почту'],
-      ['Календарь', 'расписание', '--site', 'l', 265, 2350, 'Смотрю календарь'],
-      ['Granola', 'расшифровки встреч', '--admin', 'l', 435, 2700, 'Читаю расшифровки'],
-      ['Telegram', 'чаты и каналы', '--sky', 'l', 605, 3050, 'Читаю Telegram'],
-      ['GitHub', 'код и задачи', '--ableton', 'r', 180, 3400, 'Смотрю GitHub'],
-      ['Google Диск', 'документы и таблицы', '--mint', 'r', 350, 3750, 'Смотрю Google Диск'],
-      ['Папка на компе', 'файлы и заметки', '--quiz', 'r', 520, 4100, 'Читаю папку']
+      ['Gmail', 'Читает и отправляет письма', '--job', 'l', 95, 2000, 'Смотрю почту'],
+      ['Календарь', 'Смотрит расписание и создаёт события', '--site', 'l', 265, 2350, 'Смотрю календарь'],
+      ['Granola', 'Находит договорённости во встречах', '--admin', 'l', 435, 2700, 'Читаю расшифровки'],
+      ['Telegram', 'Читает сообщения и посты', '--sky', 'l', 605, 3050, 'Читаю Telegram'],
+      ['GitHub', 'Смотрит код и задачи', '--ableton', 'r', 180, 3400, 'Смотрю GitHub'],
+      ['Google Диск', 'Читает документы и таблицы', '--mint', 'r', 350, 3750, 'Смотрю Google Диск'],
+      ['Папка на компе', 'Читает файлы вашей базы знаний', '--quiz', 'r', 520, 4100, 'Читаю папку']
     ];
     const ease = u => u < 0 ? 0 : u > 1 ? 1 : u * u * (3 - 2 * u);
     const clamp = u => Math.min(1, Math.max(0, u));
