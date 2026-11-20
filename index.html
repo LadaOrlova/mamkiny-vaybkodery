@@ -95,9 +95,6 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .weights div{flex:var(--w) 1 0;min-width:0}
 .weights b{display:flex;align-items:flex-end;height:auto;padding:0 0 16px;border-bottom:var(--hair);color:var(--ink);font:400 54px/1 var(--display);letter-spacing:-.03em;background:none}
 .weights span{display:block;margin-top:14px;font-size:24px;font-weight:400;color:var(--muted)}
-.flags{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:56px;align-content:center}
-.flags p{font-size:27px;line-height:1.3;font-weight:400}
-.flags i{display:block;width:26px;height:26px;border-radius:50%;background:var(--f);box-shadow:0 0 0 1.5px #fff,0 0 26px var(--f);margin:4px 0 24px 4px}
 
 /* Granola */
 .lines{flex:1;display:flex;flex-direction:column;justify-content:center;gap:34px;font-size:54px;line-height:1.15;font-weight:400;letter-spacing:-.02em}
@@ -362,7 +359,7 @@ body.touch .ov .x{display:grid}
 .analytics-boundary{padding:18px 24px;border-top:1.5px solid var(--ink);font-size:25px;line-height:1.3}
 
 /* Claude и Codex */
-.model-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;height:650px;min-height:0}
+.model-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;height:610px;grid-template-rows:minmax(0,1fr);min-height:0}
 .model-shots{display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:20px;min-height:0}
 .model-shots img{display:block;width:100%;height:100%;object-fit:contain;object-position:left center}
 .model-guide{display:grid;align-content:center;gap:24px;font-size:26px;line-height:1.3}
@@ -421,33 +418,15 @@ body.touch .ov .x{display:grid}
 </section>
 
 <section class="clip" data-track="job" data-name="Как я ищу работу" style="--c:var(--job)"
-  data-notes="Система собрана в Codex. По будням в 10:00 она обходит источники, читает вакансии и ставит флаги, всё складывается в Google-таблицу. Зелёный флаг: можно влиять на стратегию, есть команда и ресурсы. Красный: под видом руководителя ищут человека, который сам будет делать весь контент. Если про команду или зарплату ничего нет, надо спросить, а не додумывать. Срез на 17.11.2026: 80 вакансий в базе, 47 откликов, 18 ответов работодателей, 5 приглашений к следующему этапу. Падающие точки показывают идею отсева, их число условное.">
-  <div class="hd"><h2>Как я ищу работу</h2><p>Чтобы поиск не превратился в ещё одну работу</p></div>
+  data-notes="Система собрана в Codex. По будням в 10:00 она обходит источники, читает вакансии и ставит флаги, всё складывается в Google-таблицу. Codex пишет отклики и отслеживает ответы работодателей на почте. Ищу руководящую роль, где пригодится мой опыт. Зелёный флаг: можно влиять на стратегию, есть команда и ресурсы. Красный: под видом руководителя ищут человека, который сам будет делать весь контент. Если про команду или зарплату ничего нет, надо спросить, а не додумывать. Срез на 17.11.2026: 80 вакансий в базе, 47 откликов, 18 ответов работодателей, 5 приглашений к следующему этапу. Падающие точки показывают идею отсева, их число условное.">
+  <div class="hd"><h2>Как я ищу работу</h2><p>Ищу руководящую роль, где пригодится мой опыт</p></div>
   <div class="flow">
-    <canvas id="flow" width="2976" height="880" role="img" aria-label="Вакансии идут из источников через фильтр критериев, 80 попадают в таблицу, 47 становятся откликами, 5 приглашений дальше"></canvas>
-    <div class="fl" style="left:0;width:290px"><b>&nbsp;</b>источники: hh.ru, Telegram, сайты компаний</div>
-    <div class="fl" style="left:352px;width:230px"><b>&nbsp;</b>Codex читает и оценивает по критериям</div>
+    <canvas id="flow" width="2976" height="880" role="img" aria-label="Вакансии идут из источников через фильтр критериев, 80 попадают в таблицу, 47 становятся откликами, 5 приглашений на следующий этап"></canvas>
+    <div class="fl" style="left:0;width:290px"><b>&nbsp;</b>Codex сканирует hh.ru, Telegram и сайты компаний</div>
+    <div class="fl" style="left:352px;width:230px"><b>&nbsp;</b>Codex оценивает вакансии по моим критериям</div>
     <div class="fl" style="left:640px;width:260px"><b>80</b>вакансий в таблице</div>
-    <div class="fl" style="left:980px;width:280px"><b>47</b>откликов: Claude ищет почту помимо hh.ru и отправляет письмо</div>
+    <div class="fl" style="left:980px;width:280px"><b>47</b>откликов. Codex пишет отклики и следит за ответами на почте</div>
     <div class="fl" style="left:1296px;width:190px"><b>5</b>приглашений дальше</div>
-  </div>
-</section>
-
-<section class="clip" data-track="job" data-name="Критерии" style="--c:var(--job)"
-  data-notes="Шесть критериев из таблицы: стратегия 25%, опыт 20%, финансы 20%, автономия 15%, компания 10%, условия 10%. Веса предложены и ещё не откалиброваны, числовые баллы система пока не считает: главное в карточке вакансии флаги. Каждый флаг хранит цитату из объявления. Отсутствие сведений не считается плохим признаком, это вопрос к работодателю.">
-  <div class="hd"><h2>Как оцениваю вакансию</h2><p>Веса пока черновые</p></div>
-  <div class="weights">
-    <div style="--w:25"><b>25%</b><span>Стратегия</span></div>
-    <div style="--w:20"><b>20%</b><span>Опыт</span></div>
-    <div style="--w:20"><b>20%</b><span>Финансы</span></div>
-    <div style="--w:15"><b>15%</b><span>Автономия</span></div>
-    <div style="--w:10"><b>10%</b><span>Компания</span></div>
-    <div style="--w:10"><b>10%</b><span>Условия</span></div>
-  </div>
-  <div class="flags">
-    <p><i style="--f:#8fcfa9"></i>Можно влиять на стратегию, есть команда и ресурсы</p>
-    <p><i style="--f:#e9d48a"></i>Про команду или зарплату ничего нет: спросить, а не додумывать</p>
-    <p><i style="--f:#d9786d"></i>Под видом руководителя ищут того, кто сам сделает весь контент</p>
   </div>
 </section>
 
