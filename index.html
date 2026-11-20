@@ -779,15 +779,11 @@ body.touch #sw button{padding:16px 34px}
   </div>
 </section>
 
-<section class="clip" data-track="fekla" data-name="Бот: запуск" style="--c:var(--fekla)" data-notes="Деплой на Railway. 1. Залить репозиторий на GitHub (приватный). 2. railway.app, New Project, Deploy from GitHub repo. Попроси агента настроить команду запуска бота на Railway. 3. Variables: TELEGRAM_BOT_TOKEN, ANTHROPIC_API_KEY, при необходимости GOOGLE_CREDENTIALS_JSON и GOOGLE_TOKEN_JSON. 4. Каждый git push в main запускает автоматический редеплой. Чтобы бот отвечал только владельцу, в OWNER_ID пишется Telegram ID.">
-  <div class="hd"><h2>Шаг 3. Запусти бота на Railway</h2><p>Чтобы он работал, даже когда компьютер выключен</p></div>
+<section class="clip" data-track="fekla" data-name="Бот: запуск" style="--c:var(--fekla)" data-notes="Есть два варианта запуска. На своём компьютере: попроси агента запустить бота. Railway не нужен. Бот работает, пока программа запущена, компьютер включён, не спит и подключён к интернету. Для утреннего дайджеста эти условия должны выполняться в 10:00. Для постоянной работы независимо от компьютера: размести бота на Railway. Загрузи проект в приватный репозиторий GitHub без файла .env, подключи репозиторий в Railway через New Project → Deploy from GitHub repo, ключи добавь в Variables. Попроси агента помочь с настройкой и проверить запуск.">
+  <div class="hd"><h2>Шаг 3. Выбери, где будет работать бот</h2><p>На своём компьютере или постоянно — независимо от него</p></div>
   <div class="setup">
-    <ol class="todo">
-      <li>Залей проект в приватный репозиторий на GitHub</li>
-      <li>На railway.app нажми New Project, затем Deploy from GitHub repo и выбери репозиторий</li>
-      <li>В Variables впиши ключи<small><span class="mono">TELEGRAM_BOT_TOKEN</span>, <span class="mono">ANTHROPIC_API_KEY</span></small></li>
-    </ol>
-    <div class="kard"><h3>Дальше</h3><p>Каждый git push в main сам обновляет бота</p><p>Файлы .env, credentials.json и token.json в репозиторий не кладём. Чтобы бот отвечал только вам, впиши свой Telegram ID в OWNER_ID, узнать его можно командой /whoami</p></div>
+    <div class="kard"><h3>На своём компьютере</h3><p>Railway не нужен. Попроси агента запустить бота у тебя на компьютере</p><p>Бот работает, пока программа запущена, компьютер включён, не спит и есть интернет</p><p>Хочешь дайджест в 10:00 — в это время компьютер и бот должны работать</p></div>
+    <div class="kard"><h3>Всегда, даже если компьютер выключен</h3><p>Размести бота на Railway — сервисе, где он будет работать независимо от твоего компьютера</p><p>Загрузи проект на GitHub без файла .env. В Railway нажми New Project → Deploy from GitHub repo</p><p>Добавь ключи в Variables — настройки сервиса. Попроси агента помочь всё подключить и проверить запуск</p></div>
   </div>
 </section>
 
@@ -798,11 +794,6 @@ body.touch #sw button{padding:16px 34px}
     <div><h3>Просите проверить результат перед выдачей</h3><p>Попросите агента проверить и вычитать результат. Затем попросите его смоделировать пользователей и от их лица прочитать статью или пройтись по сайту или лендингу. Если у вас есть данные о целевой аудитории, пусть агент смоделирует пользователей на их основе и доработает результат по итогам проверки.</p></div>
     <div><h3>Соберите свою базу знаний и данных</h3><p>Храните сведения о себе и проекте, документы и рабочие данные там, где агент сможет к ним обращаться. Тогда для каждой новой задачи ему не придётся заново объяснять контекст.</p></div>
   </div>
-</section>
-
-<section class="clip" data-track="quiz" data-name="Вайбкодер ли ты?" style="--c:var(--quiz)" data-notes="zamesinschool.ru/products/boost/quiz-vibecoder">
-  <div class="hd"><h2>Квиз «Вайбкодер ли ты?»</h2><p><a href="https://zamesinschool.ru/products/boost/quiz-vibecoder" target="_blank" rel="noopener">10 вопросов, результат и рекомендация</a></p></div>
-  <div class="shotbox"><img class="shot" src="assets/quiz.png" alt="Стартовый экран квиза «Вайбкодер ли ты?»"></div>
 </section>
 
 <section class="clip" data-track="mari" data-name="Сайт «Мари, куда идём?»" style="--c:var(--mint)"
@@ -936,7 +927,7 @@ body.touch #sw button{padding:16px 34px}
 (() => {
   const stage = document.getElementById('stage');
   const clips = [...document.querySelectorAll('.clip')];
-  const TRACKS = [['intro','Старт'],['ableton','Ableton'],['site','Сайт школы'],['admin','Админка'],['fekla','Фекла'],['job','Поиск работы'],['neuro','Нейроночки'],['quiz','Квиз'],['mari','Сайт Мари'],['setup','Установка']];
+  const TRACKS = [['intro','Старт'],['ableton','Ableton'],['site','Сайт школы'],['admin','Админка'],['fekla','Фекла'],['job','Поиск работы'],['neuro','Нейроночки'],['mari','Сайт Мари'],['setup','Установка']];
   const BPM = 108;
   let cur = 0;
 
