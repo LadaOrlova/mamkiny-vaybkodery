@@ -367,6 +367,9 @@ body.touch .ov .x{display:grid}
 .model-guide .model-lead{font-size:30px}
 .model-guide .model-note{border-top:1px solid var(--ink);padding-top:20px;color:var(--muted);font-size:24px}
 
+.ableton-story.model-layout{grid-template-columns:minmax(0,5fr) minmax(0,8fr)}
+.ableton-story .cat6{position:static;width:auto;min-width:0;display:grid;place-items:center}
+.ableton-story .cat6 img{width:100%;max-height:100%;object-fit:contain}
 </style>
 </head>
 <body>
@@ -452,14 +455,17 @@ body.touch .ov .x{display:grid}
   </div>
 </section>
 
-<section class="clip" data-track="ableton" data-name="Про музыку" style="--c:var(--ableton)" data-notes="Мем: Vibing Cat, tenor.com/view/cat-vibe-cat-dancing-cat-cat-meme-gif-15870698214896676686. Курс по Ableton я собрала для себя: со своей LMS и своим сайтом. Дальше на слайдах его первый дизайн, готовый курс и как он попал в интернет.">
-  <div class="hd"><h2>А ещё я начала делать музыку</h2></div>
-  <div class="lines">
-    <p>Собрала себе курс по Ableton</p>
-    <p>со своей LMS</p>
-    <p>и своим сайтом</p>
+<section class="clip" data-track="ableton" data-name="Как я собрала курс" style="--c:var(--ableton)" data-notes="Мем: Vibing Cat, tenor.com/view/cat-vibe-cat-dancing-cat-cat-meme-gif-15870698214896676686. Дальше покажу первый дизайн, готовый курс и как он попал в интернет.">
+  <div class="hd"><h2>Как я навыкодила себе курс по Ableton</h2></div>
+  <div class="model-layout ableton-story">
+    <picture class="cat6"><source media="(prefers-reduced-motion:reduce)" srcset="assets/cat-vibing-still.jpg"><img src="assets/cat-vibing.gif" alt="Кот качает головой под музыку"></picture>
+    <div class="model-guide">
+      <div><h3>Собрала программу под себя</h3><p>Попросила агента изучить сайт Ableton, разобрать программы готовых курсов, собрать удачные приёмы с YouTube и учесть мои музыкальные референсы.</p></div>
+      <div><h3>Прогнала курс на 30 симулированных учениках</h3><p>Агент симулировал прохождение курса и собрал обратную связь. По ней я попросила его улучшить интерфейс, объяснения и порядок уроков.</p></div>
+      <div><h3>Проверила тексты и логику уроков</h3><p>Собрала скилл по книге Ильяхова и попросила агента проверить ясность текстов и дидактику курса.</p></div>
+      <p class="model-note">В итоге у меня появился курс под музыку, которую я хочу делать, со своим сайтом и LMS.</p>
+    </div>
   </div>
-  <picture class="cat6"><source media="(prefers-reduced-motion:reduce)" srcset="assets/cat-vibing-still.jpg"><img src="assets/cat-vibing.gif" alt="Кот качает головой под музыку"></picture>
 </section>
 
 <section class="clip" data-track="ableton" data-name="Что внутри" style="--c:var(--ableton)"
