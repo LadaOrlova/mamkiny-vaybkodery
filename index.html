@@ -358,10 +358,10 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
 .pics .pic{aspect-ratio:16/7.3}
 
 /* переключатель разделов */
-#sw{position:absolute;right:72px;top:38px;z-index:6;display:flex;gap:4px;padding:5px;border-radius:32px;background:rgba(255,255,255,.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 6px 22px rgba(29,60,100,.14)}
-#sw button{padding:10px 28px;border-radius:26px;font-size:23px;line-height:1;color:var(--muted);transition:background-color .2s,color .2s}
+#sw{position:absolute;right:72px;top:8px;z-index:6;display:flex;gap:4px;padding:5px;border-radius:32px;background:rgba(255,255,255,.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 6px 22px rgba(29,60,100,.14)}
+#sw button{padding:8px 22px;border-radius:26px;font-size:20px;line-height:1;color:var(--muted);transition:background-color .2s,color .2s}
 #sw button.on{background:var(--ink);color:#fff}
-body.touch #sw button{padding:16px 34px}
+body.touch #sw{top:0}body.touch #sw button{padding:10px 24px;font-size:23px}
 
 .dl{display:flex;flex-wrap:wrap;gap:8px 32px;margin-top:12px}
 .dl a,.price a{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
@@ -744,49 +744,6 @@ body.touch #sw button{padding:16px 34px}
   </div>
 </section>
 
-<section class="clip" data-track="fekla" data-name="Бот: из чего собран" style="--c:var(--fekla)" data-notes="Устройство бота Фекла по репозиторию LadaOrlova/fekla. Бот на Python (библиотека python-telegram-bot) запущен на Railway как сервис worker командой python bot.py. Мозги: Claude через Anthropic API (модель Haiku 4.5) с вызовом инструментов: создать задачу, показать задачи, завершить, удалить, создать событие в Google Календаре, дайджест дня. Ключ API берётся на console.anthropic.com и оплачивается отдельно от подписки Claude. Дайджест каналов бот читает через публичную веб-версию t.me/s/ без входа, список в channels.json (рубрики), сайты афиш в sites.json. Текст дайджеста пишет модель. Голосовые расшифровывает OpenAI Whisper, заметки хранятся в репозитории на GitHub.">
-  <div class="hd"><h2>Как сделать такого бота: из чего он собран</h2><p>Мозги бота не из подписки, а из API</p></div>
-  <div class="fb4">
-    <div class="fb" style="--i:0"><h3>Telegram</h3><p>Ты пишешь боту или вызываешь команду</p></div>
-    <div class="fb" style="--i:1"><h3>Railway</h3><p>Код на Python работает там круглосуточно, не на твоём компьютере</p></div>
-    <div class="fb" style="--i:2"><h3>Claude API</h3><p>Мозги: понимает просьбу и вызывает нужные действия</p></div>
-    <div class="fb" style="--i:3"><h3>Результат</h3><p>Бот присылает сообщение с результатом</p></div>
-  </div>
-  <div class="kard brain"><h3>У мозгов отдельный аккаунт</h3><p>Подписка Claude на claude.ai и API это разные вещи. Для бота нужен ключ с платформы console.anthropic.com, и баланс там пополняется отдельно от подписки</p><p>Дайджест каналов бот собирает по публичным страницам t.me/s/ без входа в Telegram. Список каналов лежит в файле channels.json, править его можно без кода</p></div>
-</section>
-
-<section class="clip" data-track="fekla" data-name="Бот: ключи" style="--c:var(--fekla)" data-notes="Подготовка ключей, один раз. 1. Telegram-бот: @BotFather, /newbot, имя и username, токен вида 7123456789:AAF... 2. Anthropic API: console.anthropic.com/settings/keys, Create Key, ключ sk-ant-api03-... 3. Google Calendar (по желанию): проект в Google Cloud, включить Google Calendar API, OAuth client ID типа Desktop app, скачать credentials.json. Остальные ключи по желанию: OpenAI для Whisper, токен GitHub для хранения заметок. Ключи нельзя коммитить в репозиторий.">
-  <div class="hd"><h2>Шаг 1. Подготовь ключи</h2><p>Два обязательных, остальные по желанию</p></div>
-  <div class="setup">
-    <ol class="todo">
-      <li>Создай бота в Telegram<small>Найди @BotFather, напиши /newbot, задай имя и username (он оканчивается на bot). Сохрани токен</small></li>
-      <li>Получи ключ Claude API<small>Открой <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener" style="text-decoration:underline">console.anthropic.com/settings/keys</a>, нажми Create Key и сохрани ключ. Пополни баланс на платформе отдельно</small></li>
-    </ol>
-    <div class="kard"><h3>По желанию</h3><p>Google Calendar API: чтобы бот работал с календарём</p><p>Ключ OpenAI: чтобы бот расшифровывал голосовые (Whisper)</p><p>Токен GitHub: чтобы заметки не терялись при обновлении бота</p></div>
-  </div>
-</section>
-
-<section class="clip" data-track="fekla" data-name="Бот: попроси агента" style="--c:var(--fekla)" data-notes="Опиши, что бот должен делать: какие каналы читать, что присылать и в какое время. Язык программирования и способ запуска предложит агент. .env — файл с секретными ключами доступа: например, к Telegram-боту и Claude API. Попроси агента создать его, объяснить, куда вставить ключи, и исключить его из загрузки на GitHub. .gitignore — список файлов, которые не нужно загружать в репозиторий; его тоже настраивает агент. Пример просьбы: Я читаю 30 Telegram-каналов, вот ссылки: [список каналов]. Сделай мне бота, который каждое утро в 10:00 по Москве присылает дайджест новых постов за последние сутки. Сгруппируй по темам, убери повторы и оставь ссылки на оригиналы. Помоги всё подключить и запустить.">
-  <div class="hd"><h2>Шаг 2. Попроси агента написать бота</h2><p>Ты описываешь, что нужно, агент пишет код и помогает запустить</p></div>
-  <div class="setup">
-    <ol class="todo">
-      <li>Создай папку проекта и открой её в Claude Code или Codex</li>
-      <li>Расскажи, какого бота хочешь. Пример справа</li>
-      <li>Храни ключи API отдельно от кода<small>В файле .env — это файл с ключами доступа. Не загружай его на GitHub и не публикуй ключи</small></li>
-      <li>Попроси агента запустить бота<small>Напиши боту в Telegram и проверь, что он делает то, что ты просила</small></li>
-    </ol>
-    <div class="kard"><h3>Пример просьбы</h3><p class="prompt2">Я читаю 30 Telegram-каналов, вот ссылки: [список каналов]. Сделай мне бота, который каждое утро в 10:00 по Москве присылает дайджест новых постов за последние сутки. Сгруппируй по темам, убери повторы и оставь ссылки на оригиналы. Помоги всё подключить и запустить.</p></div>
-  </div>
-</section>
-
-<section class="clip" data-track="fekla" data-name="Бот: запуск" style="--c:var(--fekla)" data-notes="Есть два варианта запуска. На своём компьютере: попроси агента запустить бота. Railway не нужен. Бот работает, пока программа запущена, компьютер включён, не спит и подключён к интернету. Для утреннего дайджеста эти условия должны выполняться в 10:00. Для постоянной работы независимо от компьютера: размести бота на Railway. Загрузи проект в приватный репозиторий GitHub без файла .env, подключи репозиторий в Railway через New Project → Deploy from GitHub repo, ключи добавь в Variables. Попроси агента помочь с настройкой и проверить запуск.">
-  <div class="hd"><h2>Шаг 3. Выбери, где будет работать бот</h2><p>На своём компьютере или постоянно — независимо от него</p></div>
-  <div class="setup">
-    <div class="kard"><h3>На своём компьютере</h3><p>Railway не нужен. Попроси агента запустить бота у тебя на компьютере</p><p>Бот работает, пока программа запущена, компьютер включён, не спит и есть интернет</p><p>Хочешь дайджест в 10:00 — в это время компьютер и бот должны работать</p></div>
-    <div class="kard"><h3>Всегда, даже если компьютер выключен</h3><p>Размести бота на <a href="https://railway.com/" target="_blank" rel="noopener" style="text-decoration:underline">Railway</a> — сервисе, где он будет работать независимо от твоего компьютера</p><p>Загрузи проект на GitHub без файла .env. В <a href="https://railway.com/dashboard" target="_blank" rel="noopener" style="text-decoration:underline">Railway</a> нажми New Project → Deploy from GitHub repo</p><p>Добавь ключи в Variables — настройки сервиса. Попроси агента помочь всё подключить и проверить запуск</p></div>
-  </div>
-</section>
-
 <section class="clip" data-track="neuro" data-name="Лайфхаки" style="--c:var(--neuro)">
   <div class="hd"><h2>Лайфхаки</h2></div>
   <div class="model-guide workflow-tips">
@@ -909,12 +866,59 @@ body.touch #sw button{padding:16px 34px}
   </div>
 </section>
 
+<section class="clip" data-track="bot-guide" data-name="Бот: из чего собран" style="--c:var(--fekla)" data-notes="Устройство бота Фекла по репозиторию LadaOrlova/fekla. Бот на Python (библиотека python-telegram-bot) запущен на Railway как сервис worker командой python bot.py. Мозги: Claude через Anthropic API (модель Haiku 4.5) с вызовом инструментов: создать задачу, показать задачи, завершить, удалить, создать событие в Google Календаре, дайджест дня. Ключ API берётся на console.anthropic.com и оплачивается отдельно от подписки Claude. Дайджест каналов бот читает через публичную веб-версию t.me/s/ без входа, список в channels.json (рубрики), сайты афиш в sites.json. Текст дайджеста пишет модель. Голосовые расшифровывает OpenAI Whisper, заметки хранятся в репозитории на GitHub.">
+  <div class="hd"><h2>Как сделать такого бота: из чего он собран</h2><p>Мозги бота не из подписки, а из API</p></div>
+  <div class="fb4">
+    <div class="fb" style="--i:0"><h3>Telegram</h3><p>Ты пишешь боту или вызываешь команду</p></div>
+    <div class="fb" style="--i:1"><h3>Railway</h3><p>Код на Python работает там круглосуточно, не на твоём компьютере</p></div>
+    <div class="fb" style="--i:2"><h3>Claude API</h3><p>Мозги: понимает просьбу и вызывает нужные действия</p></div>
+    <div class="fb" style="--i:3"><h3>Результат</h3><p>Бот присылает сообщение с результатом</p></div>
+  </div>
+  <div class="kard brain"><h3>У мозгов отдельный аккаунт</h3><p>Подписка Claude на claude.ai и API это разные вещи. Для бота нужен ключ с платформы console.anthropic.com, и баланс там пополняется отдельно от подписки</p><p>Дайджест каналов бот собирает по публичным страницам t.me/s/ без входа в Telegram. Список каналов лежит в файле channels.json, править его можно без кода</p></div>
+</section>
+
+
+<section class="clip" data-track="bot-guide" data-name="Бот: ключи" style="--c:var(--fekla)" data-notes="Подготовка ключей, один раз. 1. Telegram-бот: @BotFather, /newbot, имя и username, токен вида 7123456789:AAF... 2. Anthropic API: console.anthropic.com/settings/keys, Create Key, ключ sk-ant-api03-... 3. Google Calendar (по желанию): проект в Google Cloud, включить Google Calendar API, OAuth client ID типа Desktop app, скачать credentials.json. Остальные ключи по желанию: OpenAI для Whisper, токен GitHub для хранения заметок. Ключи нельзя коммитить в репозиторий.">
+  <div class="hd"><h2>Шаг 1. Подготовь ключи</h2><p>Два обязательных, остальные по желанию</p></div>
+  <div class="setup">
+    <ol class="todo">
+      <li>Создай бота в Telegram<small>Найди @BotFather, напиши /newbot, задай имя и username (он оканчивается на bot). Сохрани токен</small></li>
+      <li>Получи ключ Claude API<small>Открой <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener" style="text-decoration:underline">console.anthropic.com/settings/keys</a>, нажми Create Key и сохрани ключ. Пополни баланс на платформе отдельно</small></li>
+    </ol>
+    <div class="kard"><h3>По желанию</h3><p>Google Calendar API: чтобы бот работал с календарём</p><p>Ключ OpenAI: чтобы бот расшифровывал голосовые (Whisper)</p><p>Токен GitHub: чтобы заметки не терялись при обновлении бота</p></div>
+  </div>
+</section>
+
+
+<section class="clip" data-track="bot-guide" data-name="Бот: попроси агента" style="--c:var(--fekla)" data-notes="Опиши, что бот должен делать: какие каналы читать, что присылать и в какое время. Язык программирования и способ запуска предложит агент. .env — файл с секретными ключами доступа: например, к Telegram-боту и Claude API. Попроси агента создать его, объяснить, куда вставить ключи, и исключить его из загрузки на GitHub. .gitignore — список файлов, которые не нужно загружать в репозиторий; его тоже настраивает агент. Пример просьбы: Я читаю 30 Telegram-каналов, вот ссылки: [список каналов]. Сделай мне бота, который каждое утро в 10:00 по Москве присылает дайджест новых постов за последние сутки. Сгруппируй по темам, убери повторы и оставь ссылки на оригиналы. Помоги всё подключить и запустить.">
+  <div class="hd"><h2>Шаг 2. Попроси агента написать бота</h2><p>Ты описываешь, что нужно, агент пишет код и помогает запустить</p></div>
+  <div class="setup">
+    <ol class="todo">
+      <li>Создай папку проекта и открой её в Claude Code или Codex</li>
+      <li>Расскажи, какого бота хочешь. Пример справа</li>
+      <li>Храни ключи API отдельно от кода<small>В файле .env — это файл с ключами доступа. Не загружай его на GitHub и не публикуй ключи</small></li>
+      <li>Попроси агента запустить бота<small>Напиши боту в Telegram и проверь, что он делает то, что ты просила</small></li>
+    </ol>
+    <div class="kard"><h3>Пример просьбы</h3><p class="prompt2">Я читаю 30 Telegram-каналов, вот ссылки: [список каналов]. Сделай мне бота, который каждое утро в 10:00 по Москве присылает дайджест новых постов за последние сутки. Сгруппируй по темам, убери повторы и оставь ссылки на оригиналы. Помоги всё подключить и запустить.</p></div>
+  </div>
+</section>
+
+
+<section class="clip" data-track="bot-guide" data-name="Бот: запуск" style="--c:var(--fekla)" data-notes="Есть два варианта запуска. На своём компьютере: попроси агента запустить бота. Railway не нужен. Бот работает, пока программа запущена, компьютер включён, не спит и подключён к интернету. Для утреннего дайджеста эти условия должны выполняться в 10:00. Для постоянной работы независимо от компьютера: размести бота на Railway. Загрузи проект в приватный репозиторий GitHub без файла .env, подключи репозиторий в Railway через New Project → Deploy from GitHub repo, ключи добавь в Variables. Попроси агента помочь с настройкой и проверить запуск.">
+  <div class="hd"><h2>Шаг 3. Выбери, где будет работать бот</h2><p>На своём компьютере или постоянно — независимо от него</p></div>
+  <div class="setup">
+    <div class="kard"><h3>На своём компьютере</h3><p>Railway не нужен. Попроси агента запустить бота у тебя на компьютере</p><p>Бот работает, пока программа запущена, компьютер включён, не спит и есть интернет</p><p>Хочешь дайджест в 10:00 — в это время компьютер и бот должны работать</p></div>
+    <div class="kard"><h3>Всегда, даже если компьютер выключен</h3><p>Размести бота на <a href="https://railway.com/" target="_blank" rel="noopener" style="text-decoration:underline">Railway</a> — сервисе, где он будет работать независимо от твоего компьютера</p><p>Загрузи проект на GitHub без файла .env. В <a href="https://railway.com/dashboard" target="_blank" rel="noopener" style="text-decoration:underline">Railway</a> нажми New Project → Deploy from GitHub repo</p><p>Добавь ключи в Variables — настройки сервиса. Попроси агента помочь всё подключить и проверить запуск</p></div>
+  </div>
+</section>
+
+
 <i id="bar"></i>
 <div id="pr" aria-label="Прогресс по слайдам"><i class="line"></i><i class="trail"></i><i class="done"></i><div class="dots"></div><i class="glow"></i>
   <div class="hero"><div class="flip"><div class="jump"><div class="bun"><div class="cat-cut"></div></div></div></div><span class="zz">z z z</span></div>
   <span class="tip"></span></div>
 <div id="num" aria-hidden="true"></div>
-<div id="sw" role="tablist" aria-label="Разделы"><button role="tab" data-s="cases">Кейсы</button><button role="tab" data-s="setup">Установка</button></div>
+<div id="sw" role="tablist" aria-label="Разделы"><button role="tab" data-s="cases">Кейсы</button><button role="tab" data-s="setup">Установка</button><button role="tab" data-s="bot">Сделать своего бота</button></div>
 <button class="nb prev" id="nbPrev" aria-label="Предыдущий слайд"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
 <button class="nb next" id="nbNext" aria-label="Следующий слайд"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
 <button class="nb menu" id="nbMenu" aria-label="Обзор слайдов"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></button>
@@ -927,7 +931,7 @@ body.touch #sw button{padding:16px 34px}
 (() => {
   const stage = document.getElementById('stage');
   const clips = [...document.querySelectorAll('.clip')];
-  const TRACKS = [['intro','Старт'],['ableton','Ableton'],['site','Сайт школы'],['admin','Админка'],['fekla','Фекла'],['job','Поиск работы'],['neuro','Нейроночки'],['mari','Сайт Мари'],['setup','Установка']];
+  const TRACKS = [['intro','Старт'],['ableton','Ableton'],['site','Сайт школы'],['admin','Админка'],['fekla','Фекла'],['job','Поиск работы'],['neuro','Нейроночки'],['mari','Сайт Мари'],['setup','Установка'],['bot-guide','Сделать своего бота']];
   const BPM = 108;
   let cur = 0;
 
@@ -1111,8 +1115,8 @@ body.touch #sw button{padding:16px 34px}
   const trail = pr.querySelector('.trail'), prDone = pr.querySelector('.done'), tip = pr.querySelector('.tip');
   const hero = pr.querySelector('.hero'), flipEl = pr.querySelector('.flip');
   const PW = 1180, PAD = 24, NOANIM = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  /* два раздела: «Кейсы» и «Установка». Листание, номера и линия прогресса работают внутри раздела */
-  const secOf = c => c.dataset.track === 'setup' ? 'setup' : 'cases';
+  /* три раздела: «Кейсы», «Установка», «Сделать своего бота». Листание, номера и линия прогресса работают внутри раздела */
+  const secOf = c => c.dataset.track === 'setup' ? 'setup' : c.dataset.track === 'bot-guide' ? 'bot' : 'cases';
   const rangeOf = s => { const ix = clips.map((c, i) => secOf(c) === s ? i : -1).filter(i => i >= 0); return [ix[0], ix[ix.length - 1]]; };
   let curSec = 'cases', LO = 0, HI = 0, XS = [], dots = [];
   const lastIn = {};
