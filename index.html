@@ -38,8 +38,9 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .title{--c:var(--site);padding:0}
 .tc{position:absolute;height:156px;display:flex;align-items:center;padding:0 52px;border-radius:78px;background:var(--c);font:400 100px/1 var(--display);letter-spacing:-.025em;white-space:nowrap}
 .cat{position:absolute;display:block;margin:0}
-.cat img{display:block;width:100%;height:auto;border-radius:28px}
-.title.on.sweep .tc,.title.on.sweep .cat{animation:wipe .5s steps(8) both;animation-delay:var(--at)}
+.cat img{display:block;width:100%;height:auto;border-radius:16px}
+.title.on.sweep .tc{animation:wipe .5s steps(8) both;animation-delay:var(--at)}
+.title.on.sweep .cat{animation:fadein .5s ease-out both;animation-delay:var(--at)}
 @keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 
 /* промпт */
@@ -94,15 +95,12 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .weights div{flex:var(--w) 1 0;min-width:0}
 .weights b{display:flex;align-items:flex-end;height:auto;padding:0 0 16px;border-bottom:var(--hair);color:var(--ink);font:400 54px/1 var(--display);letter-spacing:-.03em;background:none}
 .weights span{display:block;margin-top:14px;font-size:24px;font-weight:400;color:var(--muted)}
-.flags{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:56px;align-content:center}
-.flags p{font-size:27px;line-height:1.3;font-weight:400}
-.flags i{display:block;width:26px;height:26px;border-radius:50%;background:var(--f);box-shadow:0 0 0 1.5px #fff,0 0 26px var(--f);margin:4px 0 24px 4px}
 
 /* Granola */
 .lines{flex:1;display:flex;flex-direction:column;justify-content:center;gap:34px;font-size:54px;line-height:1.15;font-weight:400;letter-spacing:-.02em}
 
 /* одно окно: сервисы слева и справа, по проводам бегут данные */
-.hub{position:relative;flex:1;min-height:0;margin-top:-34px}
+.hub{position:relative;flex:1;min-height:0;margin-top:-60px}
 .hub>svg{position:absolute;left:0;top:0;width:1488px;height:733px}
 .hub line{stroke:var(--ink);stroke-width:1.5}
 .hub circle{stroke:#fff;stroke-width:2;filter:drop-shadow(0 0 6px rgba(29,39,51,.22))}
@@ -231,7 +229,12 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .ttl{font:400 118px/1.06 var(--display);letter-spacing:-.04em}
 .ttl .ln{display:block;width:max-content}
 .title .cat{right:96px;top:50%;margin-top:-190px;width:400px}
-.title.on.sweep .ln{animation:wipe .5s steps(8) both;animation-delay:var(--at)}
+.title.on.sweep .ln{animation:title-wipe .5s steps(8) backwards;animation-delay:var(--at)}
+/* Give glyphs room to extend past the text box during the reveal. */
+@keyframes title-wipe{
+  from{clip-path:inset(-.1em calc(100% + .1em) -.1em -.1em)}
+  to{clip-path:inset(-.1em -.1em -.1em -.1em)}
+}
 
 /* курс: цифры слева, модули списком справа */
 .course{flex:1;min-height:0;display:grid;grid-template-columns:340px minmax(0,1fr);gap:80px;align-items:center}
@@ -371,6 +374,39 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
 #memo{position:absolute;inset:auto 0 0;background:rgba(255,255,255,.94);padding:18px 72px 24px;font-size:22px;line-height:1.4;z-index:4}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* Дашборды школы */
+.analytics-flow{display:grid;grid-template-columns:1fr 72px 1.05fr 72px .94fr;align-items:stretch;gap:0}
+.analytics-flow .flow-card{padding:24px 26px;border:1.5px solid var(--ink);border-radius:22px;background:#ffffffb8}
+.analytics-flow .flow-card:nth-child(3){background:#e1ebce}
+.analytics-flow h3{font-size:30px;font-weight:650;margin-bottom:18px}
+.analytics-flow p{font-size:23px;line-height:1.3}
+.analytics-flow ul{list-style:none;padding:0;display:grid;gap:13px;font-size:23px;line-height:1.18}
+.analytics-flow li span{display:block;margin-top:3px;color:var(--muted);font-size:20px}
+.analytics-flow .flow-arrow{align-self:center;text-align:center;font-size:45px}
+.analytics-flow .flow-tables{display:grid;gap:9px;margin-top:18px}
+.analytics-flow .flow-tables span{border:1px solid #707c60;border-radius:9px;padding:8px 12px;font-size:21px}
+.analytics-flow .flow-tables span:last-child{font-weight:650;background:#f5f8ef}
+.analytics-boundary{padding:18px 24px;border-top:1.5px solid var(--ink);font-size:25px;line-height:1.3}
+
+/* Claude и Codex */
+.model-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;height:610px;grid-template-rows:minmax(0,1fr);min-height:0}
+.model-shots{display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:20px;min-height:0}
+.model-shots img{display:block;width:100%;height:100%;object-fit:contain;object-position:left center}
+.model-guide{display:grid;align-content:center;gap:24px;font-size:26px;line-height:1.3}
+.model-guide h3{font-size:31px;margin-bottom:5px}
+.model-guide .model-lead{font-size:30px}
+.model-guide .model-note{border-top:1px solid var(--ink);padding-top:20px;color:var(--muted);font-size:24px}
+
+.ableton-story.model-layout{grid-template-columns:minmax(0,5fr) minmax(0,8fr)}
+.ableton-story .cat6{position:static;width:auto;min-width:0;display:grid;place-items:center}
+.ableton-story .cat6 img{width:100%;max-height:100%;object-fit:contain}
+.fekla-story .faders{height:150px}
+.workflow-tips{height:610px;max-width:1140px;gap:32px}
+.workflow-tips>div{border-left:3px solid #8475aa;padding-left:24px}
+.glossary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 56px;margin:0;padding:38px 0 0}
+.glossary>div{border-top:1.5px solid var(--ink);padding:22px 0}
+.glossary dt{font-size:34px;font-weight:650;margin-bottom:12px}
+.glossary dd{margin:0;font-size:27px;line-height:1.35;max-width:630px}
 </style>
 </head>
 <body>
@@ -382,21 +418,56 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
   <div class="cat" style="--at:1.3s"><img src="assets/cat-hacker.png" alt="Кот в темноте за светящейся клавиатурой, подпись: enters my own password, im in"></div>
 </section>
 
-<section class="clip" data-track="intro" data-name="Claude и Codex" style="--c:var(--intro)" data-notes="Оба приложения: пишу задачу обычными словами, они делают.">
+<section class="clip" data-track="intro" data-name="Тезаурус. Модели и агенты" style="--c:var(--intro)">
+  <div class="hd"><h2>Тезаурус. Модели и агенты</h2></div>
+  <dl class="glossary">
+    <div><dt>Нейронка (модель)</dt><dd>Читает запрос и генерирует ответ. GPT или Claude может, например, объяснить, как работает компрессор в Ableton.</dd></div>
+    <div><dt>Агент</dt><dd>Программа с моделью и инструментами, которая выполняет задачу в несколько шагов. Codex может найти вакансии, сверить их с критериями и записать подходящие в таблицу.</dd></div>
+    <div><dt>Субагент</dt><dd>Агент, которому основной агент поручает часть задачи. При проверке курса один субагент может вычитать уроки, другой — пройти их глазами новичка.</dd></div>
+    <div><dt>Скилл</dt><dd>Сохранённая инструкция, которую агент применяет к похожим задачам. Скилл по Ильяхову подсказывает, как вычитать урок и заменить общие слова примерами.</dd></div>
+  </dl>
+</section>
+
+<section class="clip" data-track="intro" data-name="Тезаурус. Подключения и код" style="--c:var(--intro)">
+  <div class="hd"><h2>Тезаурус. Подключения и код</h2></div>
+  <dl class="glossary">
+    <div><dt>API</dt><dd>Способ, которым одна программа обращается к другой. Фёкла отправляет посты через API Claude и получает текст дайджеста.</dd></div>
+    <div><dt>MCP</dt><dd>Общий стандарт, по которому агент узнаёт, какие инструменты ему доступны и как их вызвать. Через MCP агент может запросить у CRM продукт и сумму продажи.</dd></div>
+    <div><dt>Коннектор</dt><dd>Готовое подключение к сервису. Подключите календарь в приложении, и агент сможет посмотреть расписание или создать событие, если у него есть такое право.</dd></div>
+    <div><dt>GitHub</dt><dd>Сервис для хранения кода и истории его изменений. Код этой презентации лежит на GitHub, а GitHub Pages публикует её как сайт.</dd></div>
+  </dl>
+</section>
+
+<section class="clip" data-track="intro" data-name="Claude и Codex" style="--c:var(--intro)">
   <div class="hd"><h2>Где я вайбкожу</h2></div>
-  <div class="apps">
-    <div><h3>Claude</h3><img src="assets/tool-claude.jpg" alt="Окно чата в приложении Claude"></div>
-    <div><h3>Codex</h3><img src="assets/tool-codex.jpg" alt="Окно чата в приложении Codex"></div>
+  <div class="model-layout">
+    <div class="model-shots">
+      <img src="assets/tool-claude.jpg" alt="Интерфейс Claude">
+      <img src="assets/tool-codex.jpg" alt="Интерфейс Codex">
+    </div>
+    <div class="model-guide">
+      <p class="model-lead">Claude и GPT — state of the art, одни из лучших моделей на рынке. Для большинства задач я бы выбрала одну из них.</p>
+      <div><h3>Claude Code</h3><p>В моём опыте лучше справляется с написанием кода.</p></div>
+      <div><h3>«Codex», он же GPT</h3><p>GPT лучше пишет тексты. В ChatGPT удобно собирать простые автоматизации через коннекторы.</p></div>
+      <p class="model-note">Искать альтернативу стоит, если доступ окончательно заблокирован или компания запрещает пользоваться этими инструментами.</p>
+    </div>
   </div>
 </section>
 
-<section class="clip" data-track="intro" data-name="Плагины" style="--c:var(--intro)" data-notes="ChatGPT, Настройки → Плагины → Приложения. Подключено 15 приложений, среди них GitHub, Gmail, Google Calendar, Google Contacts, Google Drive, Granola и Notion. Скрин от 17.11.2026.">
-  <div class="hd"><h2>Плагины в ChatGPT</h2><p>Почта, календарь, встречи, Notion, GitHub</p></div>
-  <div class="shotbox"><img class="shot" src="assets/plugins.png" style="filter:none" alt="Настройки ChatGPT, раздел «Плагины»: подключены GitHub, Gmail, Google Calendar, Google Contacts, Google Drive, Granola, Notion и другие приложения"></div>
+<section class="clip" data-track="intro" data-name="Коннекторы" style="--c:var(--intro)" data-notes="ChatGPT, Настройки → Плагины → Приложения. Подключено 15 приложений, среди них GitHub, Gmail, Google Calendar, Google Contacts, Google Drive, Granola и Notion. Скрин от 17.11.2026.">
+  <div class="hd"><h2>Коннекторы в ChatGPT и Claude</h2></div>
+  <div class="model-layout">
+    <div class="shotbox"><img class="shot" src="assets/plugins.png" style="filter:none" alt="Список подключённых приложений в настройках ChatGPT"></div>
+    <div class="model-guide">
+      <p class="model-lead">Подключить почту, календарь или другие сервисы можно прямо в приложении ChatGPT или Claude.</p>
+      <p>После регистрации открой настройки, выбери доступный коннектор и войди в свой аккаунт сервиса. Дальше достаточно описать задачу в чате обычными словами, без кода.</p>
+      <p class="model-note">Например, попроси собрать итоги недели по письмам и встречам.</p>
+    </div>
+  </div>
 </section>
 
-<section class="clip" data-track="intro" data-name="Одно окно" style="--c:var(--intro)" data-notes="Схема условная, анимация идёт по кругу. Пишу задачу в одном окне, а ChatGPT сам ходит в подключённые сервисы: почта, календарь, расшифровки встреч Granola, Telegram, GitHub, Google Диск и папка на компьютере. Всё собирается в одном чате.">
-  <div class="hd"><h2>Плагины собирают всё в одно окно</h2><p>Сервисы обмениваются данными через чат</p></div>
+<section class="clip" data-track="intro" data-name="Коннекторы в работе" style="--c:var(--intro)" data-notes="Схема условная, анимация идёт по кругу. Пишу задачу в одном окне, а ChatGPT сам ходит в подключённые сервисы: почта, календарь, расшифровки встреч Granola, Telegram, GitHub, Google Диск и папка на компьютере. Всё собирается в одном чате.">
+  <div class="hd"><h2>Коннекторы в работе</h2><p>Что агент может делать в подключённых сервисах</p></div>
   <div class="hub" id="hub" role="img" aria-label="Окно ChatGPT, к нему подключены Gmail, Календарь, Granola, Telegram, GitHub, Google Диск и папка на компьютере. Всё приходит в один чат">
     <div class="win">
       <div class="wtop"><i></i><i></i><i></i><span>ChatGPT</span></div>
@@ -407,33 +478,15 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
 </section>
 
 <section class="clip" data-track="job" data-name="Как я ищу работу" style="--c:var(--job)"
-  data-notes="Система собрана в Codex. По будням в 10:00 она обходит источники, читает вакансии и ставит флаги, всё складывается в Google-таблицу. Зелёный флаг: можно влиять на стратегию, есть команда и ресурсы. Красный: под видом руководителя ищут человека, который сам будет делать весь контент. Если про команду или зарплату ничего нет, надо спросить, а не додумывать. Срез на 17.11.2026: 80 вакансий в базе, 47 откликов, 18 ответов работодателей, 5 приглашений к следующему этапу. Падающие точки показывают идею отсева, их число условное.">
-  <div class="hd"><h2>Как я ищу работу</h2><p>Чтобы поиск не превратился в ещё одну работу</p></div>
+  data-notes="Система собрана в Codex. По будням в 10:00 она обходит источники, читает вакансии и ставит флаги, всё складывается в Google-таблицу. Codex пишет отклики и отслеживает ответы работодателей на почте. Ищу руководящую роль, где пригодится мой опыт. Зелёный флаг: можно влиять на стратегию, есть команда и ресурсы. Красный: под видом руководителя ищут человека, который сам будет делать весь контент. Если про команду или зарплату ничего нет, надо спросить, а не додумывать. Срез на 17.11.2026: 80 вакансий в базе, 47 откликов, 18 ответов работодателей, 5 приглашений к следующему этапу. Падающие точки показывают идею отсева, их число условное.">
+  <div class="hd"><h2>Как я ищу работу</h2><p>Ищу руководящую роль, где пригодится мой опыт</p></div>
   <div class="flow">
-    <canvas id="flow" width="2976" height="880" role="img" aria-label="Вакансии идут из источников через фильтр критериев, 80 попадают в таблицу, 47 становятся откликами, 5 приглашений дальше"></canvas>
-    <div class="fl" style="left:0;width:290px"><b>&nbsp;</b>источники: hh.ru, Telegram, сайты компаний</div>
-    <div class="fl" style="left:352px;width:230px"><b>&nbsp;</b>Codex читает и оценивает по критериям</div>
+    <canvas id="flow" width="2976" height="880" role="img" aria-label="Вакансии идут из источников через фильтр критериев, 80 попадают в таблицу, 47 становятся откликами, 5 приглашений на следующий этап"></canvas>
+    <div class="fl" style="left:0;width:290px"><b>&nbsp;</b>Codex сканирует hh.ru, Telegram и сайты компаний</div>
+    <div class="fl" style="left:352px;width:230px"><b>&nbsp;</b>Codex оценивает вакансии по моим критериям</div>
     <div class="fl" style="left:640px;width:260px"><b>80</b>вакансий в таблице</div>
-    <div class="fl" style="left:980px;width:280px"><b>47</b>откликов: Claude ищет почту помимо hh.ru и отправляет письмо</div>
+    <div class="fl" style="left:980px;width:280px"><b>47</b>откликов. Codex пишет отклики и следит за ответами на почте</div>
     <div class="fl" style="left:1296px;width:190px"><b>5</b>приглашений дальше</div>
-  </div>
-</section>
-
-<section class="clip" data-track="job" data-name="Критерии" style="--c:var(--job)"
-  data-notes="Шесть критериев из таблицы: стратегия 25%, опыт 20%, финансы 20%, автономия 15%, компания 10%, условия 10%. Веса предложены и ещё не откалиброваны, числовые баллы система пока не считает: главное в карточке вакансии флаги. Каждый флаг хранит цитату из объявления. Отсутствие сведений не считается плохим признаком, это вопрос к работодателю.">
-  <div class="hd"><h2>Как оцениваю вакансию</h2><p>Веса пока черновые</p></div>
-  <div class="weights">
-    <div style="--w:25"><b>25%</b><span>Стратегия</span></div>
-    <div style="--w:20"><b>20%</b><span>Опыт</span></div>
-    <div style="--w:20"><b>20%</b><span>Финансы</span></div>
-    <div style="--w:15"><b>15%</b><span>Автономия</span></div>
-    <div style="--w:10"><b>10%</b><span>Компания</span></div>
-    <div style="--w:10"><b>10%</b><span>Условия</span></div>
-  </div>
-  <div class="flags">
-    <p><i style="--f:#8fcfa9"></i>Можно влиять на стратегию, есть команда и ресурсы</p>
-    <p><i style="--f:#e9d48a"></i>Про команду или зарплату ничего нет: спросить, а не додумывать</p>
-    <p><i style="--f:#d9786d"></i>Под видом руководителя ищут того, кто сам сделает весь контент</p>
   </div>
 </section>
 
@@ -459,14 +512,17 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
   </div>
 </section>
 
-<section class="clip" data-track="ableton" data-name="Про музыку" style="--c:var(--ableton)" data-notes="Мем: Vibing Cat, tenor.com/view/cat-vibe-cat-dancing-cat-cat-meme-gif-15870698214896676686. Курс по Ableton я собрала для себя: со своей LMS и своим сайтом. Дальше на слайдах его первый дизайн, готовый курс и как он попал в интернет.">
-  <div class="hd"><h2>А ещё я начала делать музыку</h2></div>
-  <div class="lines">
-    <p>Собрала себе курс по Ableton</p>
-    <p>со своей LMS</p>
-    <p>и своим сайтом</p>
+<section class="clip" data-track="ableton" data-name="Как я собрала курс" style="--c:var(--ableton)" data-notes="Мем: Vibing Cat, tenor.com/view/cat-vibe-cat-dancing-cat-cat-meme-gif-15870698214896676686. Дальше покажу первый дизайн, готовый курс и как он попал в интернет.">
+  <div class="hd"><h2>Как я навыкодила себе курс по Ableton</h2></div>
+  <div class="model-layout ableton-story">
+    <picture class="cat6"><source media="(prefers-reduced-motion:reduce)" srcset="assets/cat-vibing-still.jpg"><img src="assets/cat-vibing.gif" alt="Кот качает головой под музыку"></picture>
+    <div class="model-guide">
+      <div><h3>Собрала программу под себя</h3><p>Попросила агента изучить сайт Ableton, разобрать программы готовых курсов, собрать удачные приёмы с YouTube и учесть мои музыкальные референсы.</p></div>
+      <div><h3>Прогнала курс на 30 симулированных учениках</h3><p>Агент симулировал прохождение курса и собрал обратную связь. По ней я попросила его улучшить интерфейс, объяснения и порядок уроков.</p></div>
+      <div><h3>Проверила тексты и логику уроков</h3><p>Собрала скилл по книге Ильяхова и попросила агента проверить ясность текстов и дидактику курса.</p></div>
+      <p class="model-note">В итоге у меня появился курс под музыку, которую я хочу делать, со своим сайтом и LMS.</p>
+    </div>
   </div>
-  <picture class="cat6"><source media="(prefers-reduced-motion:reduce)" srcset="assets/cat-vibing-still.jpg"><img src="assets/cat-vibing.gif" alt="Кот качает головой под музыку"></picture>
 </section>
 
 <section class="clip" data-track="ableton" data-name="Что внутри" style="--c:var(--ableton)"
@@ -508,8 +564,17 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
 </section>
 
 <section class="clip" data-track="site" data-name="Главная" style="--c:var(--site)" data-notes="zamesinschool.ru">
-  <div class="hd"><h2>Сайт школы Замесина</h2><p><a href="https://zamesinschool.ru/" target="_blank" rel="noopener">Главная страница</a></p></div>
-  <div class="shotbox"><img class="shot" src="assets/site-home.png" alt="Главная страница сайта школы"></div>
+  <div class="hd"><h2>Сайт школы Вани Замесина</h2></div>
+  <div class="model-layout">
+    <a class="shotbox" href="https://zamesinschool.ru/" target="_blank" rel="noopener" aria-label="Открыть сайт школы Вани Замесина">
+      <img class="shot" src="assets/site-home.png" alt="Главная страница сайта школы">
+    </a>
+    <div class="model-guide">
+      <div><h3>Два часа на каркас</h3><p>За одну сессию вайбкодинга мы с Ваней собрали каркас всего сайта с гайдами, продуктами и календарём.</p></div>
+      <div><h3>Две недели на наполнение</h3><p>Добавили актуальные данные школы и SEO-статьи. Теперь SEO-скиллы регулярно проверяют технические настройки в коде и подсказывают, что поправить.</p></div>
+      <div><h3>Своя админка для аналитики</h3><p>Сайт собирает UTM-метки, рефереры, данные Яндекс Метрики и ID посетителей. Для отдела я навыкодила админку, где эти данные видны в нужных нам разрезах.</p></div>
+    </div>
+  </div>
 </section>
 
 <section class="clip" data-track="site" data-name="Гайды и видео" style="--c:var(--site)">
@@ -576,9 +641,40 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
   <p class="call">Возьмите любую книгу или свои тексты, и агент соберёт такой же скилл</p>
 </section>
 
-<section class="clip" data-track="admin" data-name="Заказы" style="--c:var(--admin)" data-notes="Локальная версия админки школы. Синтетические заказы, не реальные результаты продаж.">
-  <div class="hd"><h2>Админка: заказы</h2><p style="white-space:nowrap">Демонстрационные данные</p></div>
-  <div class="shotbox"><img class="shot" src="assets/admin-orders.png" alt="Таблица заказов в админке"></div>
+<section class="clip" data-track="admin" data-name="Как устроены дашборды" style="--c:var(--admin)"
+  data-notes="Я долго пилила дашборды. Сначала подключала API прямо к ним, но интеграции периодически отваливались, а данные приходили не полностью. Отдельная задача — собрать понятный экран без перегруза. Передавать рабочую аналитику нейросети нельзя. Поэтому сбор и хранение я вынесла в отдельный слой. Сайт собирает ID Метрики с UTM. В CRM я попросила сделать MCP, который отдаёт факт продажи, продукт, сумму, UTM, источник и реферер без персональных полей CRM. Плюс собираю аналитику из BotHelp, UniSender и Яндекс Метрики. Для органики YouTube, без рекламы, нужную выгрузку можно сделать отдельным скриптом. Разработчик подготовил среду и репозиторий GitHub с настройками. В этой среде я написала и развернула свой дашборд. Нейросеть помогает с кодом, а загрузку, хранение и чтение данных выполняет программа. У нейросети нет доступа к рабочим данным, ключам или API.">
+  <div class="hd">
+    <h2>Как я собрала дашборды аналитики</h2>
+    <p>Прямые подключения к API отваливались, и часть данных терялась. Я вынесла сбор в базу.</p>
+  </div>
+  <div class="analytics-flow">
+    <div class="flow-card">
+      <h3>Источники</h3>
+      <ul>
+        <li>Сайт школы<span>ID Метрики и UTM</span></li>
+        <li>CRM через MCP<span>Продажа, продукт, сумма, источник, UTM и реферер</span></li>
+        <li>Яндекс Метрика, BotHelp и UniSender</li>
+        <li>Органика YouTube<span>Отдельный скрипт</span></li>
+      </ul>
+    </div>
+    <span class="flow-arrow" aria-hidden="true">→</span>
+    <div class="flow-card">
+      <h3>База данных</h3>
+      <p>Код собирает данные и складывает их в таблицы.</p>
+      <div class="flow-tables">
+        <span>Визиты и UTM</span>
+        <span>Продажи и источники</span>
+        <span>Данные по каналам</span>
+        <span>Таблица связей</span>
+      </div>
+    </div>
+    <span class="flow-arrow" aria-hidden="true">→</span>
+    <div class="flow-card">
+      <h3>Дашборд</h3>
+      <p>Читает данные из базы и показывает нужные метрики. Можно увидеть, откуда пришли посетители и какие источники принесли продажи.</p>
+    </div>
+  </div>
+  <p class="analytics-boundary"><strong>Нейросеть помогает писать код.</strong> Рабочие данные, ключи и доступ к API остаются в среде приложения.</p>
 </section>
 
 <section class="clip" data-track="admin" data-name="Аналитика" style="--c:var(--admin)" data-notes="Общий дашборд и источники покупок. Группировка UTM по source, medium, campaign, отдельно рефереры.">
@@ -586,97 +682,26 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
   <div class="shotbox"><img class="shot" src="assets/admin-analytics.png" alt="Дашборд продаж и источников"></div>
 </section>
 
-<section class="clip" data-track="admin" data-name="CJM" style="--c:var(--admin)" data-notes="Частота визитов и путь до покупки. Визиты и покупатели сопоставлены по ID.">
-  <div class="hd"><h2>CJM: путь клиента</h2><p style="white-space:nowrap">Демонстрационные данные</p></div>
-  <div class="shotbox"><img class="shot" src="assets/admin-cjm.png" alt="Частота визитов и путь до покупки"></div>
-</section>
-
-<section class="clip" data-track="admin" data-name="CJM: источники и путь" style="--c:var(--admin)"
-  data-notes="CJM «Как делать продукт» от 7 октября 2026. Из разрозненной обратной связи собрана одна карта пути клиента. Источники: 35 решенческих интервью, 1 660 входных анкет (потоки 50–59), 85 анкет КДП 2.0, 19 068 подписчиков бота, 2 960 человек в журнале сайта. Десять этапов в четырёх фазах. До покупки: 1–5, покупка: 6, обучение (8 недель): 7–8, после курса: 9–10. Каждый этап описан как работа человека, с цифрами и дословными цитатами и пометкой, насколько данным можно верить.">
-  <div class="hd"><h2>CJM: путь клиента по большим данным</h2><p>Из разрозненной обратной связи в одну карту</p></div>
-  <div class="src5">
-    <div><b>35</b><span>решенческих интервью</span></div>
-    <div><b>1 660</b><span>входных анкет, потоки 50–59</span></div>
-    <div><b>85</b><span>анкет КДП 2.0</span></div>
-    <div><b>19 068</b><span>подписчиков бота</span></div>
-    <div><b>2 960</b><span>человек в журнале сайта</span></div>
-  </div>
-  <div class="stg" role="img" aria-label="Десять этапов пути клиента в четырёх фазах">
-    <div class="ph" style="grid-column:span 5">До покупки</div><div class="ph" style="grid-column:span 1">Покупка</div><div class="ph" style="grid-column:span 2">Обучение, 8 недель</div><div class="ph" style="grid-column:span 2">После курса</div>
-    <div class="sg"><i>1</i>Живу с задачей</div><div class="sg"><i>2</i>Слежу за Ваней и зрею</div><div class="sg"><i>3</i>Наступает «сейчас»</div><div class="sg"><i>4</i>Пробую бесплатно</div><div class="sg"><i>5</i>Проверяю, про меня ли</div><div class="sg"><i>6</i>Решаю и плачу</div><div class="sg"><i>7</i>Вхожу в курс</div><div class="sg"><i>8</i>Учусь на своём продукте</div><div class="sg"><i>9</i>Получаю результат</div><div class="sg"><i>10</i>Возвращаюсь и привожу других</div>
-  </div>
-</section>
-
-<section class="clip" data-track="admin" data-name="CJM: шесть выводов" style="--c:var(--admin)"
-  data-notes="Шесть выводов, которые подтверждаются сразу в нескольких источниках. 1. Все 35 респондентов знали Ваню до интервью, лендинг проверяет уже почти принятое решение. Медиана в боте до покупки 127 дней, Telegram Вани как источник у 47%. 2. «Сейчас» запускает окно, а не боль: событие назвали 33 из 85 в анкете 2.0. 3. Бизнес-задача 56% против карьеры 16% (потоки 56–59). 4. Бесплатный модуль «Введение» прошли 46% покупателей против 14% подписчиков, после пробных лекций покупают 4,5–10% при средней 0,62%. 5. 20 из 79 заказов КДП 2.0 не оплачены (6.09–6.10), механизма вернуть тех, кто сказал «не сейчас», нет. 6. «Не применю к своему» 22%, «теория без практики» 8%, цена 0%. Что происходит после курса, неизвестно: выходной анкеты в выгрузках нет.">
-  <div class="hd"><h2>Что показала карта: шесть выводов</h2><p>Каждый подтверждён несколькими источниками</p></div>
-  <div class="six">
-    <div><b>127 дней</b><h3>Решение созревает до лендинга</h3><p>Медиана в боте до покупки. Telegram Вани привёл 47% покупателей</p></div>
-    <div><b>33 из 85</b><h3>«Сейчас» запускает окно, а не боль</h3><p>Назвали событие, которое запустило покупку: освободилось время или деньги, вышел анонс</p></div>
-    <div><b>56%</b><h3>Курс нанимают под рабочую задачу</h3><p>Бизнес-задача против 16% у карьеры, потоки 56–59</p></div>
-    <div><b>46%</b><h3>Бесплатный модуль продаёт сильнее всего</h3><p>Прошли его покупатели, среди подписчиков с почтой только 14%</p></div>
-    <div><b>20 из 79</b><h3>Больше всего теряем на «не сейчас»</h3><p>Заказов КДП 2.0 не оплачены. Вернуть этих людей к следующему потоку нечем</p></div>
-    <div><b>22%</b><h3>Главный страх: не применю к своему</h3><p>Против 8% у «теории без практики». Цены не боится никто</p></div>
-  </div>
-</section>
-
-<section class="clip" data-track="admin" data-name="CJM: отчёт целиком" style="--c:var(--admin)"
-  data-notes="Исходный отчёт встроен целиком, его можно листать мышью: карта пути прокручивается вбок, внизу строка «Дорожки» показывает, чем путь отличается у четырёх групп (владельцы и основатели, продакты в найме, переходят в продукт, выпускники и повторники). Файл лежит в папке assets. Шрифты отчёт подгружает из интернета.">
-  <div class="hd"><h2>CJM «Как делать продукт»: отчёт целиком</h2><p class="hint">Листается мышью</p></div>
-  <div class="embed"><iframe src="assets/cjm-kak-delat-produkt.html" title="CJM Как делать продукт, 7 октября 2026" loading="lazy"></iframe></div>
-</section>
-
-<section class="clip" data-track="admin" data-name="SEO-аудит" style="--c:var(--admin)"
-  data-notes="Полный SEO-аудит zamesinschool.ru, повторный обход 27 августа 2026, после первых правок. Обойдено 138 страниц, в sitemap 56 URL, ошибок 4xx и 5xx нет. Здоровье 75 из 100. Оценки по областям: техническое SEO 72, качество контента 78, on-page 63, микроразметка 88, скорость 92, готовность к AI-поиску 73, картинки 60. Главные находки, порядок по цене ошибки: 21 индексируемая страница не попала в sitemap, 19 страниц без canonical, старые адреса Boost, Boost Pro и КДП на zamesin.ru ведут на личную главную и теряют накопленный вес, 54 заголовка обрезаются в выдаче (кейсы доходят до 178 знаков при 60–65 видимых), 30 описаний вдвое-втрое длиннее нужного (до 392 знаков вместо 155). Ещё: 29 материалов из 41 делят одну картинку в разметке, нет заголовков безопасности, у www ошибка сертификата.">
-  <div class="hd"><h2>SEO-аудит сайта школы</h2><p>Повторный обход 27 августа, после первых правок</p></div>
-  <div class="seo">
-    <div class="score">
-      <b>75<small>/100</small></b>
-      <p>здоровье сайта</p>
-      <div class="f"><span><b>138</b> страниц обошли</span><span><b>56</b> URL в sitemap</span><span><b>0</b> ошибок 4xx и 5xx</span></div>
-    </div>
-    <div class="areas" role="img" aria-label="Оценки по семи областям из ста">
-      <div><span>Скорость</span><em>92</em><i style="--v:92"></i></div>
-      <div><span>Микроразметка</span><em>88</em><i style="--v:88"></i></div>
-      <div><span>Качество контента</span><em>78</em><i style="--v:78"></i></div>
-      <div><span>Готовность к AI-поиску</span><em>73</em><i style="--v:73"></i></div>
-      <div><span>Техническое SEO</span><em>72</em><i style="--v:72"></i></div>
-      <div><span>On-page</span><em>63</em><i style="--v:63"></i></div>
-      <div><span>Картинки</span><em>60</em><i style="--v:60"></i></div>
-    </div>
-    <div class="finds">
-      <h3>Что нашли, по цене ошибки</h3>
-      <p><b>21 страница</b> не попала в sitemap, хотя индексируется</p>
-      <p><b>19 страниц</b> без canonical: ссылка с UTM создаёт дубль</p>
-      <p><b>Старые адреса Boost, Boost Pro и КДП</b> ведут на личную страницу, накопленный вес теряется</p>
-      <p><b>54 заголовка</b> обрезаются в выдаче: у кейсов до 178 знаков при 60–65 видимых</p>
-      <p><b>30 описаний</b> вдвое-втрое длиннее нужного</p>
-    </div>
-  </div>
-</section>
-
-<section class="clip" data-track="admin" data-name="SEO-аудит: отчёт целиком" style="--c:var(--admin)"
-  data-notes="Исходный SEO-аудит встроен целиком, его можно листать мышью. Файл лежит в папке assets. Шрифты отчёт подгружает из интернета.">
-  <div class="hd"><h2>SEO-аудит: отчёт целиком</h2><p class="hint">Листается мышью</p></div>
-  <div class="embed"><iframe src="assets/seo-audit-zamesinschool.html" title="SEO-аудит zamesinschool.ru" loading="lazy"></iframe></div>
-</section>
-
 <section class="clip" data-track="fekla" data-name="71 канал" style="--c:var(--fekla)"
   data-notes="Источник: channels.json в репозитории LadaOrlova/fekla, проверено 03.11.2026. 72 записи, 71 уникальный канал: naurale_trvl есть и в Екб, и в Поездках. Рубрики: События 20, Анонсы 5, Екб 14, Поездки 8, Знания 15, Рабочие 7, Музыка и видосы 3. На слайде один столбик = один канал, зазоры делят рубрики.">
-  <div class="hd"><h2>Бот Фекла</h2></div>
-  <div class="mix">
-    <div class="board">
-      <div class="big"><b>71</b><span>Telegram-канал<br>в 7 рубриках</span></div>
+  <div class="hd"><h2>Бот Фёкла</h2></div>
+  <div class="model-layout fekla-story">
+    <div class="shotbox"><img class="shot" src="assets/fekla-chat.png" alt="Дайджест событий от бота Фёкла в Telegram"></div>
+    <div class="model-guide">
+      <p class="model-lead">Я создала бота в Telegram через BotFather и подключила к нему Claude API.</p>
+      <div>
+        <h3>71 Telegram-канал в 7 рубриках</h3>
+        <p>Я дала Фёкле список каналов, за которыми хочу следить.</p>
+      </div>
       <div class="faders" id="faders" role="img" aria-label="71 столбик, по одному на канал, сгруппированы по 7 рубрикам"></div>
-      <p class="lead">Собирает посты в персональный дайджест</p>
+      <p class="model-note">Когда я пишу Фёкле, она собирает посты из этих каналов, а Claude составляет дайджест по моему запросу.</p>
     </div>
-    <div class="shotbox"><img class="shot" src="assets/fekla-chat.png" alt="Дайджест событий от бота Фекла в Telegram"></div>
   </div>
 </section>
 
 <section class="clip" data-track="fekla" data-name="Как устроена" style="--c:var(--fekla)"
   data-notes="Бот написан вместе с Claude Code в VS Code. Код лежит в приватном репозитории LadaOrlova/fekla, 77 коммитов. На Railway он запущен как сервис worker, статус Online, 44 деплоя, всё идёт из GitHub.">
-  <div class="hd"><h2>Как устроена Фекла</h2></div>
+  <div class="hd"><h2>Как устроена Фёкла</h2></div>
   <div class="chain">
     <div class="step"><h3>VS Code</h3><img src="assets/chain-vscode.jpg" alt="VS Code: папка Fekla bot и вкладка Claude Code"><p>Здесь вайбкожу бота</p></div>
     <div class="wire" aria-hidden="true"></div>
@@ -686,12 +711,12 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
   </div>
 </section>
 
-<section class="clip" data-track="neuro" data-name="Granola" style="--c:var(--neuro)" data-notes="granola.ai: AI-блокнот для встреч. Использует звук компьютера для расшифровки и заметок. Не утверждаем, что сохраняет аудио- или видеозапись.">
-  <div class="hd"><h2>Granola: заметки по встречам</h2><p>Ещё из полезных нейроночек</p></div>
-  <div class="lines">
-    <p>Расшифровывает разговор</p>
-    <p>Собирает конспект и договорённости</p>
-    <p>Помогает вспомнить, что обсуждали</p>
+<section class="clip" data-track="neuro" data-name="Лайфхаки" style="--c:var(--neuro)">
+  <div class="hd"><h2>Лайфхаки</h2></div>
+  <div class="model-guide workflow-tips">
+    <div><h3>Диктуйте задачи и правки</h3><p>Вместо того чтобы печатать, расскажите голосом, что нужно сделать и что поправить. К диктовке стоит привыкнуть: так вы быстрее поставите задачу и дадите обратную связь.</p></div>
+    <div><h3>Просите проверить результат перед выдачей</h3><p>Попросите агента проверить и вычитать результат. Затем попросите его смоделировать пользователей и от их лица прочитать статью или пройтись по сайту или лендингу. Если у вас есть данные о целевой аудитории, пусть агент смоделирует пользователей на их основе и доработает результат по итогам проверки.</p></div>
+    <div><h3>Соберите свою базу знаний и данных</h3><p>Храните сведения о себе и проекте, документы и рабочие данные там, где агент сможет к ним обращаться. Тогда для каждой новой задачи ему не придётся заново объяснять контекст.</p></div>
   </div>
 </section>
 
@@ -900,13 +925,13 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
     const LOOP = 10200, SENT = 1700, REPLY = 5300, FADE = 9300;
     /* имя, что даёт, цвет, сторона, центр по y, когда идут данные, строка в чате (null = сервис только принимает) */
     const SVC = [
-      ['Gmail', 'почта', '--job', 'l', 95, 2000, 'Смотрю почту'],
-      ['Календарь', 'расписание', '--site', 'l', 265, 2350, 'Смотрю календарь'],
-      ['Granola', 'расшифровки встреч', '--admin', 'l', 435, 2700, 'Читаю расшифровки'],
-      ['Telegram', 'чаты и каналы', '--sky', 'l', 605, 3050, 'Читаю Telegram'],
-      ['GitHub', 'код и задачи', '--ableton', 'r', 180, 3400, 'Смотрю GitHub'],
-      ['Google Диск', 'документы и таблицы', '--mint', 'r', 350, 3750, 'Смотрю Google Диск'],
-      ['Папка на компе', 'файлы и заметки', '--quiz', 'r', 520, 4100, 'Читаю папку']
+      ['Gmail', 'Читает и отправляет письма', '--job', 'l', 95, 2000, 'Смотрю почту'],
+      ['Календарь', 'Смотрит расписание и создаёт события', '--site', 'l', 265, 2350, 'Смотрю календарь'],
+      ['Granola', 'Находит договорённости во встречах', '--admin', 'l', 435, 2700, 'Читаю расшифровки'],
+      ['Telegram', 'Читает сообщения и посты', '--sky', 'l', 605, 3050, 'Читаю Telegram'],
+      ['GitHub', 'Смотрит код и задачи', '--ableton', 'r', 180, 3400, 'Смотрю GitHub'],
+      ['Google Диск', 'Читает документы и таблицы', '--mint', 'r', 350, 3750, 'Смотрю Google Диск'],
+      ['Папка на компе', 'Читает файлы вашей базы знаний', '--quiz', 'r', 520, 4100, 'Читаю папку']
     ];
     const ease = u => u < 0 ? 0 : u > 1 ? 1 : u * u * (3 - 2 * u);
     const clamp = u => Math.min(1, Math.max(0, u));
