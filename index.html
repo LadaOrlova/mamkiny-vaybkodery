@@ -372,6 +372,8 @@ body.touch #sw button{padding:16px 34px}
 .pics .pic-b{aspect-ratio:570/368;object-fit:contain;background:#fff;max-height:380px}
 .todo+.chk{margin-top:10px}
 
+.pics .pic-c,.pic-c{aspect-ratio:820/518;object-fit:cover;background:#fff}
+
 /* номер слайда */
 #num{position:absolute;left:72px;bottom:20px;z-index:3;font-size:20px;font-weight:500;letter-spacing:.02em;color:var(--muted);pointer-events:none}
 #num b{font-weight:500;color:var(--ink)}
@@ -785,11 +787,11 @@ body.touch #sw button{padding:16px 34px}
   </div>
 </section>
 
-<section class="clip" data-track="setup" data-name="Шаг 4: аккаунт" style="--c:var(--setup)" data-notes="Регистрация на claude.ai и chatgpt.com. Claude: базовая Pro 20 долларов в месяц, расширенная Max x5 100 долларов в месяц. ChatGPT: базовая Plus 20 долларов в месяц, расширенная Pro 100 долларов в месяц. VPN не выключаем во время регистрации, оплаты и первого входа.">
+<section class="clip" data-track="setup" data-name="Шаг 4: аккаунт" style="--c:var(--setup)" data-notes="Регистрация на claude.ai и chatgpt.com. Claude: базовая Pro 20 долларов в месяц, расширенная Max x5 100 долларов в месяц. ChatGPT: базовая Plus 20 долларов в месяц, расширенная Pro 100 долларов в месяц. VPN включаем до того, как откроем сайт, с той же страной, что у карты, и держим включённым во время регистрации, оплаты и первого входа.">
   <div class="hd"><h2>Шаг 4. Заведи аккаунт и оформи подписку</h2><p>Регистрироваться можно на Gmail или через Apple</p></div>
   <div class="setup">
     <div class="col">
-      <div class="talk"><p>ChatGPT и Claude можно регистрировать на почту Gmail и на Apple</p><p>Не выключай VPN во время регистрации, оплаты и первого входа</p></div>
+      <div class="talk"><p>ChatGPT и Claude можно регистрировать на почту Gmail и на Apple</p><p>Включи VPN с той же страной, что у карты, до того как откроешь сайт. Держи его включённым во время регистрации, оплаты и первого входа</p></div>
       <div class="price">
         <div class="ph2"></div><div class="ph2">Claude</div><div class="ph2">ChatGPT</div>
         <div class="rl">Регистрация</div><div><a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a></div><div><a href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a></div>
@@ -818,15 +820,20 @@ body.touch #sw button{padding:16px 34px}
   </div>
 </section>
 
-<section class="clip" data-track="setup" data-name="Шаг 6: папка Claude" style="--c:var(--setup)" data-notes="Для начала создай папку на рабочем столе. Claude: если в строке чата есть переключатель Chat / Cowork, выбери Cowork; если его нет, ничего выбирать не нужно. Нажми Work in a folder, укажи созданную папку, в меню режима выбери Automatically approve. Проверка: агент отвечает на просьбу «Перечисли файлы в этой папке» и видит её содержимое. Инструкция по Claude ещё сверяется со скриншотами.">
+<section class="clip" data-track="setup" data-name="Шаг 6: папка Claude" style="--c:var(--setup)" data-notes="Для начала создай папку на рабочем столе. По скриншоту приложения Claude: New, затем под строкой ввода выбрать папку, справа режим Auto. Раньше в инструкции было про режим Cowork и кнопку Work in a folder (Automatically approve), это нужно сверить с актуальной версией приложения. Проверка: агент отвечает на просьбу «Перечисли файлы в этой папке» и видит её содержимое. Инструкция по Claude ещё сверяется со скриншотами.">
   <div class="hd"><h2>Шаг 6. Создай папку и подключи её к Claude</h2><p>Сначала создай папку на рабочем столе</p></div>
-  <div class="kard setup1"><ol class="todo">
-    <li>Создай на рабочем столе папку для работы с агентом</li>
-    <li>Если в строке чата есть переключатель Chat / Cowork, выбери Cowork. Если его нет, ничего выбирать не нужно</li>
-    <li>Нажми Work in a folder и укажи созданную папку</li>
-    <li>В меню режима выбери Automatically approve</li>
-  </ol></div>
-  <p class="chk">Проверь: попроси «Перечисли файлы в этой папке». Агент ответит и увидит содержимое</p>
+  <div class="setup">
+    <div class="col">
+      <ol class="todo">
+        <li>Создай на рабочем столе папку для работы с агентом</li>
+        <li>В приложении Claude нажми New, чтобы начать новую сессию</li>
+        <li>Под строкой ввода нажми на название папки (там может стоять Downloads) и выбери свою папку</li>
+        <li>Справа внизу выбери режим Auto: он сам одобряет действия агента</li>
+      </ol>
+      <p class="chk">Проверь: попроси «Перечисли файлы в этой папке». Агент ответит и увидит содержимое</p>
+    </div>
+    <img class="pic pic-c" src="assets/setup-claude-folder.png" alt="Приложение Claude: новая сессия, под строкой ввода выбор папки, справа режим Auto">
+  </div>
 </section>
 
 <section class="clip" data-track="setup" data-name="Шаг 7: папка ChatGPT" style="--c:var(--setup)" data-notes="ChatGPT: в приложении ChatGPT в левом верхнем углу переключи режим с ChatGPT на Codex. Дальше в разделе проектов нажми «Создать проект», введи название, в блоке «Исходные папки» нажми «Добавить» (добавить папку на этом компьютере) и выбери созданную папку, потом «Создать проект». Проверка: попроси «Перечисли файлы в этой папке», агент должен ответить и увидеть содержимое. Про режим Full access пока не пишем.">
