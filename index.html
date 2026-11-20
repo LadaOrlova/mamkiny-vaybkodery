@@ -374,6 +374,22 @@ body.touch #sw button{padding:16px 34px}
 
 .pics .pic-c,.pic-c{aspect-ratio:820/518;object-fit:cover;background:#fff}
 
+/* инструкция: свой бот */
+.fb4{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 40px;align-content:center}
+.fb{position:relative;padding-top:56px}
+.fb::before{content:"";position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 6px rgba(255,255,255,.7)}
+.fb::after{content:"";position:absolute;left:34px;right:-40px;top:10.25px;height:1.5px;background:var(--ink)}
+.fb:last-child::after{display:none}
+.fb h3{font:500 30px/1.2 var(--display);margin-bottom:10px}
+.fb p{font-size:24px;line-height:1.35;color:var(--muted)}
+.clip.on .fb{animation:fadein .5s ease-out both;animation-delay:calc(var(--i)*.15s)}
+.brain{margin-top:16px;max-width:1180px}
+.brain h3{font:500 30px/1.2 var(--display);margin-bottom:10px}
+.brain p{font-size:26px;line-height:1.4}
+.brain p+p{margin-top:10px;color:var(--muted);font-size:23px}
+.prompt2{font-size:24px;line-height:1.45;font-family:var(--text)}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:.9em;background:rgba(29,39,51,.07);padding:2px 8px;border-radius:8px}
+
 /* номер слайда */
 #num{position:absolute;left:72px;bottom:20px;z-index:3;font-size:20px;font-weight:500;letter-spacing:.02em;color:var(--muted);pointer-events:none}
 #num b{font-weight:500;color:var(--ink)}
@@ -725,6 +741,54 @@ body.touch #sw button{padding:16px 34px}
     <div class="step"><h3>GitHub</h3><img src="assets/chain-github.jpg" alt="GitHub: приватный репозиторий LadaOrlova/fekla"><p>Здесь лежит код</p></div>
     <div class="wire" aria-hidden="true"></div>
     <div class="step"><h3>Railway</h3><img src="assets/chain-railway.jpg" alt="Railway: сервис worker в статусе Online"><p>Здесь бот работает</p></div>
+  </div>
+</section>
+
+<section class="clip" data-track="fekla" data-name="Бот: из чего собран" style="--c:var(--fekla)" data-notes="Устройство бота Фекла по репозиторию LadaOrlova/fekla. Бот на Python (библиотека python-telegram-bot) запущен на Railway как сервис worker командой python bot.py. Мозги: Claude через Anthropic API (модель Haiku 4.5) с вызовом инструментов: создать задачу, показать задачи, завершить, удалить, создать событие в Google Календаре, дайджест дня. Ключ API берётся на console.anthropic.com и оплачивается отдельно от подписки Claude. Дайджест каналов бот читает через публичную веб-версию t.me/s/ без входа, список в channels.json (рубрики), сайты афиш в sites.json. Текст дайджеста пишет модель через OpenRouter (Gemini 2.5 Flash), а если сервис недоступен, то Claude. Голосовые расшифровывает OpenAI Whisper, заметки хранятся в репозитории на GitHub.">
+  <div class="hd"><h2>Как сделать такого бота: из чего он собран</h2><p>Мозги бота не из подписки, а из API</p></div>
+  <div class="fb4">
+    <div class="fb" style="--i:0"><h3>Telegram</h3><p>Ты пишешь боту обычным текстом или голосом</p></div>
+    <div class="fb" style="--i:1"><h3>Railway</h3><p>Код на Python работает там круглосуточно, не на твоём компьютере</p></div>
+    <div class="fb" style="--i:2"><h3>Claude API</h3><p>Мозги: понимает просьбу и вызывает нужные действия</p></div>
+    <div class="fb" style="--i:3"><h3>Твои данные</h3><p>Задачи, календарь Google, заметки на GitHub, список каналов</p></div>
+  </div>
+  <div class="kard brain"><h3>У мозгов отдельный аккаунт</h3><p>Подписка Claude на claude.ai и API это разные вещи. Для бота нужен ключ с платформы console.anthropic.com, и баланс там пополняется отдельно от подписки</p><p>Дайджест каналов бот собирает по публичным страницам t.me/s/ без входа в Telegram. Список каналов лежит в файле channels.json, править его можно без кода</p></div>
+</section>
+
+<section class="clip" data-track="fekla" data-name="Бот: ключи" style="--c:var(--fekla)" data-notes="Подготовка ключей, один раз. 1. Telegram-бот: @BotFather, /newbot, имя и username, токен вида 7123456789:AAF... 2. Anthropic API: console.anthropic.com/settings/keys, Create Key, ключ sk-ant-api03-... 3. Google Calendar (по желанию): проект в Google Cloud, включить Google Calendar API, OAuth client ID типа Desktop app, скачать credentials.json. Остальные ключи по желанию: OpenRouter для дайджеста, OpenAI для Whisper, токен GitHub для хранения заметок. Ключи нельзя коммитить в репозиторий.">
+  <div class="hd"><h2>Шаг 1. Подготовь ключи</h2><p>Два обязательных, остальные по желанию</p></div>
+  <div class="setup">
+    <ol class="todo">
+      <li>Создай бота в Telegram<small>Найди @BotFather, напиши /newbot, задай имя и username (он оканчивается на bot). Сохрани токен</small></li>
+      <li>Получи ключ Claude API<small>Открой <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener" style="text-decoration:underline">console.anthropic.com/settings/keys</a>, нажми Create Key и сохрани ключ. Пополни баланс на платформе отдельно</small></li>
+    </ol>
+    <div class="kard"><h3>По желанию</h3><p>Google Calendar API: чтобы бот работал с календарём</p><p>Ключ OpenRouter: дешёвая модель для дайджеста каналов</p><p>Ключ OpenAI: чтобы бот расшифровывал голосовые (Whisper)</p><p>Токен GitHub: чтобы заметки не терялись при обновлении бота</p></div>
+  </div>
+</section>
+
+<section class="clip" data-track="fekla" data-name="Бот: попроси агента" style="--c:var(--fekla)" data-notes="Бота можно написать с агентом. Пример просьбы: Сделай Telegram-бота на Python (python-telegram-bot). Мозги: Claude через Anthropic API с вызовом инструментов. Бот управляет задачами и календарём по свободному тексту. Ключи читай из .env: TELEGRAM_BOT_TOKEN и ANTHROPIC_API_KEY. Отвечай только мне, по моему Telegram ID. Подготовь запуск на Railway. Фекла написана вместе с Claude Code в VS Code. Узнать свой Telegram ID можно командой /whoami в самом боте.">
+  <div class="hd"><h2>Шаг 2. Попроси агента написать бота</h2><p>Код пишет Claude Code или Codex, ты описываешь, что нужно</p></div>
+  <div class="setup">
+    <ol class="todo">
+      <li>Создай папку проекта и открой её в Claude Code или Codex</li>
+      <li>Опиши бота обычными словами. Пример справа</li>
+      <li>Положи ключи в файл <span class="mono">.env</span> и добавь его в <span class="mono">.gitignore</span><small>В код и в репозиторий ключи не попадают</small></li>
+      <li>Запусти <span class="mono">python bot.py</span> и напиши боту в Telegram</li>
+    </ol>
+    <div class="kard"><h3>Пример просьбы</h3><p class="prompt2">Сделай Telegram-бота на Python (python-telegram-bot). Мозги: Claude через Anthropic API с вызовом инструментов. Бот управляет задачами и календарём по свободному тексту. Ключи читай из .env: TELEGRAM_BOT_TOKEN и ANTHROPIC_API_KEY. Отвечай только мне, по моему Telegram ID. Подготовь запуск на Railway</p></div>
+  </div>
+</section>
+
+<section class="clip" data-track="fekla" data-name="Бот: запуск" style="--c:var(--fekla)" data-notes="Деплой на Railway. 1. Залить репозиторий на GitHub (приватный). 2. railway.app, New Project, Deploy from GitHub repo. Railway сам подхватит requirements.txt и запустит python bot.py как worker. 3. Settings, Volumes, Add Volume, Mount path /data, хватит 1 ГБ. 4. Variables: TELEGRAM_BOT_TOKEN, ANTHROPIC_API_KEY, DATA_DIR=/data, при необходимости GOOGLE_CREDENTIALS_JSON и GOOGLE_TOKEN_JSON. 5. Каждый git push в main запускает автоматический редеплой. Чтобы бот отвечал только владельцу, в OWNER_ID пишется Telegram ID.">
+  <div class="hd"><h2>Шаг 3. Запусти бота на Railway</h2><p>Чтобы он работал, даже когда компьютер выключен</p></div>
+  <div class="setup">
+    <ol class="todo">
+      <li>Залей проект в приватный репозиторий на GitHub</li>
+      <li>На railway.app нажми New Project, затем Deploy from GitHub repo и выбери репозиторий</li>
+      <li>В сервисе добавь Volume с путём <span class="mono">/data</span><small>Settings, Volumes. Так задачи не пропадут при обновлении</small></li>
+      <li>В Variables впиши ключи<small><span class="mono">TELEGRAM_BOT_TOKEN</span>, <span class="mono">ANTHROPIC_API_KEY</span>, <span class="mono">DATA_DIR=/data</span></small></li>
+    </ol>
+    <div class="kard"><h3>Дальше</h3><p>Каждый git push в main сам обновляет бота</p><p>Файлы .env, credentials.json и token.json в репозиторий не кладём. Чтобы бот отвечал только вам, впиши свой Telegram ID в OWNER_ID, узнать его можно командой /whoami</p></div>
   </div>
 </section>
 
