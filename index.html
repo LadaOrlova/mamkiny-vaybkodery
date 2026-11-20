@@ -357,6 +357,12 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
 .pics{display:flex;flex-direction:column;gap:20px;min-width:0}
 .pics .pic{aspect-ratio:16/7.3}
 
+/* переключатель разделов */
+#sw{position:absolute;right:72px;top:38px;z-index:6;display:flex;gap:4px;padding:5px;border-radius:32px;background:rgba(255,255,255,.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 6px 22px rgba(29,60,100,.14)}
+#sw button{padding:10px 28px;border-radius:26px;font-size:23px;line-height:1;color:var(--muted);transition:background-color .2s,color .2s}
+#sw button.on{background:var(--ink);color:#fff}
+body.touch #sw button{padding:16px 34px}
+
 /* номер слайда */
 #num{position:absolute;left:72px;bottom:20px;z-index:3;font-size:20px;font-weight:500;letter-spacing:.02em;color:var(--muted);pointer-events:none}
 #num b{font-weight:500;color:var(--ink)}
@@ -817,6 +823,7 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
   <div class="hero"><div class="flip"><div class="jump"><div class="bun"><div class="cat-cut"></div></div></div></div><span class="zz">z z z</span></div>
   <span class="tip"></span></div>
 <div id="num" aria-hidden="true"></div>
+<div id="sw" role="tablist" aria-label="Разделы"><button role="tab" data-s="cases">Кейсы</button><button role="tab" data-s="setup">Установка</button></div>
 <button class="nb prev" id="nbPrev" aria-label="Предыдущий слайд"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
 <button class="nb next" id="nbNext" aria-label="Следующий слайд"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
 <button class="nb menu" id="nbMenu" aria-label="Обзор слайдов"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></button>
@@ -1002,7 +1009,7 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
     clips.filter(c => c.dataset.track === id).forEach(c => {
       const i = clips.indexOf(c);
       const s = document.createElement('button'); s.className = 'slot'; s.textContent = `${i + 1}. ${c.dataset.name}`;
-      s.onclick = () => { go(i); toggleSession(false); }; col.append(s); slots[i] = s;
+      s.onclick = () => { go(i, false, true); toggleSession(false); }; col.append(s); slots[i] = s;
     });
     session.append(col);
   });
@@ -1013,21 +1020,37 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
   const trail = pr.querySelector('.trail'), prDone = pr.querySelector('.done'), tip = pr.querySelector('.tip');
   const hero = pr.querySelector('.hero'), flipEl = pr.querySelector('.flip');
   const PW = 1180, PAD = 24, NOANIM = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  const XS = clips.map((_, i) => PAD + i * (PW - 2 * PAD) / (clips.length - 1));
-  const dots = clips.map((c, i) => {
-    const b = document.createElement('button'); b.className = 'dot'; b.style.left = XS[i] + 'px';
-    b.setAttribute('aria-label', `Слайд ${i + 1}: ${c.dataset.name}`);
-    b.onclick = () => go(i);
-    b.onmouseenter = () => { tip.textContent = `${i + 1}. ${c.dataset.name}`; tip.style.left = XS[i] + 'px'; tip.classList.add('on'); };
-    b.onmouseleave = () => tip.classList.remove('on');
-    prDots.append(b); return b;
-  });
-  let heroX = XS[0], pTimers = [], firstMove = true, idleTimer = 0;
+  /* два раздела: «Кейсы» и «Установка». Листание, номера и линия прогресса работают внутри раздела */
+  const secOf = c => c.dataset.track === 'setup' ? 'setup' : 'cases';
+  const rangeOf = s => { const ix = clips.map((c, i) => secOf(c) === s ? i : -1).filter(i => i >= 0); return [ix[0], ix[ix.length - 1]]; };
+  let curSec = 'cases', LO = 0, HI = 0, XS = [], dots = [];
+  const lastIn = {};
+  let heroX = 0, pTimers = [], firstMove = true, idleTimer = 0;
   const IDLE = 20000;                                     /* кот засыпает, если слайд стоит дольше 20 секунд */
-  const napLater = () => { clearTimeout(idleTimer); hero.classList.remove('sleep'); idleTimer = setTimeout(() => { if (heroX !== XS[XS.length - 1] || true) hero.classList.add('sleep'); }, IDLE); };
-  ['keydown', 'pointerdown'].forEach(ev => addEventListener(ev, () => { if (hero.classList.contains('sleep') && heroX !== XS[XS.length - 1]) napLater(); else if (!hero.classList.contains('sleep')) napLater(); }, true));
+  const napLater = () => { clearTimeout(idleTimer); hero.classList.remove('sleep'); idleTimer = setTimeout(() => hero.classList.add('sleep'), IDLE); };
+  ['keydown', 'pointerdown'].forEach(ev => addEventListener(ev, () => { if (!(hero.classList.contains('sleep') && heroX === XS[XS.length - 1])) napLater(); }, true));
+  function buildProgress() {
+    const n = HI - LO + 1;
+    XS = Array.from({ length: n }, (_, k) => PAD + k * (PW - 2 * PAD) / Math.max(1, n - 1));
+    prDots.innerHTML = '';
+    dots = XS.map((x, k) => {
+      const c = clips[LO + k], b = document.createElement('button'); b.className = 'dot'; b.style.left = x + 'px';
+      b.setAttribute('aria-label', `Слайд ${k + 1}: ${c.dataset.name}`);
+      b.onclick = () => go(LO + k);
+      b.onmouseenter = () => { tip.textContent = `${k + 1}. ${c.dataset.name}`; tip.style.left = x + 'px'; tip.classList.add('on'); };
+      b.onmouseleave = () => tip.classList.remove('on');
+      prDots.append(b); return b;
+    });
+    heroX = XS[0]; firstMove = true; pTimers.forEach(clearTimeout); pTimers = [];
+  }
+  function setSection(sec) {
+    curSec = sec; [LO, HI] = rangeOf(sec); buildProgress();
+    document.querySelectorAll('#sw button').forEach(b => { const on = b.dataset.s === sec; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  }
+  document.querySelectorAll('#sw button').forEach(b => { b.onclick = () => { const sec = b.dataset.s; if (sec !== curSec) go(lastIn[sec] ?? rangeOf(sec)[0], false, true); }; });
+  setSection('cases');
   function moveProgress(i) {
-    const from = heroX, to = XS[i], dist = Math.abs(to - from);
+    const k = i - LO, from = heroX, to = XS[k], dist = Math.abs(to - from);
     const dur = (NOANIM || firstMove || !dist) ? 0 : Math.min(1400, 400 + dist * .9), ease = `${dur}ms cubic-bezier(.4,0,.2,1)`;
     pTimers.forEach(clearTimeout); pTimers = [];
     hero.classList.remove('run', 'sleep');
@@ -1038,7 +1061,7 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
     pr.style.setProperty('--g', clips[i].style.getPropertyValue('--c') || 'var(--site)');
     if (dur) { hero.classList.add('run'); pTimers.push(setTimeout(() => hero.classList.remove('run'), dur)); }
     dots.forEach((d, j) => {
-      const gone = j < i, isGone = d.classList.contains('fallen') || d.classList.contains('gone');
+      const gone = j < k, isGone = d.classList.contains('fallen') || d.classList.contains('gone');
       if (gone === isGone) return;
       const act = () => {
         d.classList.remove('fallen', 'gone', 'back');
@@ -1049,23 +1072,24 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
       };
       if (!dur) act(); else pTimers.push(setTimeout(act, Math.max(0, dur * Math.abs(XS[j] - from) / dist)));
     });
-    if (i === clips.length - 1) pTimers.push(setTimeout(() => hero.classList.add('sleep'), dur + 150));
     heroX = to; firstMove = false;
     napLater();
-    if (i === clips.length - 1) { clearTimeout(idleTimer); pTimers.push(setTimeout(() => hero.classList.add('sleep'), dur + 150)); }
+    if (k === HI - LO) { clearTimeout(idleTimer); pTimers.push(setTimeout(() => hero.classList.add('sleep'), dur + 150)); }
   }
 
-  function go(i, fromHash) {
+  function go(i, fromHash, cross) {
     i = Math.max(0, Math.min(clips.length - 1, i));
+    const sec = secOf(clips[i]);
+    if (sec !== curSec) { if (cross || fromHash) setSection(sec); else i = Math.max(LO, Math.min(HI, i)); }
     clips[cur].classList.remove('on', 'sweep');
-    cur = i;
+    cur = i; lastIn[curSec] = i;
     const c = clips[cur];
     void c.offsetWidth;            /* анимация запускается при каждом входе */
     c.classList.add('on');
     if (c.classList.contains('title')) c.classList.add('sweep');
     if (c.dataset.track === 'job') flow.play(); else flow.stop();
     if (c.querySelector('#hub')) hub.play(); else hub.stop();
-    num.innerHTML = `<b>${cur + 1}</b> / ${clips.length}`;
+    num.innerHTML = `<b>${cur - LO + 1}</b> / ${HI - LO + 1}`;
     bar.style.width = `${(cur + 1) / clips.length * 100}%`;
     moveProgress(cur);
     slots.forEach((s, j) => s.classList.toggle('now', j === cur));
@@ -1136,7 +1160,7 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
     if (!ovg.children.length) clips.forEach((c, i) => {
       const a = document.createElement('button'); a.className = 'cell';
       a.innerHTML = `<div class="thumb"><iframe src="${location.pathname.split('/').pop() || 'index.html'}#${i + 1}" tabindex="-1" loading="lazy" title="Слайд ${i + 1}"></iframe></div><div class="cap"><b>${i + 1}</b>${c.dataset.name}</div>`;
-      a.onclick = () => { toggleOv(false); go(i); };
+      a.onclick = () => { toggleOv(false); go(i, false, true); };
       ovg.append(a);
     });
     scaleThumbs();
@@ -1150,8 +1174,8 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
     if (key === 'o' || key === 'щ') { toggleOv(true); return; }
     if (['arrowright', 'arrowdown', 'pagedown'].includes(key)) { e.preventDefault(); go(cur + 1); }
     else if (['arrowleft', 'arrowup', 'pageup'].includes(key)) { e.preventDefault(); go(cur - 1); }
-    else if (key === 'home') go(0);
-    else if (key === 'end') go(clips.length - 1);
+    else if (key === 'home') go(LO);
+    else if (key === 'end') go(HI);
     else if (key === ' ') { e.preventDefault(); toggleBeat(); }
     else if (key === 'tab') { e.preventDefault(); toggleSession(); }
     else if (key === 'escape') toggleSession(false);
