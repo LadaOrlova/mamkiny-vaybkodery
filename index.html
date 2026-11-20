@@ -363,6 +363,10 @@ ol.todo li small{display:block;margin-top:6px;font-size:23px;line-height:1.35;co
 #sw button.on{background:var(--ink);color:#fff}
 body.touch #sw button{padding:16px 34px}
 
+.dl{display:flex;flex-wrap:wrap;gap:8px 32px;margin-top:12px}
+.dl a,.price a{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
+.dl a{font:500 27px/1.2 var(--display)}
+
 /* номер слайда */
 #num{position:absolute;left:72px;bottom:20px;z-index:3;font-size:20px;font-weight:500;letter-spacing:.02em;color:var(--muted);pointer-events:none}
 #num b{font-weight:500;color:var(--ink)}
@@ -783,7 +787,7 @@ body.touch #sw button{padding:16px 34px}
       <div class="talk"><p>ChatGPT и Claude можно регистрировать на почту Gmail и на Apple</p><p>Не выключай VPN во время регистрации, оплаты и первого входа</p></div>
       <div class="price">
         <div class="ph2"></div><div class="ph2">Claude</div><div class="ph2">ChatGPT</div>
-        <div class="rl">Регистрация</div><div>claude.ai</div><div>chatgpt.com</div>
+        <div class="rl">Регистрация</div><div><a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a></div><div><a href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a></div>
         <div class="rl">Базовая</div><div>Pro, <b>$20</b> в месяц</div><div>Plus, <b>$20</b> в месяц</div>
         <div class="rl">Расширенная</div><div>Max x5, <b>$100</b> в месяц</div><div>Pro, <b>$100</b> в месяц</div>
       </div>
@@ -797,7 +801,7 @@ body.touch #sw button{padding:16px 34px}
   <div class="setup">
     <div class="col">
       <ol class="todo">
-        <li>Скачай приложение Claude или ChatGPT с официальной страницы и установи<small>Если Claude уже стоит на Windows, обнови его: Cowork работает в последней версии</small></li>
+        <li>Скачай приложение Claude или ChatGPT с официальной страницы и установи<span class="dl"><a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a><a href="https://chatgpt.com/download" target="_blank" rel="noopener">chatgpt.com/download</a></span><small>Если Claude уже стоит на Windows, обнови его: Cowork работает в последней версии</small></li>
         <li>Войди в аккаунт с активной подпиской<small>Здесь как раз может понадобиться SMS</small></li>
       </ol>
       <div class="kard"><p>Через приложение агент сможет читать и создавать файлы на компьютере</p><p>Нет приложений в сторе: смени регион с российского на любой другой. Без включённого VPN при входе может появиться ошибка региона</p></div>
