@@ -367,6 +367,11 @@ body.touch #sw button{padding:16px 34px}
 .dl a,.price a{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
 .dl a{font:500 27px/1.2 var(--display)}
 
+.setup1{max-width:1000px}
+.pics .pic-a{aspect-ratio:475/205;object-fit:contain;background:#fff}
+.pics .pic-b{aspect-ratio:570/368;object-fit:contain;background:#fff;max-height:380px}
+.todo+.chk{margin-top:10px}
+
 /* номер слайда */
 #num{position:absolute;left:72px;bottom:20px;z-index:3;font-size:20px;font-weight:500;letter-spacing:.02em;color:var(--muted);pointer-events:none}
 #num b{font-weight:500;color:var(--ink)}
@@ -741,9 +746,9 @@ body.touch #sw button{padding:16px 34px}
   <div class="embed"><iframe src="assets/mari-site/index.html" title="Мари, куда идём? Личный каталог Москвы" loading="lazy"></iframe></div>
 </section>
 
-<section class="clip title" data-track="setup" data-name="Установка" style="--c:var(--setup)" data-notes="Отдельный раздел: как поставить Claude и ChatGPT себе. Шесть шагов: карта, VPN, SMS, аккаунт и подписка, приложение, папка для агента.">
+<section class="clip title" data-track="setup" data-name="Установка" style="--c:var(--setup)" data-notes="Отдельный раздел: как поставить Claude и ChatGPT себе. Семь шагов: карта, VPN, SMS, аккаунт и подписка, приложение, папка в Claude и в ChatGPT.">
   <h1 class="ttl"><span class="ln" style="--at:.1s">Как поставить</span><span class="ln" style="--at:.5s">всё это себе</span></h1>
-  <p class="sub">Шесть шагов: карта, VPN, SMS, аккаунт, приложение, папка</p>
+  <p class="sub">Семь шагов: карта, VPN, SMS, аккаунт, приложение, папка в Claude и в ChatGPT</p>
 </section>
 
 <section class="clip" data-track="setup" data-name="Шаг 1: карта" style="--c:var(--setup)" data-notes="Если зарубежная карта уже есть, переходи к следующему шагу. Инструкция для platipomiru, но можно использовать аналогичный сервис. Ссылка с промо: https://platipomiru.com/?code=E2HH2OA8, по ней получите 10 долларов на карту.">
@@ -813,13 +818,34 @@ body.touch #sw button{padding:16px 34px}
   </div>
 </section>
 
-<section class="clip" data-track="setup" data-name="Шаг 6: папка" style="--c:var(--setup)" data-notes="Для начала создай папку на рабочем столе. Claude: если в строке чата есть переключатель Chat / Cowork, выбери Cowork; если его нет, ничего выбирать не нужно. Нажми Work in a folder, укажи созданную папку, в меню режима выбери Automatically approve. ChatGPT: открой папку в приложении и выбери Codex, затем Settings > General > Permissions, включи Full access и выбери этот режим под полем ввода. Проверка: агент отвечает на просьбу «Перечисли файлы в этой папке» и видит её содержимое.">
-  <div class="hd"><h2>Шаг 6. Создай папку и подключи её</h2><p>Сначала папка на рабочем столе, потом режим агента</p></div>
-  <div class="two">
-    <div class="kard"><h3>Claude</h3><ul><li>Если есть переключатель Chat / Cowork, выбери Cowork</li><li>Нажми Work in a folder и укажи созданную папку</li><li>В меню режима выбери Automatically approve</li></ul></div>
-    <div class="kard"><h3>ChatGPT</h3><ul><li>Открой папку в приложении и выбери Codex</li><li>Открой Settings > General > Permissions и включи Full access</li><li>Выбери этот режим под полем ввода</li></ul></div>
-  </div>
+<section class="clip" data-track="setup" data-name="Шаг 6: папка Claude" style="--c:var(--setup)" data-notes="Для начала создай папку на рабочем столе. Claude: если в строке чата есть переключатель Chat / Cowork, выбери Cowork; если его нет, ничего выбирать не нужно. Нажми Work in a folder, укажи созданную папку, в меню режима выбери Automatically approve. Проверка: агент отвечает на просьбу «Перечисли файлы в этой папке» и видит её содержимое. Инструкция по Claude ещё сверяется со скриншотами.">
+  <div class="hd"><h2>Шаг 6. Создай папку и подключи её к Claude</h2><p>Сначала создай папку на рабочем столе</p></div>
+  <div class="kard setup1"><ol class="todo">
+    <li>Создай на рабочем столе папку для работы с агентом</li>
+    <li>Если в строке чата есть переключатель Chat / Cowork, выбери Cowork. Если его нет, ничего выбирать не нужно</li>
+    <li>Нажми Work in a folder и укажи созданную папку</li>
+    <li>В меню режима выбери Automatically approve</li>
+  </ol></div>
   <p class="chk">Проверь: попроси «Перечисли файлы в этой папке». Агент ответит и увидит содержимое</p>
+</section>
+
+<section class="clip" data-track="setup" data-name="Шаг 7: папка ChatGPT" style="--c:var(--setup)" data-notes="ChatGPT: в приложении ChatGPT в левом верхнем углу переключи режим с ChatGPT на Codex. Дальше в разделе проектов нажми «Создать проект», введи название, в блоке «Исходные папки» нажми «Добавить» (добавить папку на этом компьютере) и выбери созданную папку, потом «Создать проект». Проверка: попроси «Перечисли файлы в этой папке», агент должен ответить и увидеть содержимое. Про режим Full access пока не пишем.">
+  <div class="hd"><h2>Шаг 7. Подключи папку в ChatGPT</h2><p>В приложении ChatGPT включи режим Codex и создай проект с папкой</p></div>
+  <div class="setup">
+    <div class="col">
+      <ol class="todo">
+        <li>В приложении ChatGPT переключи режим на Codex<small>Меню в левом верхнем углу, где написано ChatGPT</small></li>
+        <li>В «Проектах» нажми «Создать проект» и введи название</li>
+        <li>В блоке «Исходные папки» нажми «Добавить» и выбери папку, которую создал<small>Добавить папку на этом компьютере</small></li>
+        <li>Нажми «Создать проект»</li>
+      </ol>
+      <p class="chk">Проверь: попроси «Перечисли файлы в этой папке». Агент ответит и увидит содержимое</p>
+    </div>
+    <div class="pics">
+      <img class="pic pic-a" src="assets/setup-codex-mode.png" alt="Меню в приложении ChatGPT: режимы ChatGPT и Codex, выбран Codex">
+      <img class="pic pic-b" src="assets/setup-codex-project.png" alt="Окно «Создать проект»: название проекта и кнопка «Добавить» в блоке «Исходные папки»">
+    </div>
+  </div>
 </section>
 
 <i id="bar"></i>
