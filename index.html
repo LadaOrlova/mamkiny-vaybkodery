@@ -744,7 +744,7 @@ body.touch #sw button{padding:16px 34px}
   </div>
 </section>
 
-<section class="clip" data-track="fekla" data-name="Бот: из чего собран" style="--c:var(--fekla)" data-notes="Устройство бота Фекла по репозиторию LadaOrlova/fekla. Бот на Python (библиотека python-telegram-bot) запущен на Railway как сервис worker командой python bot.py. Мозги: Claude через Anthropic API (модель Haiku 4.5) с вызовом инструментов: создать задачу, показать задачи, завершить, удалить, создать событие в Google Календаре, дайджест дня. Ключ API берётся на console.anthropic.com и оплачивается отдельно от подписки Claude. Дайджест каналов бот читает через публичную веб-версию t.me/s/ без входа, список в channels.json (рубрики), сайты афиш в sites.json. Текст дайджеста пишет модель через OpenRouter (Gemini 2.5 Flash), а если сервис недоступен, то Claude. Голосовые расшифровывает OpenAI Whisper, заметки хранятся в репозитории на GitHub.">
+<section class="clip" data-track="fekla" data-name="Бот: из чего собран" style="--c:var(--fekla)" data-notes="Устройство бота Фекла по репозиторию LadaOrlova/fekla. Бот на Python (библиотека python-telegram-bot) запущен на Railway как сервис worker командой python bot.py. Мозги: Claude через Anthropic API (модель Haiku 4.5) с вызовом инструментов: создать задачу, показать задачи, завершить, удалить, создать событие в Google Календаре, дайджест дня. Ключ API берётся на console.anthropic.com и оплачивается отдельно от подписки Claude. Дайджест каналов бот читает через публичную веб-версию t.me/s/ без входа, список в channels.json (рубрики), сайты афиш в sites.json. Текст дайджеста пишет модель. Голосовые расшифровывает OpenAI Whisper, заметки хранятся в репозитории на GitHub.">
   <div class="hd"><h2>Как сделать такого бота: из чего он собран</h2><p>Мозги бота не из подписки, а из API</p></div>
   <div class="fb4">
     <div class="fb" style="--i:0"><h3>Telegram</h3><p>Ты пишешь боту обычным текстом или голосом</p></div>
@@ -755,14 +755,14 @@ body.touch #sw button{padding:16px 34px}
   <div class="kard brain"><h3>У мозгов отдельный аккаунт</h3><p>Подписка Claude на claude.ai и API это разные вещи. Для бота нужен ключ с платформы console.anthropic.com, и баланс там пополняется отдельно от подписки</p><p>Дайджест каналов бот собирает по публичным страницам t.me/s/ без входа в Telegram. Список каналов лежит в файле channels.json, править его можно без кода</p></div>
 </section>
 
-<section class="clip" data-track="fekla" data-name="Бот: ключи" style="--c:var(--fekla)" data-notes="Подготовка ключей, один раз. 1. Telegram-бот: @BotFather, /newbot, имя и username, токен вида 7123456789:AAF... 2. Anthropic API: console.anthropic.com/settings/keys, Create Key, ключ sk-ant-api03-... 3. Google Calendar (по желанию): проект в Google Cloud, включить Google Calendar API, OAuth client ID типа Desktop app, скачать credentials.json. Остальные ключи по желанию: OpenRouter для дайджеста, OpenAI для Whisper, токен GitHub для хранения заметок. Ключи нельзя коммитить в репозиторий.">
+<section class="clip" data-track="fekla" data-name="Бот: ключи" style="--c:var(--fekla)" data-notes="Подготовка ключей, один раз. 1. Telegram-бот: @BotFather, /newbot, имя и username, токен вида 7123456789:AAF... 2. Anthropic API: console.anthropic.com/settings/keys, Create Key, ключ sk-ant-api03-... 3. Google Calendar (по желанию): проект в Google Cloud, включить Google Calendar API, OAuth client ID типа Desktop app, скачать credentials.json. Остальные ключи по желанию: OpenAI для Whisper, токен GitHub для хранения заметок. Ключи нельзя коммитить в репозиторий.">
   <div class="hd"><h2>Шаг 1. Подготовь ключи</h2><p>Два обязательных, остальные по желанию</p></div>
   <div class="setup">
     <ol class="todo">
       <li>Создай бота в Telegram<small>Найди @BotFather, напиши /newbot, задай имя и username (он оканчивается на bot). Сохрани токен</small></li>
       <li>Получи ключ Claude API<small>Открой <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener" style="text-decoration:underline">console.anthropic.com/settings/keys</a>, нажми Create Key и сохрани ключ. Пополни баланс на платформе отдельно</small></li>
     </ol>
-    <div class="kard"><h3>По желанию</h3><p>Google Calendar API: чтобы бот работал с календарём</p><p>Ключ OpenRouter: дешёвая модель для дайджеста каналов</p><p>Ключ OpenAI: чтобы бот расшифровывал голосовые (Whisper)</p><p>Токен GitHub: чтобы заметки не терялись при обновлении бота</p></div>
+    <div class="kard"><h3>По желанию</h3><p>Google Calendar API: чтобы бот работал с календарём</p><p>Ключ OpenAI: чтобы бот расшифровывал голосовые (Whisper)</p><p>Токен GitHub: чтобы заметки не терялись при обновлении бота</p></div>
   </div>
 </section>
 
